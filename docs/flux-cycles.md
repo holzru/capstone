@@ -101,7 +101,6 @@ what you'll need to do.
 ### Store Listeners
 
 * `EventsIndex` component listens to `Event` store.
-* Is anyone actually going to read this?
 
 ## Group Cycles
 

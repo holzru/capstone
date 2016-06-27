@@ -6,7 +6,7 @@
 
 ## Minimum Viable Product
 
-HellaMeets is a web application inspired by Meetup that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
+MeatUp is a web application inspired by Meetup that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
 
 - [ ] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
@@ -54,39 +54,45 @@ HellaMeets is a web application inspired by Meetup that will be build using Ruby
 - [ ] user signup/signin pages
 - [ ] splash page after signin
 - [ ] setup Webpack & Flux scaffold
+- [ ] learn bootstrap-sass
+
 
 # Phase 2: Flux Architecture and Group Continued (2 days Friday W1 6pm)
 
-- Finish out Actions/Stores for events/groups
+- [ ] Finish out Actions/Stores for events/groups
+- [ ] create a basic style guide
+- [ ] position elements on the page
+- [ ] add basic colors & styles
 - [ ] seed the database with a small amount of test data
-- API for groups/events
+- [ ] API for groups/events
 - [ ] jBuilder views for groups/events
 - [ ] setup `APIUtil` to interact with the API
 - [ ] test out API interaction in the console.
 - [ ] setup the flux loop with skeleton files
 - [ ] setup React Router
-- implement each component, building out the flux loop as needed.
+- [ ] implement each component, building out the flux loop as needed.
 
 
 ### Phase 3: Search (2 days, W2 M 6pm)
-- Setup global search
-- allow for search through users/groups/events
-- pane filtering for toggling between calendar vs Bootstrap view
+- [ ] Setup global search
+- [ ] allow for search through users/groups/events
+- [ ] pane filtering for toggling between calendar vs Bootstrap view
 
 
-### Phase 4: Styling (2 days, W2 Tue 6pm)
+### Phase 4: Finish Styling (2 days, W2 Tue 6pm)
 
 **Objective:** Existing pages (including signup/signin) will look good.
 
-- [ ] learn bootstrap-sass
-- [ ] create a basic style guide
-- [ ] position elements on the page
-- [ ] add basic colors & styles
+- [ ] Finish Up/additional styling as needed
+- [ ] Peer review on style and functionality
+- [ ] bug fix, code refactoring
+
 
 ### Phase 5: Reminders and Garbage Collection, Fix Up (2 days, W2 Thur 6pm)
-- reminder model and Implementation
+- [ ] Implementation of peer suggestions
+- [ ] reminder model and Implementation
 - [ ] additional styling as needed
-- bug fix, code refactoring
+- [ ] bug fix, code refactoring
 
 ### Phase 6: Extra Time for whatever is needed or bonus work (1 day, W2 Fri 6pm)
 
