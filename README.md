@@ -6,24 +6,25 @@
 
 ## Minimum Viable Product
 
-FresherNote is a web application inspired by Evernote that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
+HellaMeets is a web application inspired by Meetup that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
 
 - [ ] Hosting on Heroku
 - [ ] New account creation, login, and guest/demo login
 - [ ] A production README, replacing this README (**NB**: check out the [sample production README](docs/production_readme.md) -- you'll write this later)
-- [ ] Notes
+- [ ] Members
   - [ ] Smooth, bug-free navigation
   - [ ] Adequate seed data to demonstrate the site's features
   - [ ] Adequate CSS styling
-- [ ] Notebooks for organizing notes
+- [ ] Groups with members
   - [ ] Smooth, bug-free navigation
   - [ ] Adequate seed data to demonstrate the site's features
   - [ ] Adequate CSS styling
-- [ ] Tags for notes
+- [ ] Events for groups
+  - [ ] Invitations for group members to group events
   - [ ] Smooth, bug-free navigation
   - [ ] Adequate seed data to demonstrate the site's features
   - [ ] Adequate CSS styling
-- [ ] Rich Text Editing of notes
+- [ ] Members register for events
   - [ ] Smooth, bug-free navigation
   - [ ] Adequate seed data to demonstrate the site's features
   - [ ] Adequate CSS styling
@@ -43,99 +44,56 @@ FresherNote is a web application inspired by Evernote that will be build using R
 
 ## Implementation Timeline
 
-### Phase 1: Backend setup and Front End User Authentication (1 day, W1 Tu 6pm)
+### Phase 1: Backend setup and Front End User Authentication, Models (2 days, W1 Wed 6pm)
 
 **Objective:** Functioning rails project with Authentication
 
 - [ ] create new project
-- [ ] create `User` model
+- [ ] create Models
 - [ ] authentication
 - [ ] user signup/signin pages
-- [ ] blank landing page after signin
-
-### Phase 2: Notes Model, API, and basic APIUtil (1.5 days, W1 Th 12pm)
-
-**Objective:** Notes can be created, read, edited and destroyed through
-the API.
-
-- [ ] create `Note` model
-- [ ] seed the database with a small amount of test data
-- [ ] CRUD API for notes (`NotesController`)
-- [ ] jBuilder views for notes
+- [ ] splash page after signin
 - [ ] setup Webpack & Flux scaffold
+
+# Phase 2: Flux Architecture and Group Continued (2 days Friday W1 6pm)
+
+- Finish out Actions/Stores for events/groups
+- [ ] seed the database with a small amount of test data
+- API for groups/events
+- [ ] jBuilder views for groups/events
 - [ ] setup `APIUtil` to interact with the API
 - [ ] test out API interaction in the console.
-
-### Phase 3: Flux Architecture and Router (1.5 days, W1 F 6pm)
-
-**Objective:** Notes can be created, read, edited and destroyed with the
-user interface.
-
 - [ ] setup the flux loop with skeleton files
 - [ ] setup React Router
-- implement each note component, building out the flux loop as needed.
-  - [ ] `NotesIndex`
-  - [ ] `NoteIndexItem`
-  - [ ] `NoteForm`
-- [ ] save Notes to the DB when the form loses focus or is left idle
-  after editing.
+- implement each component, building out the flux loop as needed.
 
-### Phase 4: Start Styling (0.5 days, W2 M 12pm)
+
+### Phase 3: Search (2 days, W2 M 6pm)
+- Setup global search
+- allow for search through users/groups/events
+- pane filtering for toggling between calendar vs Bootstrap view
+
+
+### Phase 4: Styling (2 days, W2 Tue 6pm)
 
 **Objective:** Existing pages (including signup/signin) will look good.
 
+- [ ] learn bootstrap-sass
 - [ ] create a basic style guide
 - [ ] position elements on the page
 - [ ] add basic colors & styles
 
-### Phase 5: Notebooks (1 day, W2 Tu 12pm)
+### Phase 5: Reminders and Garbage Collection, Fix Up (2 days, W2 Thur 6pm)
+- reminder model and Implementation
+- [ ] additional styling as needed
+- bug fix, code refactoring
 
-**Objective:** Notes belong to Notebooks, and can be viewed by notebook.
-
-- [ ] create `Notebook` model
-- build out API, Flux loop, and components for:
-  - [ ] Notebook CRUD
-  - [ ] adding notes requires a notebook
-  - [ ] moving notes to a different notebook
-  - [ ] viewing notes by notebook
-- Use CSS to style new views
-
-Phase 3 adds organization to the Notes. Notes belong to a Notebook,
-which has its own `Index` view.
-
-### Phase 6: Tags (1 days, W2 Th 12pm)
-
-**Objective:** Notes can be tagged with multiple tags, and tags are searchable.
-
-- [ ] create `Tag` model and join table
-- build out API, Flux loop, and components for:
-  - [ ] fetching tags for notebook
-  - [ ] adding tags to notebook
-  - [ ] creating tags while adding to notebooks
-  - [ ] searching notebooks by tag
-- [ ] Style new elements
-
-### Phase 7: Allow Complex Styling in Notes (0.5 days, W2 Th 6pm)
-
-**objective:** Enable complex styling of notes.
-
-- [ ] Integrate `react-quill` (based on Quill.js).
-- [ ] Use Rails helpers to sanitize HTML before rendering.
-- [ ] Style the new Quill elements.
-
-### Phase 8: Styling Cleanup and Seeding (1 day, W2 F 6pm)
-
-**objective:** Make the site feel more cohesive and awesome.
-
-- [ ] Get feedback on my UI from others
-- [ ] Refactor HTML classes & CSS rules
-- [ ] Add modals, transitions, and other styling flourishes.
+### Phase 6: Extra Time for whatever is needed or bonus work (1 day, W2 Fri 6pm)
 
 ### Bonus Features (TBD)
-- [ ] Search through notes for blocks of text
-- [ ] Pagination / infinite scroll for Notes Index
-- [ ] Set reminders on notes
-- [ ] Changelogs for Notes
+- [ ] Google Map Directions for events
+- [ ] Automatic email notification of events
+- [ ] slack client in page
 - [ ] Multiple sessions
 
 [phase-one]: docs/phases/phase1.md

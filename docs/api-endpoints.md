@@ -6,12 +6,6 @@
 
 - `GET /` - loads React web app
 
-### Users
-
-- `GET /users/new`
-- `POST /users`
-- `PATCH /users`
-
 ### Session
 
 - `GET /session/new`
@@ -20,34 +14,27 @@
 
 ## JSON API
 
-### Notes
+### Members
 
-- `GET /api/notes`
-  - Notes index/search
-  - accepts `tag_name` query param to list notes by tag
+- `GET /members`
+- `POST /members`
+- `PATCH /members/memberId/edit`
+
+### Events
+
+- `GET /events`
+  - Events index/search
+  - accepts `event_category` query param to list events by category
   - accepts pagination params (if I get there)
-- `POST /api/notes`
-- `GET /api/notes/:id`
-- `PATCH /api/notes/:id`
-- `DELETE /api/notes/:id`
+- `POST /events`
+- `GET /events/:eventid`
+- `PATCH /events/:eventid/edit`
+- `DELETE /events/:eventid`
 
-### Notebooks
+### Groups
 
-- `GET /api/notebooks`
-- `POST /api/notebooks`
-- `GET /api/notebooks/:id`
-- `PATCH /api/notebooks/:id`
-- `DELETE /api/notebooks/:id`
-- `GET /api/notebooks/:id/notes`
-  - index of all notes for a notebook
-  - accepts pagination params (if I get there)
-
-### Tags
-
-- A note's tags will be included in the note show template
-- `GET /api/tags`
-  - includes query param for typeahead suggestions
-- `POST /api/notes/:note_id/tags`: add tag to note by name
-  - if note doesn't already exist, it will be created
-- `DELETE /api/notes/:note_id/tags/:tag_name`: remove tag from note by
-  name
+- `GET /groups`
+- `POST /groups`
+- `GET /groups/:groupid`
+- `PATCH /groups/:groupid`
+- `DELETE /groups/:groupid`

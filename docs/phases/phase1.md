@@ -1,29 +1,50 @@
-# Phase 1: User Authentication, Note Model and JSON API
+# Phase 1: User Authentication, Group Model and JSON API (2 days)
 
 ## Rails
 ### Models
 * User
-* Note
+* Group
+* Event
+
 
 ### Controllers
 * UsersController (create, new)
 * SessionsController (create, new, destroy)
-* Api::NotesController (create, destroy, index, show, update)
+* GroupsController (create, destroy, index, show, update)
+* EventsController (create, destroy, index, show, update)
 
 ### Views
 * users/new.html.erb
+* users/show.html.erb
 * session/new.html.erb
-* notes/index.json.jbuilder
-* notes/show.json.jbuilder
+* groups/index.json.jbuilder
+* groups/show.json.jbuilder
 
 ## Flux
 ### Views (React Components)
+Member Details
+Group Details
+Group Member Index
+Group index
 
 ### Stores
+Group Store
+Member Store
 
 ### Actions
+receiveAllMembers
+receiveSingleMember
+removeMember
+MemberIndex
+MemberDetail
 
 ### ApiUtil
+fetchAllMembers
+createMember
+fetchSingleMember
+updateMember
+destroyMember
 
 ## Gems/Libraries
 * BCrypt (Gem)
+* Flux Dispatcher (npm)

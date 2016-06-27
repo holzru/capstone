@@ -1,8 +1,8 @@
-# Phase 5: Reminders and Garbage Collection
+# Phase 5: Reminders and Garbage Collection, Fix Up
 
 ## Rails
 ### Models
-* Reminder
+* Reminders
 
 ### Controllers
 * Api::RemindersController (create, destroy, index, show, update)
@@ -12,10 +12,7 @@
 
 ## Flux
 ### Views (React Components)
-* RemindersIndex
-  - ReminderIndexItem
-* ReminderShow
-* ReminderForm
+
 
 ### Stores
 * Reminder

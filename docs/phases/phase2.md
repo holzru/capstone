@@ -1,4 +1,4 @@
-# Phase 2: Flux Architecture and Note CRUD (2 days)
+# Phase 2: Flux Architecture and Group Continued (2 days)
 
 ## Rails
 ### Models
@@ -9,30 +9,33 @@
 
 ## Flux
 ### Views (React Components)
-* NotesIndex
-  - NotesIndexItem
-* NoteForm
+* EventIndex
+  - EventIndexItem
+  - EventDetails
+* EventForm
 
 ### Stores
-* Note
+* Event
 
 ### Actions
-* ApiActions.receiveAllNotes -> triggered by ApiUtil
-* ApiActions.receiveSingleNote
-* ApiActions.deleteNote
-* NoteActions.fetchAllNotes -> triggers ApiUtil
-* NoteActions.fetchSingleNote 
-* NoteActions.createNote
-* NoteActions.editNote 
-* NoteActions.destroyNote
+* receiveAllEvents
+* receiveSingleNotebook
+* removeEvent
+* receiveAllGroups
+* receiveSingleGroup
+* removeGroup
 
 ### ApiUtil
-* ApiUtil.fetchAllNotes
-* ApiUtil.fetchSingleNote
-* ApiUtil.createNote
-* ApiUtil.editNote
-* ApiUtil.destroyNote
+* fetchAllGroups
+* createGroup
+* fetchSingleGroup
+* updateGroup
+* destroyGroup
+* destroyEvent
+* updateEvent
+* fetchSingleEvent
+* createEvent
+* fetchAllEvents
 
 ## Gems/Libraries
 * Flux Dispatcher (npm)
-* Twitter Bootstrap
