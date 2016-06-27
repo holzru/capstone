@@ -6,13 +6,13 @@
 
 - `GET /` - loads React web app
 
+## JSON API
+
 ### Session
 
 - `GET /session/new`
 - `POST /session`
 - `DELETE /session`
-
-## JSON API
 
 ### Members
 
