@@ -8,9 +8,6 @@ const ErrorStore = require('../stores/error_store');
 
 const LoginForm = React.createClass({
 
-	contextTypes: {
-		router: React.PropTypes.object.isRequired
-	},
 
   getInitialState() {
     return {
@@ -80,9 +77,9 @@ const LoginForm = React.createClass({
     }
 
 		return (
-			<div className="login-form-container">
+			<div className="login-form-container container-fluid text-center">
 				<form onSubmit={this.handleSubmit} className="login-form-box">
-	        Welcome to BenchBnB!
+	        Welcome to MeatUp
 					<br/>
 					Please { this.formType() } or { navLink }
 

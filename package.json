@@ -34,8 +34,8 @@
   },
   "homepage": "https://github.com/holzru/capstone#readme",
   "engines": {
-    "node": "4.1.1",
-    "npm": "2.1.x"
+    "node": "6.2.1",
+    "npm": "3.9.3"
   },
 
   "scripts": {

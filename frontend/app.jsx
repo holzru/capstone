@@ -3,11 +3,12 @@ import { Router, Route, IndexRoute, Link, hashHistory } from 'react-router'
 const React = require('react');
 const ReactDOM = require('react-dom');
 const NavBar = require('./components/nav_bar');
+const LoginForm = require('./components/login_form')
 
 const App = React.createClass({
   render () {
     return (
-      <div>
+      <div class='container fluid'>
         <NavBar/>
         { this.props.children }
       </div>
