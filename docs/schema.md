@@ -15,18 +15,39 @@ column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 creator_id  | integer   | not null, foreign key
-title       | string    | not null
+name        | string    | not null
 description | string    |
-member_ids  | integer   | foreign key
+
+## Group_Memberships
+column name | data type | details
+------------|-----------|-----------------------
+id          | integer   | not null, primary key
+member_id   | integer   | not null, foreign key
+group_id    | integer   | not null, foreign key
+
 
 ## Events
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-member_ids  | integer   | not null, foreign key
 group_id    | integer   | not null, foreign key
 description | text      | not null
 date        | datetime  | not null
 location    | string    | not null
 type        | string    | not null
 creator_id  | integer   | not null, foreign key
+
+## Event_Tickets
+column name | data type | details
+------------|-----------|-----------------------
+id          | integer   | not null, primary key
+member_id   | integer   | not null, foreign key
+event_id    | integer   | not null, foreign key
+
+## Comments
+column name | data type | details
+------------|-----------|-----------------------
+id          | integer   | not null, primary key
+creator_id  | integer   | not null, foreign key
+event_id    | integer   | not null, foreign key
+body        | text      | not null

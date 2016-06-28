@@ -1,0 +1,2 @@
+class EventTicketsController < ApplicationController
+end
