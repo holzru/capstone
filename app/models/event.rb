@@ -18,11 +18,11 @@ class Event < ActiveRecord::Base
 
   belongs_to :creator,
     foreign_key: :creator_id,
-    class: :User
+    class_name: :User
 
   has_many :event_tickets,
     foreign_key: :event_id,
-    class: :EventTicket
+    class_name: :EventTicket
 
   has_many :attendees,
     through: :event_tickets,

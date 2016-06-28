@@ -14,22 +14,22 @@
 class User < ActiveRecord::Base
   has_many :created_groups,
     foreign_key: :creator_id,
-    class: :Group
+    class_name: :Group
 
   has_many :group_memberships,
     foreign_key: :user_id,
-    class: :GroupMembership
+    class_name: :GroupMembership
 
   has_many :groups,
-    thorugh: :group_memberships,
+    through: :group_memberships,
     source: :group
 
   has_many :event_tickets,
     foreign_key: :user_id,
-    class: :EventTicket
+    class_name: :EventTicket
 
   has_many :created_events,
     foreign_key: :creator_id,
-    class: :Event
+    class_name: :Event
 
 end

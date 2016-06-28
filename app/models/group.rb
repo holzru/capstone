@@ -13,11 +13,11 @@
 class Group < ActiveRecord::Base
   belongs_to :creator,
     foreign_key: :creator_id,
-    class: :User
+    class_name: :User
 
   has_many :memberships,
     foreign_key: :group_id,
-    class: :GroupMembership
+    class_name: :GroupMembership
 
   has_many :members,
     through: :memberships,

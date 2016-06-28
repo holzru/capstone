@@ -13,7 +13,7 @@
 class Comment < ActiveRecord::Base
   belongs_to :author,
     foreign_key: :author_id,
-    class: :User
+    class_name: :User
 
   belongs_to :event
 end
