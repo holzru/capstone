@@ -4,13 +4,17 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const NavBar = require('./components/nav_bar');
 const LoginForm = require('./components/login_form')
+const Footer = require('./components/footer')
 
 const App = React.createClass({
   render () {
     return (
       <div class='container fluid'>
         <NavBar/>
+        <div>
         { this.props.children }
+        </div>
+        <Footer/>
       </div>
     );
   }

@@ -1,9 +1,9 @@
 "use strict";
 
-const SessionApiUtil = {
+const SessionUtil = {
 	logIn(user, success, error) {
 		$.ajax({
-			url: '/api/session',
+			url: '/session',
 			type: 'POST',
 			data: { user },
 			success,
@@ -17,7 +17,7 @@ const SessionApiUtil = {
 
 	logOut(success) {
 		$.ajax({
-			url: '/api/session',
+			url: '/session',
 			method: 'delete',
 			success,
 			error: function () {
@@ -28,7 +28,7 @@ const SessionApiUtil = {
 
 	signUp(user, success, error) {
 		$.ajax({
-			url: '/api/user',
+			url: '/users',
 			type: 'POST',
 			dataType: 'json',
 			data: { user },
@@ -42,7 +42,7 @@ const SessionApiUtil = {
 
 	fetchCurrentUser(success, complete) {
 		$.ajax({
-			url: '/api/session',
+			url: '/session',
 			method: 'GET',
 			success,
 			error: function (xhr) {

@@ -1,8 +1,25 @@
-$navbar-default-bg: red;
-
+$navbar-default-bg: #D82D19;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+
+#footer {
+  background-color: #190071;
+  border-color: #190071;
+  color: #fff;
+}
+
+#footer_link {
+  color: #fff;
+}
+
+
+#footer-links {
+  margin: 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+}
 
 #logo {
   float: left;

@@ -5,6 +5,7 @@ const Link = require('react-router').Link;
 const SessionActions = require('../actions/session_actions');
 const SessionStore = require('../stores/session_store');
 const ErrorStore = require('../stores/error_store');
+const hashHistory = require('react-router').hashHistory;
 
 const LoginForm = React.createClass({
 
@@ -28,7 +29,7 @@ const LoginForm = React.createClass({
 
   redirectIfLoggedIn() {
     if (SessionStore.isUserLoggedIn()) {
-      this.context.router.push("/");
+      hashHistory.push("/");
     }
   },
 

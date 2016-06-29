@@ -52,6 +52,7 @@
 	var ReactDOM = __webpack_require__(100);
 	var NavBar = __webpack_require__(230);
 	var LoginForm = __webpack_require__(231);
+	var Footer = __webpack_require__(258);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -60,7 +61,12 @@
 	      'div',
 	      { 'class': 'container fluid' },
 	      React.createElement(NavBar, null),
-	      this.props.children
+	      React.createElement(
+	        'div',
+	        null,
+	        this.props.children
+	      ),
+	      React.createElement(Footer, null)
 	    );
 	  }
 	});
@@ -26170,6 +26176,7 @@
 	var SessionActions = __webpack_require__(232);
 	var SessionStore = __webpack_require__(239);
 	var ErrorStore = __webpack_require__(257);
+	var hashHistory = __webpack_require__(1).hashHistory;
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -26189,7 +26196,7 @@
 	  },
 	  redirectIfLoggedIn: function redirectIfLoggedIn() {
 	    if (SessionStore.isUserLoggedIn()) {
-	      this.context.router.push("/");
+	      hashHistory.push("/");
 	    }
 	  },
 	  handleSubmit: function handleSubmit(e) {
@@ -26666,10 +26673,10 @@
 
 	"use strict";
 	
-	var SessionApiUtil = {
+	var SessionUtil = {
 		logIn: function logIn(user, success, _error) {
 			$.ajax({
-				url: '/api/session',
+				url: '/session',
 				type: 'POST',
 				data: { user: user },
 				success: success,
@@ -26682,7 +26689,7 @@
 		},
 		logOut: function logOut(success) {
 			$.ajax({
-				url: '/api/session',
+				url: '/session',
 				method: 'delete',
 				success: success,
 				error: function error() {
@@ -26692,7 +26699,7 @@
 		},
 		signUp: function signUp(user, success, _error2) {
 			$.ajax({
-				url: '/api/user',
+				url: '/users',
 				type: 'POST',
 				dataType: 'json',
 				data: { user: user },
@@ -26705,7 +26712,7 @@
 		},
 		fetchCurrentUser: function fetchCurrentUser(success, _complete) {
 			$.ajax({
-				url: '/api/session',
+				url: '/session',
 				method: 'GET',
 				success: success,
 				error: function error(xhr) {
@@ -33295,6 +33302,73 @@
 	};
 	
 	module.exports = ErrorStore;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var React = __webpack_require__(4);
+	
+	module.exports = React.createClass({
+	  displayName: "exports",
+	  render: function render() {
+	    return React.createElement(
+	      "nav",
+	      { className: "navbar navbar-default navbar-fixed-bottom", id: "footer" },
+	      React.createElement(
+	        "div",
+	        { className: "container-fluid" },
+	        React.createElement(
+	          "div",
+	          { className: "navbar-footer", id: "footer-links" },
+	          React.createElement(
+	            "ul",
+	            { className: "nav navbar-nav" },
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "#", id: "footer_link" },
+	                "Action"
+	              )
+	            ),
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "#", id: "footer_link" },
+	                "Another action"
+	              )
+	            ),
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "#", id: "footer_link" },
+	                "Something else here"
+	              )
+	            ),
+	            React.createElement("li", { role: "separator", className: "divider" }),
+	            React.createElement(
+	              "li",
+	              null,
+	              React.createElement(
+	                "a",
+	                { href: "#", id: "footer_link" },
+	                "Separated link"
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
 
 /***/ }
 /******/ ]);
