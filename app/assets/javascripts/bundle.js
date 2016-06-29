@@ -26673,7 +26673,7 @@
 
 	"use strict";
 	
-	var SessionUtil = {
+	var SessionApiUtil = {
 		logIn: function logIn(user, success, _error) {
 			$.ajax({
 				url: '/session',

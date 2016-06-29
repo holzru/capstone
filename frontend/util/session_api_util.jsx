@@ -1,6 +1,6 @@
 "use strict";
 
-const SessionUtil = {
+const SessionApiUtil = {
 	logIn(user, success, error) {
 		$.ajax({
 			url: '/session',
