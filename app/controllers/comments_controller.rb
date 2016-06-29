@@ -3,13 +3,18 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
 
   def create
     @comment = Comment.new(comment_params)
-    @comment.auhor_id = current_user.id
+    @comment.author_id = current_user.id
     if @comment.save
       render json: @comment
     else
       # render json: @comment.errors.full_messages
       render 'shared/errors', @comment.errors.full_messages
     end
+  end
+
+  def index
+    @comments = Comment.find_by_event_id(params[:event_id])
+    render json: @comments
   end
 
   def edit
@@ -19,7 +24,7 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
 
   def update
     @comment = Comment.find(params[:id])
-    if @comment.update(comment_params)
+    if @comment.author_id == current_user.id && @comment.update(comment_params)
       render json: @comment
     else
       render 'shared/errors', @comment.errors.full_messages
@@ -33,6 +38,6 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
 
   protected
   def comment_params
-    params.permit(:body, :event_id)
+    params.require(:comment).permit(:body, :event_id)
   end
 end

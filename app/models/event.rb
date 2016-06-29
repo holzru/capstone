@@ -14,6 +14,8 @@
 #
 
 class Event < ActiveRecord::Base
+  validates :group_id, :creator_id, :description, :location, :type, :date, presence: true
+
   belongs_to :group
 
   belongs_to :creator,

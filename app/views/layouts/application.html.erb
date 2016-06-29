@@ -5,6 +5,24 @@
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
+  <script src="//widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    window.CLOUDINARY_OPTIONS = {
+      cloud_name: "dywbzmakl",
+      upload_preset: "heldi9zw",
+      theme: "minimal",
+      sources: ["local"],
+      client_allowed_formats: ["jpg"],
+      multiiple: false,
+      text: {
+        "sources.local.drop_file": "Drop Photo Here"
+        "sources.local.drop_files": "Drop Photo Here",
+        "sources.local.select_file": "Photo Here",
+        "sources.local.select_files": "Photo Here",
+        "progress.failed_note": "Some of your audio failed uploading."
+      }
+    }
+  </script>
 </head>
 <body>
 

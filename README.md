@@ -2,7 +2,7 @@
 
 [Heroku link][heroku] **Note:** This should be a link to your production site
 
-[heroku]: http://www.herokuapp.com
+[heroku]: https://thawing-brook-34178.herokuapp.com/#/?_k=l3e69s
 
 ## Minimum Viable Product
 

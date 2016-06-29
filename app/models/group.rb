@@ -8,9 +8,12 @@
 #  description :text             not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
+#  location    :string           not null
 #
 
 class Group < ActiveRecord::Base
+  validates :name, :description, :location, :creator_id, presence: true
+
   belongs_to :creator,
     foreign_key: :creator_id,
     class_name: :User
