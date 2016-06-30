@@ -12,11 +12,17 @@ module.exports = React.createClass({
 
   componentDidMount() {
     this.eventstoreListener = EventStore.addListener(this._eventhandleChange);
+    this.groupStoreListener = GroupStore.addListener(this.__groupHandleChange);
     EventActions.fetchGroupEvents(this.props.params.group_id);
+    GroupActions.fetchAllGroups();
   },
 
   _eventhandleChange() {
     this.setState({events: EventStore.all()});
+  },
+
+  __groupHandleChange() {
+    this.setState({group: GroupStore.find(this.props.params.group_id)});
   },
 
   componentWillUnmount() {
@@ -24,30 +30,32 @@ module.exports = React.createClass({
   },
 
   render() {
-    debugger;
     let group = this.state.group;
     return (
-      <div class="group-detail-pane">
+      <div className="group-detail-pane container-fluid">
         <div className="group-header">
           <div className="Group-Banner container-fluid">{group.name}</div>
         </div>
-        <div className="group-deatils">
-          <div className="group-info">
-            <img className="group-image" src={group.pic_url}/></div>
-            <div className="group-loc" value={group.location}></div>
+        <div className="column-container">
+          <div className="group-details">
+            <div className="group-info">
+              <img id="group-image" src={group.pic_url}/>
+              <div className="group-loc" value={group.location}></div>
+            </div>
             <div className="group-stats">
-              <span className='group-stat-members' value="10"/>
-              <span className='group-stat-events' value={this.state.events.length}/>
+              <span className='group-stat-members'>Members: 10</span><br/>
+              <span className='group-stat-events'>Events: {this.state.events.length}</span>
+            </div>
+            <div>Creator Stuff</div>
           </div>
-          <div>Creator Stuff</div>
-        </div>
-        <div className="group-events">
-          {this.state.events.map((event) => {
-            return(<EventIndexItem event={event}/>);
-          })}
-        </div>
-        <div className="group-new">
-          <h2>What's New</h2>
+          <div className="group-events">
+            {this.state.events.map((event) => {
+              return(<EventIndexItem event={event}/>);
+            })}
+          </div>
+          <div className="group-new">
+            <h2>What's New</h2>
+          </div>
         </div>
       </div>
     );

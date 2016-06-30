@@ -29,7 +29,7 @@ render_row(row) {
 
   let rowContents = row.map((group) => {
     console.log(group.pic_url);
-    return (<li key={group.id}><Link to={`/groups/${group.id}`}><img id="group-index-item" src={group.pic_url}/></Link></li>);
+    return (<Link to={`/groups/${group.id}`} className="group-index-item-container"><li key={group.id} className="group-index-item" style={{backgroundImage: `url(${group.pic_url})`}}></li></Link>);
   });
 
   return (<ul className="group-rows">{rowContents}</ul>);
@@ -43,7 +43,7 @@ render() {
   }
 
   return (
-    <div class="group index">
+    <div className="group-index container-fluid">
       {this.render_rows(rows)}
     </div>
     );

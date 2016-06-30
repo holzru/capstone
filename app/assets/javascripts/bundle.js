@@ -33443,13 +33443,9 @@
 	    var rowContents = row.map(function (group) {
 	      console.log(group.pic_url);
 	      return React.createElement(
-	        'li',
-	        { key: group.id },
-	        React.createElement(
-	          Link,
-	          { to: '/groups/' + group.id },
-	          React.createElement('img', { id: 'group-index-item', src: group.pic_url })
-	        )
+	        Link,
+	        { to: '/groups/' + group.id, className: 'group-index-item-container' },
+	        React.createElement('li', { key: group.id, className: 'group-index-item', style: { backgroundImage: 'url(' + group.pic_url + ')' } })
 	      );
 	    });
 	
@@ -33468,7 +33464,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { 'class': 'group index' },
+	      { className: 'group-index container-fluid' },
 	      this.render_rows(rows)
 	    );
 	  }
@@ -33505,7 +33501,7 @@
 	};
 	
 	GroupStore.find = function (id) {
-	  return _groups[id];
+	  return _groups[id] ? _groups[id] : {};
 	};
 	
 	GroupStore.all = function () {
@@ -33567,10 +33563,10 @@
 	
 	var React = __webpack_require__(4);
 	var GroupStore = __webpack_require__(261);
-	var EventStore = __webpack_require__(268);
+	var EventStore = __webpack_require__(265);
 	var GroupActions = __webpack_require__(262);
 	var EventActions = __webpack_require__(266);
-	var EventIndexItem = __webpack_require__(265);
+	var EventIndexItem = __webpack_require__(268);
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -33579,20 +33575,24 @@
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.eventstoreListener = EventStore.addListener(this._eventhandleChange);
+	    this.groupStoreListener = GroupStore.addListener(this.__groupHandleChange);
 	    EventActions.fetchGroupEvents(this.props.params.group_id);
+	    GroupActions.fetchAllGroups();
 	  },
 	  _eventhandleChange: function _eventhandleChange() {
 	    this.setState({ events: EventStore.all() });
+	  },
+	  __groupHandleChange: function __groupHandleChange() {
+	    this.setState({ group: GroupStore.find(this.props.params.group_id) });
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.eventstoreListener.remove();
 	  },
 	  render: function render() {
-	    debugger;
 	    var group = this.state.group;
 	    return React.createElement(
 	      'div',
-	      { 'class': 'group-detail-pane' },
+	      { className: 'group-detail-pane container-fluid' },
 	      React.createElement(
 	        'div',
 	        { className: 'group-header' },
@@ -33604,39 +33604,53 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'group-deatils' },
+	        { className: 'column-container' },
 	        React.createElement(
 	          'div',
-	          { className: 'group-info' },
-	          React.createElement('img', { className: 'group-image', src: group.pic_url })
+	          { className: 'group-details' },
+	          React.createElement(
+	            'div',
+	            { className: 'group-info' },
+	            React.createElement('img', { id: 'group-image', src: group.pic_url }),
+	            React.createElement('div', { className: 'group-loc', value: group.location })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'group-stats' },
+	            React.createElement(
+	              'span',
+	              { className: 'group-stat-members' },
+	              'Members: 10'
+	            ),
+	            React.createElement('br', null),
+	            React.createElement(
+	              'span',
+	              { className: 'group-stat-events' },
+	              'Events: ',
+	              this.state.events.length
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            'Creator Stuff'
+	          )
 	        ),
-	        React.createElement('div', { className: 'group-loc', value: group.location }),
 	        React.createElement(
 	          'div',
-	          { className: 'group-stats' },
-	          React.createElement('span', { className: 'group-stat-members', value: '10' }),
-	          React.createElement('span', { className: 'group-stat-events', value: this.state.events.length })
+	          { className: 'group-events' },
+	          this.state.events.map(function (event) {
+	            return React.createElement(EventIndexItem, { event: event });
+	          })
 	        ),
 	        React.createElement(
 	          'div',
-	          null,
-	          'Creator Stuff'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'group-events' },
-	        this.state.events.map(function (event) {
-	          return React.createElement(EventIndexItem, { event: event });
-	        })
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'group-new' },
-	        React.createElement(
-	          'h2',
-	          null,
-	          'What\'s New'
+	          { className: 'group-new' },
+	          React.createElement(
+	            'h2',
+	            null,
+	            'What\'s New'
+	          )
 	        )
 	      )
 	    );
@@ -33649,28 +33663,39 @@
 
 	'use strict';
 	
-	var React = __webpack_require__(4);
+	var Store = __webpack_require__(240).Store;
+	var Dispatcher = __webpack_require__(233);
 	
-	module.exports = React.createClass({
-	  displayName: 'exports',
-	  render: function render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h1',
-	        null,
-	        this.props.event.name
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        ' ',
-	        this.props.event.description
-	      )
-	    );
+	var EventStore = new Store(Dispatcher);
+	
+	var _events = {};
+	
+	EventStore.__onDispatch = function (action) {
+	  switch (action.actionType) {
+	    case "Group":
+	      resetEvents(action.events);
+	      break;
 	  }
-	});
+	  this.__emitChange();
+	};
+	
+	var resetEvents = function resetEvents(events) {
+	  events.forEach(function (event) {
+	    _events[event.id] = event;
+	  });
+	};
+	
+	EventStore.all = function () {
+	  var events = [];
+	  for (var eventKey in _events) {
+	    if (_events.hasOwnProperty(eventKey)) {
+	      events.push(_events[eventKey]);
+	    }
+	  }
+	  return events;
+	};
+	
+	module.exports = EventStore;
 
 /***/ },
 /* 266 */
@@ -33718,39 +33743,28 @@
 
 	'use strict';
 	
-	var Store = __webpack_require__(240).Store;
-	var Dispatcher = __webpack_require__(233);
+	var React = __webpack_require__(4);
 	
-	var EventStore = new Store(Dispatcher);
-	
-	var _events = {};
-	
-	EventStore.__onDispatch = function (action) {
-	  switch (action.actionType) {
-	    case "Group":
-	      resetEvents(action.events);
-	      break;
+	module.exports = React.createClass({
+	  displayName: 'exports',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        this.props.event.name
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        ' ',
+	        this.props.event.description
+	      )
+	    );
 	  }
-	  this.__emitChange();
-	};
-	
-	var resetEvents = function resetEvents(events) {
-	  events.forEach(function (event) {
-	    _events[event.id] = event;
-	  });
-	};
-	
-	EventStore.all = function () {
-	  var events = [];
-	  for (var eventKey in _events) {
-	    if (_events.hasOwnProperty(eventKey)) {
-	      events.push(_events[eventKey]);
-	    }
-	  }
-	  return events;
-	};
-	
-	module.exports = EventStore;
+	});
 
 /***/ }
 /******/ ]);

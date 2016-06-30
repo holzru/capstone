@@ -21,7 +21,7 @@ const resetGroups = function(groups) {
 };
 
 GroupStore.find = function(id) {
-  return _groups[id];
+  return (_groups[id] ? _groups[id] : {});
 };
 
 GroupStore.all = function() {
