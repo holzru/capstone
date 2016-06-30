@@ -34,7 +34,8 @@ gem 'bcrypt'
 # gem 'capistrano-rails', group: :development
 group :production do
   gem 'newrelic_rpm'
-  gem 'rails_12factor' # error feedback
+  gem 'rails_12factor'
+  gem 'faker' # error feedback
 end
 
 group :development, :test do
