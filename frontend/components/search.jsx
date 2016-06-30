@@ -6,7 +6,7 @@ const Splash = React.createClass({
     return(
       <div className="splash-page">
         <div className="splash-pic-container">
-          <img className="splash-pic" src="file:///Users/Russell/Desktop/slider-1.jpg"/>
+          <img id="splash-pic" src="http://res.cloudinary.com/dywbzmakl/image/upload/v1467236626/slider-1_tgihov.jpg"/>
         </div>
         <GroupIndex/>
       </div>

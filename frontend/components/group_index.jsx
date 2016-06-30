@@ -1,7 +1,7 @@
 const React = require('react');
+const Link = require('react-router').Link;
 const GroupStore = require('../stores/group_store');
-const GroupUtil = require('../util/group_util');
-const GroupIndexItem = require('./group_index_item');
+const GroupActions = require('../actions/group_actions');
 
 const GroupIndex = React.createClass({
 getInitialState() {
@@ -10,10 +10,10 @@ getInitialState() {
 
 componentDidMount() {
   this.storeListener = GroupStore.addListener(this._handleChange);
-  GroupUtil.fetchAllGroups();
+  GroupActions.fetchAllGroups();
 },
 
-_handleChange(data) {
+_handleChange() {
   this.setState({groups: GroupStore.all()});
 },
 
@@ -21,26 +21,33 @@ componentWillUnmount() {
   this.storeListener.remove();
 },
 
-render() {
-  let groups = this.state.groups.map((group) => {
-    return <GroupIndexItem group={group}/>;
+render_rows(rows) {
+  return (rows.map((row) => this.render_row(row)));
+},
+
+render_row(row) {
+
+  let rowContents = row.map((group) => {
+    console.log(group.pic_url);
+    return (<li key={group.id}><Link to={`/groups/${group.id}`}><img id="group-index-item" src={group.pic_url}/></Link></li>);
   });
 
+  return (<ul className="group-rows">{rowContents}</ul>);
+},
+
+render() {
+  let copy = this.state.groups.slice();
   let rows = [];
-  for (let i = 0; i < parseInt(this.state.groups/4); i++) {
-    rows.push([this.state.groups.splice(0, 4)]);
+  while (copy.length > 0) {
+    rows.push(copy.splice(0, 4));
   }
-
-
 
   return (
     <div class="group index">
-      {rows.map((row) => {
-        return <ul className="group-index-row"/>;
-      })}
+      {this.render_rows(rows)}
     </div>
-  );
-}
+    );
+  }
 });
 
 module.exports = GroupIndex;

@@ -53,17 +53,19 @@
 	var NavBar = __webpack_require__(230);
 	var LoginForm = __webpack_require__(231);
 	var Footer = __webpack_require__(258);
+	var Search = __webpack_require__(259);
+	var GroupDetail = __webpack_require__(264);
 	
 	var App = React.createClass({
 	  displayName: 'App',
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      { 'class': 'container fluid' },
+	      null,
 	      React.createElement(NavBar, null),
 	      React.createElement(
 	        'div',
-	        null,
+	        { id: 'main-page' },
 	        this.props.children
 	      ),
 	      React.createElement(Footer, null)
@@ -71,16 +73,22 @@
 	  }
 	});
 	
-	var routes = React.createElement(
-	  _reactRouter.Route,
-	  { path: '/', component: App },
-	  React.createElement(_reactRouter.Route, { path: '/login', component: LoginForm }),
-	  React.createElement(_reactRouter.Route, { path: '/signup', component: LoginForm })
+	var router = React.createElement(
+	  _reactRouter.Router,
+	  { history: _reactRouter.hashHistory },
+	  React.createElement(
+	    _reactRouter.Route,
+	    { path: '/', component: App },
+	    React.createElement(_reactRouter.IndexRoute, { component: Search }),
+	    React.createElement(_reactRouter.Route, { path: '/groups/:group_id', component: GroupDetail }),
+	    React.createElement(_reactRouter.Route, { path: '/login', component: LoginForm }),
+	    React.createElement(_reactRouter.Route, { path: '/signup', component: LoginForm })
+	  )
 	);
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	  var root = document.getElementById("root");
-	  ReactDOM.render(React.createElement(_reactRouter.Router, { history: _reactRouter.hashHistory, routes: routes }), root);
+	  ReactDOM.render(router, root);
 	});
 
 /***/ },
@@ -25963,7 +25971,7 @@
 	  render: function render() {
 	    return React.createElement(
 	      "nav",
-	      { className: "navbar navbar-default" },
+	      { className: "navbar navbar-default navbar-fixed-top" },
 	      React.createElement(
 	        "div",
 	        { className: "container-fluid" },
@@ -33369,6 +33377,380 @@
 	    );
 	  }
 	});
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	var GroupIndex = __webpack_require__(260);
+	
+	var Splash = React.createClass({
+	  displayName: 'Splash',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { className: 'splash-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'splash-pic-container' },
+	        React.createElement('img', { id: 'splash-pic', src: 'http://res.cloudinary.com/dywbzmakl/image/upload/v1467236626/slider-1_tgihov.jpg' })
+	      ),
+	      React.createElement(GroupIndex, null)
+	    );
+	  }
+	});
+	
+	module.exports = Splash;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	var Link = __webpack_require__(1).Link;
+	var GroupStore = __webpack_require__(261);
+	var GroupActions = __webpack_require__(262);
+	
+	var GroupIndex = React.createClass({
+	  displayName: 'GroupIndex',
+	  getInitialState: function getInitialState() {
+	    return { groups: GroupStore.all() };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.storeListener = GroupStore.addListener(this._handleChange);
+	    GroupActions.fetchAllGroups();
+	  },
+	  _handleChange: function _handleChange() {
+	    this.setState({ groups: GroupStore.all() });
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.storeListener.remove();
+	  },
+	  render_rows: function render_rows(rows) {
+	    var _this = this;
+	
+	    return rows.map(function (row) {
+	      return _this.render_row(row);
+	    });
+	  },
+	  render_row: function render_row(row) {
+	
+	    var rowContents = row.map(function (group) {
+	      console.log(group.pic_url);
+	      return React.createElement(
+	        'li',
+	        { key: group.id },
+	        React.createElement(
+	          Link,
+	          { to: '/groups/' + group.id },
+	          React.createElement('img', { id: 'group-index-item', src: group.pic_url })
+	        )
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      { className: 'group-rows' },
+	      rowContents
+	    );
+	  },
+	  render: function render() {
+	    var copy = this.state.groups.slice();
+	    var rows = [];
+	    while (copy.length > 0) {
+	      rows.push(copy.splice(0, 4));
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { 'class': 'group index' },
+	      this.render_rows(rows)
+	    );
+	  }
+	});
+	
+	module.exports = GroupIndex;
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Store = __webpack_require__(240).Store;
+	var Dispatcher = __webpack_require__(233);
+	
+	var GroupStore = new Store(Dispatcher);
+	
+	var _groups = {};
+	
+	GroupStore.__onDispatch = function (action) {
+	  switch (action.actionType) {
+	    case "ALL":
+	      resetGroups(action.groups);
+	      break;
+	  }
+	  this.__emitChange();
+	};
+	
+	var resetGroups = function resetGroups(groups) {
+	  groups.forEach(function (group) {
+	    _groups[group.id] = group;
+	  });
+	};
+	
+	GroupStore.find = function (id) {
+	  return _groups[id];
+	};
+	
+	GroupStore.all = function () {
+	  var groups = [];
+	  for (var groupKey in _groups) {
+	    if (_groups.hasOwnProperty(groupKey)) {
+	      groups.push(_groups[groupKey]);
+	    }
+	  }
+	  return groups;
+	};
+	
+	module.exports = GroupStore;
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var GroupUtil = __webpack_require__(263);
+	var Dispatcher = __webpack_require__(233);
+	
+	module.exports = {
+	  fetchAllGroups: function fetchAllGroups() {
+	    GroupUtil.fetchAllGroups(this.recieveAllGroups);
+	  },
+	  recieveAllGroups: function recieveAllGroups(groups) {
+	    Dispatcher.dispatch({
+	      actionType: "ALL",
+	      groups: groups
+	    });
+	  }
+	};
+
+/***/ },
+/* 263 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  fetchAllGroups: function fetchAllGroups(cb) {
+	    $.ajax({
+	      url: '/groups',
+	      type: "GET",
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	var GroupStore = __webpack_require__(261);
+	var EventStore = __webpack_require__(268);
+	var GroupActions = __webpack_require__(262);
+	var EventActions = __webpack_require__(266);
+	var EventIndexItem = __webpack_require__(265);
+	
+	module.exports = React.createClass({
+	  displayName: 'exports',
+	  getInitialState: function getInitialState() {
+	    return { group: GroupStore.find(this.props.params.group_id), events: [] };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.eventstoreListener = EventStore.addListener(this._eventhandleChange);
+	    EventActions.fetchGroupEvents(this.props.params.group_id);
+	  },
+	  _eventhandleChange: function _eventhandleChange() {
+	    this.setState({ events: EventStore.all() });
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.eventstoreListener.remove();
+	  },
+	  render: function render() {
+	    debugger;
+	    var group = this.state.group;
+	    return React.createElement(
+	      'div',
+	      { 'class': 'group-detail-pane' },
+	      React.createElement(
+	        'div',
+	        { className: 'group-header' },
+	        React.createElement(
+	          'div',
+	          { className: 'Group-Banner container-fluid' },
+	          group.name
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'group-deatils' },
+	        React.createElement(
+	          'div',
+	          { className: 'group-info' },
+	          React.createElement('img', { className: 'group-image', src: group.pic_url })
+	        ),
+	        React.createElement('div', { className: 'group-loc', value: group.location }),
+	        React.createElement(
+	          'div',
+	          { className: 'group-stats' },
+	          React.createElement('span', { className: 'group-stat-members', value: '10' }),
+	          React.createElement('span', { className: 'group-stat-events', value: this.state.events.length })
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Creator Stuff'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'group-events' },
+	        this.state.events.map(function (event) {
+	          return React.createElement(EventIndexItem, { event: event });
+	        })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'group-new' },
+	        React.createElement(
+	          'h2',
+	          null,
+	          'What\'s New'
+	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	
+	module.exports = React.createClass({
+	  displayName: 'exports',
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        this.props.event.name
+	      ),
+	      React.createElement(
+	        'p',
+	        null,
+	        ' ',
+	        this.props.event.description
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var EventUtil = __webpack_require__(267);
+	var Dispatcher = __webpack_require__(233);
+	
+	module.exports = {
+	  fetchGroupEvents: function fetchGroupEvents(id) {
+	    EventUtil.fetchGroupEvents(id, this.receiveGroupEvents);
+	  },
+	  receiveGroupEvents: function receiveGroupEvents(events) {
+	    Dispatcher.dispatch({
+	      actionType: "Group",
+	      events: events
+	    });
+	  }
+	};
+
+/***/ },
+/* 267 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  fetchGroupEvents: function fetchGroupEvents(id, cb) {
+	    $.ajax({
+	      url: '/events',
+	      data: { group: { id: id } },
+	      dataType: "JSON",
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Store = __webpack_require__(240).Store;
+	var Dispatcher = __webpack_require__(233);
+	
+	var EventStore = new Store(Dispatcher);
+	
+	var _events = {};
+	
+	EventStore.__onDispatch = function (action) {
+	  switch (action.actionType) {
+	    case "Group":
+	      resetEvents(action.events);
+	      break;
+	  }
+	  this.__emitChange();
+	};
+	
+	var resetEvents = function resetEvents(events) {
+	  events.forEach(function (event) {
+	    _events[event.id] = event;
+	  });
+	};
+	
+	EventStore.all = function () {
+	  var events = [];
+	  for (var eventKey in _events) {
+	    if (_events.hasOwnProperty(eventKey)) {
+	      events.push(_events[eventKey]);
+	    }
+	  }
+	  return events;
+	};
+	
+	module.exports = EventStore;
 
 /***/ }
 /******/ ]);

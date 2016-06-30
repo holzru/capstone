@@ -9,8 +9,9 @@
 #  creator_id  :integer          not null
 #  description :text             not null
 #  location    :string           not null
-#  type        :string           not null
 #  date        :datetime         not null
+#  pic_url     :string
+#  category    :string           not null
 #
 
 require 'test_helper'

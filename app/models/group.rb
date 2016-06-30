@@ -9,6 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  location    :string           not null
+#  pic_url     :string
 #
 
 class Group < ActiveRecord::Base
@@ -25,4 +26,7 @@ class Group < ActiveRecord::Base
   has_many :members,
     through: :memberships,
     source: :user
+
+  has_many :events
+
 end

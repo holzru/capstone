@@ -9,6 +9,7 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  location    :string           not null
+#  pic_url     :string
 #
 
 require 'test_helper'

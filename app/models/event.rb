@@ -9,12 +9,13 @@
 #  creator_id  :integer          not null
 #  description :text             not null
 #  location    :string           not null
-#  type        :string           not null
 #  date        :datetime         not null
+#  pic_url     :string
+#  category    :string           not null
 #
 
 class Event < ActiveRecord::Base
-  validates :group_id, :creator_id, :description, :location, :type, :date, presence: true
+  validates :group_id, :creator_id, :description, :location, :category, :date, presence: true
 
   belongs_to :group
 
