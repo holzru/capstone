@@ -41,7 +41,7 @@
 
 .group-details{
   width: 15%;
-  border: 2px solid black;
+  border: 2px solid #CFCFCF;
   border-radius: 10px;
   margin: 5px;
   text-align: center;
@@ -49,7 +49,7 @@
 
 .group-events{
   width: 65%;
-  border: 2px solid black;
+  border: 2px solid #CFCFCF;
   border-radius: 10px;
   margin: 5px;
   text-align: center;
@@ -62,7 +62,7 @@
 
 .group-new {
   width: 15%;
-  border: 2px solid black;
+  border: 2px solid #CFCFCF;
   border-radius: 10px;
   margin: 5px;
   text-align: center;
@@ -95,12 +95,14 @@
 }
 
 .group-header {
+  color: white;
+  background-color: #766F6F;
   display: flex;
   text-align: center;
   font-weight: bold;
   font-size: 48px;
   margin: 5px auto;
   height: 15%;
-  border: 2px solid black;
+  border: 2px solid #CFCFCF;
   border-radius: 10px;
 }

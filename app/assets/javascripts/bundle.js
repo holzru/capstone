@@ -33639,6 +33639,13 @@
 	        React.createElement(
 	          'div',
 	          { className: 'group-events' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Welcome, ',
+	            group.name,
+	            ' Members'
+	          ),
 	          this.state.events.map(function (event) {
 	            return React.createElement(EventIndexItem, { event: event });
 	          })
@@ -33647,7 +33654,7 @@
 	          'div',
 	          { className: 'group-new' },
 	          React.createElement(
-	            'h2',
+	            'h3',
 	            null,
 	            'What\'s New'
 	          )

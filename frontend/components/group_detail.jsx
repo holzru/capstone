@@ -49,12 +49,13 @@ module.exports = React.createClass({
             <div>Creator Stuff</div>
           </div>
           <div className="group-events">
+            <h3>Welcome, {group.name} Members</h3>
             {this.state.events.map((event) => {
               return(<EventIndexItem event={event}/>);
             })}
           </div>
           <div className="group-new">
-            <h2>What's New</h2>
+            <h3>What's New</h3>
           </div>
         </div>
       </div>
