@@ -12,6 +12,7 @@
 #  date        :datetime         not null
 #  pic_url     :string
 #  category    :string           not null
+#  title       :string
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

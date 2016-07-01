@@ -28,7 +28,6 @@ render_rows(rows) {
 render_row(row) {
 
   let rowContents = row.map((group) => {
-    console.log(group.pic_url);
     return (<Link to={`/groups/${group.id}`} className="group-index-item-container"><li key={group.id} className="group-index-item" style={{backgroundImage: `url(${group.pic_url})`}}></li></Link>);
   });
 

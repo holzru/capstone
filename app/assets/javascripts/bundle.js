@@ -25962,211 +25962,226 @@
 /* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var React = __webpack_require__(4);
+	var LoginForm = __webpack_require__(231);
+	var SessionStore = __webpack_require__(239);
+	var hashHistory = __webpack_require__(1).hashHistory;
 	
 	module.exports = React.createClass({
-	  displayName: "exports",
+	  displayName: 'exports',
+	  getInitialState: function getInitialState() {
+	    return { formtype: "", current_user: SessionStore.currentUser() };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.sessionListener = SessionStore.addListener(this.handleUser);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.sessionListener.remove();
+	  },
+	  handleUser: function handleUser() {
+	    this.setState({ current_user: SessionStore.currentUser() });
+	  },
+	  _logIn: function _logIn(e) {
+	    e.preventDefault();
+	    this.setState({ formType: "login" }, function () {
+	      $("#user-modal").modal("show");
+	    });
+	  },
+	  _signUp: function _signUp(e) {
+	    e.preventDefault();
+	    this.setState({ formType: "signup" }, function () {
+	      $("#user-modal").modal("show");
+	    });
+	  },
+	  userPic: function userPic() {
+	    if (this.state.current_user.id) {
+	      return React.createElement('img', { src: this.state.current_user.pic_url, id: 'user-profile-pic' });
+	    } else {
+	      return React.createElement('img', { src: 'http://res.cloudinary.com/dywbzmakl/image/upload/v1467324936/default_yduuy3.jpg', id: 'user-profile-pic' });
+	    }
+	  },
+	  _userProfile: function _userProfile() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      hashHistory.push('/users/' + this.state.current_user.id);
+	    } else {
+	      this.setState({ formType: "login" }, function () {
+	        $("#user-modal").modal("show");
+	      });
+	    }
+	  },
 	  render: function render() {
 	    return React.createElement(
-	      "nav",
-	      { className: "navbar navbar-default navbar-fixed-top" },
+	      'div',
+	      null,
 	      React.createElement(
-	        "div",
-	        { className: "container-fluid" },
+	        'nav',
+	        { className: 'navbar navbar-default navbar-fixed-top' },
 	        React.createElement(
-	          "div",
-	          { className: "navbar-header" },
+	          'div',
+	          { className: 'container-fluid' },
 	          React.createElement(
-	            "button",
-	            { type: "button", className: "navbar-toggle collapsed", "data-toggle": "collapse", "data-target": "#bs-example-navbar-collapse-1", "aria-expanded": "false" },
+	            'div',
+	            { className: 'navbar-header' },
 	            React.createElement(
-	              "span",
-	              { className: "sr-only" },
-	              "Toggle navigation"
+	              'button',
+	              { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
+	              React.createElement(
+	                'span',
+	                { className: 'sr-only' },
+	                'Toggle navigation'
+	              ),
+	              React.createElement('span', { className: 'icon-bar' }),
+	              React.createElement('span', { className: 'icon-bar' }),
+	              React.createElement('span', { className: 'icon-bar' })
 	            ),
-	            React.createElement("span", { className: "icon-bar" }),
-	            React.createElement("span", { className: "icon-bar" }),
-	            React.createElement("span", { className: "icon-bar" })
+	            React.createElement(
+	              'a',
+	              { className: 'navbar-brand', id: 'logo', href: '#' },
+	              'MeatUp'
+	            )
 	          ),
 	          React.createElement(
-	            "a",
-	            { className: "navbar-brand", id: "logo", href: "#" },
-	            "MeatUp"
-	          )
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1" },
-	          React.createElement(
-	            "ul",
-	            { className: "nav navbar-nav" },
+	            'div',
+	            { className: 'collapse navbar-collapse', id: 'bs-example-navbar-collapse-1' },
 	            React.createElement(
-	              "li",
-	              null,
+	              'ul',
+	              { className: 'nav navbar-nav' },
 	              React.createElement(
-	                "a",
-	                { href: "#" },
-	                "Link ",
+	                'li',
+	                null,
 	                React.createElement(
-	                  "span",
-	                  { className: "sr-only" },
-	                  "(current)"
+	                  'a',
+	                  { href: '#' },
+	                  'Link ',
+	                  React.createElement(
+	                    'span',
+	                    { className: 'sr-only' },
+	                    '(current)'
+	                  )
+	                )
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                React.createElement(
+	                  'a',
+	                  { href: '#' },
+	                  'Link'
+	                )
+	              ),
+	              React.createElement(
+	                'li',
+	                { className: 'dropdown' },
+	                React.createElement(
+	                  'a',
+	                  { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+	                  'Dropdown ',
+	                  React.createElement('span', { className: 'caret' })
+	                ),
+	                React.createElement(
+	                  'ul',
+	                  { className: 'dropdown-menu' },
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement(
+	                      'a',
+	                      { href: '#' },
+	                      'Action'
+	                    )
+	                  ),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement(
+	                      'a',
+	                      { href: '#' },
+	                      'Another action'
+	                    )
+	                  ),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement(
+	                      'a',
+	                      { href: '#' },
+	                      'Something else here'
+	                    )
+	                  ),
+	                  React.createElement('li', { role: 'separator', className: 'divider' }),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement(
+	                      'a',
+	                      { href: '#' },
+	                      'Separated link'
+	                    )
+	                  ),
+	                  React.createElement('li', { role: 'separator', className: 'divider' }),
+	                  React.createElement(
+	                    'li',
+	                    null,
+	                    React.createElement(
+	                      'a',
+	                      { href: '#' },
+	                      'One more separated link'
+	                    )
+	                  )
 	                )
 	              )
 	            ),
 	            React.createElement(
-	              "li",
-	              null,
+	              'form',
+	              { className: 'navbar-form navbar-left', role: 'search' },
 	              React.createElement(
-	                "a",
-	                { href: "#" },
-	                "Link"
+	                'div',
+	                { className: 'form-group' },
+	                React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Search' })
+	              ),
+	              React.createElement(
+	                'button',
+	                { type: 'submit', className: 'btn btn-default' },
+	                'Submit'
 	              )
 	            ),
 	            React.createElement(
-	              "li",
-	              { className: "dropdown" },
+	              'ul',
+	              { className: 'nav navbar-nav navbar-right' },
 	              React.createElement(
-	                "a",
-	                { href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false" },
-	                "Dropdown ",
-	                React.createElement("span", { className: "caret" })
-	              ),
-	              React.createElement(
-	                "ul",
-	                { className: "dropdown-menu" },
+	                'li',
+	                null,
 	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "Action"
-	                  )
-	                ),
-	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "Another action"
-	                  )
-	                ),
-	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "Something else here"
-	                  )
-	                ),
-	                React.createElement("li", { role: "separator", className: "divider" }),
-	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "Separated link"
-	                  )
-	                ),
-	                React.createElement("li", { role: "separator", className: "divider" }),
-	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "One more separated link"
-	                  )
+	                  'a',
+	                  { href: '#', onClick: this._logIn, id: 'log-in-link' },
+	                  'Login'
 	                )
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            "form",
-	            { className: "navbar-form navbar-left", role: "search" },
-	            React.createElement(
-	              "div",
-	              { className: "form-group" },
-	              React.createElement("input", { type: "text", className: "form-control", placeholder: "Search" })
-	            ),
-	            React.createElement(
-	              "button",
-	              { type: "submit", className: "btn btn-default" },
-	              "Submit"
-	            )
-	          ),
-	          React.createElement(
-	            "ul",
-	            { className: "nav navbar-nav navbar-right" },
-	            React.createElement(
-	              "li",
-	              null,
-	              React.createElement(
-	                "a",
-	                { href: "#" },
-	                "Link"
-	              )
-	            ),
-	            React.createElement(
-	              "li",
-	              { className: "dropdown" },
-	              React.createElement(
-	                "a",
-	                { href: "#", className: "dropdown-toggle", "data-toggle": "dropdown", role: "button", "aria-haspopup": "true", "aria-expanded": "false" },
-	                "Dropdown ",
-	                React.createElement("span", { className: "caret" })
 	              ),
 	              React.createElement(
-	                "ul",
-	                { className: "dropdown-menu" },
+	                'li',
+	                null,
 	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "Action"
-	                  )
-	                ),
+	                  'a',
+	                  { href: '#', onClick: this._signUp, id: 'sign-up-link' },
+	                  'Sign Up'
+	                )
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
 	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "Another action"
-	                  )
-	                ),
-	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "Something else here"
-	                  )
-	                ),
-	                React.createElement("li", { role: "separator", className: "divider" }),
-	                React.createElement(
-	                  "li",
-	                  null,
-	                  React.createElement(
-	                    "a",
-	                    { href: "#" },
-	                    "Separated link"
-	                  )
+	                  'a',
+	                  { href: '#', onClick: this._userProfile, id: 'user-profile-link' },
+	                  this.userPic()
 	                )
 	              )
 	            )
 	          )
 	        )
-	      )
+	      ),
+	      React.createElement(LoginForm, { formType: this.state.formType })
 	    );
 	  }
 	});
@@ -26191,20 +26206,21 @@
 	  getInitialState: function getInitialState() {
 	    return {
 	      username: "",
-	      password: ""
+	      password: "",
+	      current_user: SessionStore.currentUser()
 	    };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-	    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+	    this.sessionListener = SessionStore.addListener(this.closeModalIfLoggedIn);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.errorListener.remove();
 	    this.sessionListener.remove();
 	  },
-	  redirectIfLoggedIn: function redirectIfLoggedIn() {
+	  closeModalIfLoggedIn: function closeModalIfLoggedIn() {
 	    if (SessionStore.isUserLoggedIn()) {
-	      hashHistory.push("/");
+	      $("#userModal").modal("hide");
 	    }
 	  },
 	  handleSubmit: function handleSubmit(e) {
@@ -26215,7 +26231,7 @@
 	      password: this.state.password
 	    };
 	
-	    if (this.props.location.pathname === "/login") {
+	    if (this.props.formType === "login") {
 	      SessionActions.logIn(formData);
 	    } else {
 	      SessionActions.signUp(formData);
@@ -26243,7 +26259,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.location.pathname.slice(1);
+	    return this.props.formType;
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -26271,44 +26287,73 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'login-form-container container-fluid text-center' },
+	      { id: 'user-modal', className: 'modal fade', tabindex: '-1', role: 'dialog' },
 	      React.createElement(
-	        'form',
-	        { onSubmit: this.handleSubmit, className: 'login-form-box' },
-	        'Welcome to MeatUp',
-	        React.createElement('br', null),
-	        'Please ',
-	        this.formType(),
-	        ' or ',
-	        navLink,
-	        this.fieldErrors("base"),
+	        'div',
+	        { className: 'modal-dialog' },
 	        React.createElement(
 	          'div',
-	          { className: 'login-form' },
-	          React.createElement('br', null),
+	          { className: 'modal-content' },
 	          React.createElement(
-	            'label',
-	            null,
-	            ' Username:',
-	            this.fieldErrors("username"),
-	            React.createElement('input', { type: 'text',
-	              value: this.state.username,
-	              onChange: this.update("username"),
-	              className: 'login-input' })
+	            'div',
+	            { className: 'modal-header' },
+	            React.createElement(
+	              'button',
+	              { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+	              React.createElement(
+	                'span',
+	                { 'aria-hidden': 'true' },
+	                '×'
+	              )
+	            ),
+	            React.createElement(
+	              'h4',
+	              { className: 'modal-title' },
+	              this.formType()
+	            )
 	          ),
-	          React.createElement('br', null),
 	          React.createElement(
-	            'label',
-	            null,
-	            ' Password:',
-	            this.fieldErrors("password"),
-	            React.createElement('input', { type: 'password',
-	              value: this.state.password,
-	              onChange: this.update("password"),
-	              className: 'login-input' })
-	          ),
-	          React.createElement('br', null),
-	          React.createElement('input', { type: 'submit', value: 'Submit' })
+	            'div',
+	            { className: 'modal-body' },
+	            React.createElement(
+	              'div',
+	              { className: 'login-form-container container-fluid text-center' },
+	              React.createElement(
+	                'form',
+	                { onSubmit: this.handleSubmit, className: 'login-form-box' },
+	                React.createElement('br', null),
+	                this.fieldErrors("base"),
+	                React.createElement(
+	                  'div',
+	                  { className: 'login-form' },
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'label',
+	                    null,
+	                    ' Username:',
+	                    this.fieldErrors("username"),
+	                    React.createElement('input', { type: 'text',
+	                      value: this.state.username,
+	                      onChange: this.update("username"),
+	                      className: 'login-input' })
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'label',
+	                    null,
+	                    ' Password:',
+	                    this.fieldErrors("password"),
+	                    React.createElement('input', { type: 'password',
+	                      value: this.state.password,
+	                      onChange: this.update("password"),
+	                      className: 'login-input' })
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement('input', { type: 'submit', value: this.formType(), className: 'btn btn-success' })
+	                )
+	              )
+	            )
+	          )
 	        )
 	      )
 	    );
@@ -33392,7 +33437,7 @@
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      { className: 'splash-page' },
+	      { id: 'splash-page' },
 	      React.createElement(
 	        'div',
 	        { className: 'splash-pic-container' },
@@ -33441,7 +33486,6 @@
 	  render_row: function render_row(row) {
 	
 	    var rowContents = row.map(function (group) {
-	      console.log(group.pic_url);
 	      return React.createElement(
 	        Link,
 	        { to: '/groups/' + group.id, className: 'group-index-item-container' },
@@ -33587,6 +33631,7 @@
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.eventstoreListener.remove();
+	    this.groupStoreListener.remove();
 	  },
 	  render: function render() {
 	    var group = this.state.group;
@@ -33647,7 +33692,7 @@
 	            ' Members'
 	          ),
 	          this.state.events.map(function (event) {
-	            return React.createElement(EventIndexItem, { event: event });
+	            return React.createElement(EventIndexItem, { event: event, key: event.id });
 	          })
 	        ),
 	        React.createElement(
@@ -33751,27 +33796,86 @@
 	'use strict';
 	
 	var React = __webpack_require__(4);
+	var EventTicketActions = __webpack_require__(269);
+	var Link = __webpack_require__(1).Link;
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
+	  getInitialState: function getInitialState() {
+	    return { members: [] };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    EventTicketActions.getAttendees(this.props.event.id, this._handleMembers);
+	  },
+	  _handleMembers: function _handleMembers(members) {
+	    this.setState({ members: members });
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.setState({ members: [] });
+	  },
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'event-index-item' },
 	      React.createElement(
-	        'h1',
-	        null,
-	        this.props.event.name
+	        'span',
+	        { className: 'event-item-title' },
+	        this.props.event.title
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'span',
+	        { className: 'event-item-location' },
+	        this.props.event.location
 	      ),
 	      React.createElement(
-	        'p',
-	        null,
-	        ' ',
-	        this.props.event.description
+	        'ul',
+	        { className: 'event-attendees' },
+	        this.state.members.map(function (member) {
+	          return React.createElement(
+	            Link,
+	            { to: '/users/' + member.id, key: member.id },
+	            React.createElement('img', { id: 'user-event-pic', src: member.pic_url })
+	          );
+	        })
 	      )
 	    );
 	  }
 	});
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var EventTicketUtil = __webpack_require__(270);
+	var Dispatcher = __webpack_require__(233);
+	
+	module.exports = {
+	  getAttendees: function getAttendees(id, cb) {
+	    EventTicketUtil.fetchEventAttendees(id, cb);
+	  }
+	};
+
+/***/ },
+/* 270 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  fetchEventAttendees: function fetchEventAttendees(id, cb) {
+	    $.ajax({
+	      url: "/event_tickets",
+	      data: { eventTickets: { id: id } },
+	      datatype: "JSON",
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  }
+	};
 
 /***/ }
 /******/ ]);

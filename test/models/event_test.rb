@@ -12,6 +12,7 @@
 #  date        :datetime         not null
 #  pic_url     :string
 #  category    :string           not null
+#  title       :string
 #
 
 require 'test_helper'

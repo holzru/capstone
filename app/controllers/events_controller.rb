@@ -11,8 +11,8 @@ class EventsController < ApplicationController
 
   def index
     @events = Event.all
-    if (params[:group][:group_id])
-      @events = Event.where("group_id", params[:group][:group_id])
+    if (params[:group][:id])
+      @events = Event.where(id: params[:group][:id])
     end
     render json: @events
   end

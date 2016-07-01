@@ -27,6 +27,7 @@ module.exports = React.createClass({
 
   componentWillUnmount() {
     this.eventstoreListener.remove();
+    this.groupStoreListener.remove();
   },
 
   render() {
@@ -51,7 +52,7 @@ module.exports = React.createClass({
           <div className="group-events">
             <h3>Welcome, {group.name} Members</h3>
             {this.state.events.map((event) => {
-              return(<EventIndexItem event={event}/>);
+              return(<EventIndexItem event={event} key={event.id}/>);
             })}
           </div>
           <div className="group-new">

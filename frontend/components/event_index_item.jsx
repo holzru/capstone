@@ -1,11 +1,36 @@
 const React = require('react');
+const EventTicketActions = require('../actions/event_ticket_actions');
+const Link = require('react-router').Link;
 
 module.exports = React.createClass({
+  getInitialState() {
+    return ({members: []});
+  },
+
+  componentDidMount() {
+    EventTicketActions.getAttendees(this.props.event.id, this._handleMembers);
+  },
+
+  _handleMembers(members) {
+    this.setState({members: members});
+  },
+
+  componentWillUnmount(){
+    this.setState({members: []});
+  },
+
   render() {
     return(
-      <div>
-        <h1>{this.props.event.name}</h1>
-        <p> {this.props.event.description}</p>
+      <div className="event-index-item">
+        <span className="event-item-title">{this.props.event.title}</span>
+        <br/>
+        <span className="event-item-location">{this.props.event.location}</span>
+        <ul className="event-attendees">
+          {this.state.members.map((member) => {
+            return (<Link to={`/users/${member.id}`} key={member.id}><img id="user-event-pic" src={member.pic_url}/></Link>);
+          })
+        }
+        </ul>
       </div>
     );
   }

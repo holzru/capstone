@@ -1,6 +1,16 @@
 class EventTicketsController < ApplicationController
   before_action :require_logged_in
 
+  def index
+    if params[:eventTickets][:id]
+      @event = Event.find(params[:eventTickets][:id])
+      render json: @event.attendees
+    else
+      @events = Event.all
+      render json: @events
+    end
+  end
+
   def create
     @ticket = EventTicket.new(ticket_params)
     @ticket.user_id = current_user.id

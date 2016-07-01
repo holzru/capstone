@@ -116,7 +116,7 @@ event_pics = ["http://res.cloudinary.com/dywbzmakl/image/upload/v1467313286/imgr
 
 j = 0
 40.times do
-  Event.create(creator_id: (1..38).to_a.sample, group_id: (1..10).to_a.sample, description: Faker::StarWars.quote, location: "#{Faker::Address.street_address}, #{Faker::Address.city}", category: Faker::StarWars.planet, pic_url: event_pics[j], date: Faker::Time.between(2.days.ago, Date.today, :all))
+  Event.create(creator_id: (1..38).to_a.sample, title: Faker::StarWars.specie, group_id: (1..10).to_a.sample, description: Faker::StarWars.quote, location: "#{Faker::Address.street_address}, #{Faker::Address.city}", category: Faker::StarWars.planet, pic_url: event_pics[j], date: Faker::Time.between(2.days.ago, Date.today, :all))
   j += 1
 end
 

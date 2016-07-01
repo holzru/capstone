@@ -12,10 +12,11 @@
 #  date        :datetime         not null
 #  pic_url     :string
 #  category    :string           not null
+#  title       :string
 #
 
 class Event < ActiveRecord::Base
-  validates :group_id, :creator_id, :description, :location, :category, :date, presence: true
+  validates :group_id, :creator_id, :description, :location, :category, :date, :title, presence: true
 
   belongs_to :group
 

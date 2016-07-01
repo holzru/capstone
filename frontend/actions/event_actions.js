@@ -11,5 +11,5 @@ module.exports = {
       actionType: "Group",
       events: events,
     });
-  }
+  },
 };

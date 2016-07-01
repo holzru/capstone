@@ -13,13 +13,14 @@ const LoginForm = React.createClass({
   getInitialState() {
     return {
       username: "",
-      password: ""
+      password: "",
+      current_user: SessionStore.currentUser(),
     };
   },
 
   componentDidMount() {
     this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-    this.sessionListener = SessionStore.addListener(this.redirectIfLoggedIn);
+    this.sessionListener = SessionStore.addListener(this.closeModalIfLoggedIn);
   },
 
   componentWillUnmount() {
@@ -27,9 +28,9 @@ const LoginForm = React.createClass({
     this.sessionListener.remove();
   },
 
-  redirectIfLoggedIn() {
+  closeModalIfLoggedIn() {
     if (SessionStore.isUserLoggedIn()) {
-      hashHistory.push("/");
+      $("#userModal").modal("hide");
     }
   },
 
@@ -41,7 +42,7 @@ const LoginForm = React.createClass({
 			password: this.state.password
 		};
 
-    if (this.props.location.pathname === "/login") {
+    if (this.props.formType === "login") {
       SessionActions.logIn(formData);
     } else {
       SessionActions.signUp(formData);
@@ -61,7 +62,7 @@ const LoginForm = React.createClass({
   },
 
   formType() {
-    return this.props.location.pathname.slice(1);
+    return this.props.formType;
   },
 
   update(property) {
@@ -78,37 +79,46 @@ const LoginForm = React.createClass({
     }
 
 		return (
-			<div className="login-form-container container-fluid text-center">
-				<form onSubmit={this.handleSubmit} className="login-form-box">
-	        Welcome to MeatUp
-					<br/>
-					Please { this.formType() } or { navLink }
+      <div id="user-modal" className="modal fade" tabindex="-1" role="dialog">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title">{ this.formType() }</h4>
+            </div>
+            <div className="modal-body">
+              <div className="login-form-container container-fluid text-center">
+        				<form onSubmit={this.handleSubmit} className="login-form-box">
+        					<br/>
+        	        { this.fieldErrors("base") }
+        					<div className="login-form">
+        		        <br />
+        						<label> Username:
+        		          { this.fieldErrors("username") }
+        							<input type="text"
+        		            value={this.state.username}
+        		            onChange={this.update("username")}
+        								className="login-input" />
+        						</label>
 
-	        { this.fieldErrors("base") }
-					<div className="login-form">
-		        <br />
-						<label> Username:
-		          { this.fieldErrors("username") }
-							<input type="text"
-		            value={this.state.username}
-		            onChange={this.update("username")}
-								className="login-input" />
-						</label>
+        		        <br/>
+        						<label> Password:
+        		          { this.fieldErrors("password") }
+        		          <input type="password"
+        		            value={this.state.password}
+        		            onChange={this.update("password")}
+        								className="login-input" />
+        						</label>
+        		        <br/>
+        						<input type="submit" value={this.formType()} className="btn btn-success"/>
+        					</div>
+        				</form>
+        			</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-		        <br />
-						<label> Password:
-		          { this.fieldErrors("password") }
-		          <input type="password"
-		            value={this.state.password}
-		            onChange={this.update("password")}
-								className="login-input" />
-						</label>
-
-		        <br />
-						<input type="submit" value="Submit" />
-					</div>
-				</form>
-			</div>
 		);
 	}
 });
