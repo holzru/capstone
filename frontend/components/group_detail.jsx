@@ -1,44 +1,37 @@
 const React = require('react');
 const GroupStore = require('../stores/group_store');
-const EventStore = require('../stores/event_store');
 const GroupActions = require('../actions/group_actions');
-const EventActions = require('../actions/event_actions');
 const EventIndexItem = require('./event_index_item');
+const Link = require('react-router').Link;
 
 module.exports = React.createClass({
   getInitialState(){
-    return({group: GroupStore.find(this.props.params.group_id), events: []});
+    return({group: {}, events: [], members: [], creator: {}});
   },
 
   componentDidMount() {
-    this.eventstoreListener = EventStore.addListener(this._eventhandleChange);
     this.groupStoreListener = GroupStore.addListener(this.__groupHandleChange);
-    EventActions.fetchGroupEvents(this.props.params.group_id);
-    GroupActions.fetchAllGroups();
-  },
-
-  _eventhandleChange() {
-    this.setState({events: EventStore.all()});
+    GroupActions.fetchGroup(this.props.params.group_id);
   },
 
   __groupHandleChange() {
-    this.setState({group: GroupStore.find(this.props.params.group_id)});
+    let groupObj = GroupStore.single();
+    this.setState({group: groupObj.group, members: groupObj.members, creator: groupObj.creator, events: groupObj.events});
   },
 
   componentWillUnmount() {
-    this.eventstoreListener.remove();
     this.groupStoreListener.remove();
   },
 
   render() {
     let group = this.state.group;
     return (
-      <div className="group-detail-pane container-fluid">
-        <div className="group-header">
-          <div className="Group-Banner container-fluid">{group.name}</div>
+      <div className="detail-pane container-fluid">
+        <div className="detail-header">
+          <div className="detail-banner container-fluid">{group.name}</div>
         </div>
         <div className="column-container">
-          <div className="group-details">
+          <div className="detail-left">
             <div className="group-info">
               <img id="group-image" src={group.pic_url}/>
               <div className="group-loc" value={group.location}></div>
@@ -48,15 +41,22 @@ module.exports = React.createClass({
               <span className='group-stat-events'>Events: {this.state.events.length}</span>
             </div>
             <div>Creator Stuff</div>
+            <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/></Link>
           </div>
-          <div className="group-events">
+          <div className="detail-main">
             <h3>Welcome, {group.name} Members</h3>
             {this.state.events.map((event) => {
-              return(<EventIndexItem event={event} key={event.id}/>);
+              return(<EventIndexItem event={event} key={`${event.id}event`} group={this.state.group}/>);
             })}
           </div>
-          <div className="group-new">
-            <h3>What's New</h3>
+          <div className="detail-right">
+            <h3>Members</h3>
+            {
+              this.state.members.map((member) => {
+                return (<Link to={`/users/${member.id}`} className="member-pic-container" key={`${member.id}${member.username}`}><img id="member-pic" src={member.pic_url}/></Link>);
+              })
+            }
+
           </div>
         </div>
       </div>

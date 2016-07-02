@@ -46,7 +46,7 @@
   width: 100%;
 }
 
-.group-details{
+.detail-left{
   width: 15%;
   border: 2px solid #CFCFCF;
   border-radius: 10px;
@@ -54,7 +54,7 @@
   text-align: center;
 }
 
-.group-events{
+.detail-main{
   width: 65%;
   border: 2px solid #CFCFCF;
   border-radius: 10px;
@@ -67,7 +67,7 @@
   border-radius: 10px;
 }
 
-.group-new {
+.detail-right {
   width: 15%;
   border: 2px solid #CFCFCF;
   border-radius: 10px;
@@ -83,9 +83,19 @@
   margin-bottom: 25px;
   margin-left: 0px;
   margin-right: 10px;
+  height: 150px;
+}
+
+.group-pic-user-detail-container {
+  width: 25%;
   height: 200px;
 }
 
+#user-detail-pic {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+}
 
 .group-index-item-container {
   display: block;
@@ -99,7 +109,7 @@
   height: 100%;
 }
 
-.group-detail-pane{
+.detail-pane{
   margin-top: 50px;
   margin: 0 auto;
   margin-top: 100px;
@@ -107,7 +117,7 @@
   width: 80%;
 }
 
-.group-header {
+.detail-header {
   color: white;
   background-color: #766F6F;
   display: flex;
@@ -129,4 +139,31 @@
   height: 30px;
   width: 30px;
   border-radius: 20px;
+}
+
+.member-pic-container {
+  width: inherit;
+  height: 75px;
+}
+
+#member-pic{
+  width: 100%;
+  height: inherit;
+}
+
+.creator-pic-container{
+  width: inherit;
+  height: 100px;
+}
+
+#creator-pic {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+#event-image {
+  width: 100%;
+  height: 75px;
+  border-radius: 10px;
 }

@@ -8,5 +8,15 @@ module.exports = {
         cb(resp);
       }
     });
+  },
+
+  fetchEvent(id, cb) {
+    $.ajax({
+      url: `/events/${id}`,
+      dataType: "JSON",
+      success (resp) {
+        cb(resp);
+      }
+    });
   }
 };

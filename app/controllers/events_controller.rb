@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+  before_action :require_logged_in, only: [:create, :destroy, :edit, :update]
   def create
     @event = Event.new(event_params)
     @event.creator_id = current_user.id
@@ -19,7 +20,7 @@ class EventsController < ApplicationController
 
   def show
     @event = Event.find(params[:id])
-    render json: @event
+    render json: {event: @event, group: @event.group, attendees: @event.attendees, creator: @event.creator}
   end
 
   def edit

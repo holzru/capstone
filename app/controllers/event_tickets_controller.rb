@@ -1,5 +1,5 @@
 class EventTicketsController < ApplicationController
-  before_action :require_logged_in
+  before_action :require_logged_in, only: [:create, :destroy]
 
   def index
     if params[:eventTickets][:id]

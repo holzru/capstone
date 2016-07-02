@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160630224826) do
+ActiveRecord::Schema.define(version: 20160701210954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20160630224826) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "event_tickets", ["event_id", "user_id"], name: "index_event_tickets_on_event_id_and_user_id", unique: true, using: :btree
   add_index "event_tickets", ["event_id"], name: "index_event_tickets_on_event_id", using: :btree
   add_index "event_tickets", ["user_id"], name: "index_event_tickets_on_user_id", using: :btree
 
@@ -47,7 +48,7 @@ ActiveRecord::Schema.define(version: 20160630224826) do
     t.datetime "date",        null: false
     t.string   "pic_url"
     t.string   "category",    null: false
-    t.string   "title"
+    t.string   "title",       null: false
   end
 
   add_index "events", ["group_id"], name: "index_events_on_group_id", using: :btree
@@ -60,6 +61,7 @@ ActiveRecord::Schema.define(version: 20160630224826) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "group_memberships", ["group_id", "user_id"], name: "index_group_memberships_on_group_id_and_user_id", unique: true, using: :btree
   add_index "group_memberships", ["group_id"], name: "index_group_memberships_on_group_id", using: :btree
   add_index "group_memberships", ["user_id"], name: "index_group_memberships_on_user_id", using: :btree
 

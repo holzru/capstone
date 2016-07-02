@@ -12,4 +12,15 @@ module.exports = {
       events: events,
     });
   },
+
+  getEvent(id) {
+    EventUtil.fetchEvent(id, this.receiveEvent);
+  },
+
+  receiveEvent(eventObj) {
+    Dispatcher.dispatch({
+      actionType: "Single",
+      eventObj: eventObj,
+    });
+  }
 };

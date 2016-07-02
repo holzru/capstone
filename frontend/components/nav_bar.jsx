@@ -18,6 +18,7 @@ module.exports = React.createClass({
 
   handleUser() {
     this.setState({current_user: SessionStore.currentUser()});
+    $("#user-modal").modal("hide");
   },
 
   _logIn(e) {

@@ -1,4 +1,5 @@
 class GroupsController < ApplicationController
+  before_action :require_logged_in, only: [:create, :destroy, :edit, :update]
   def create
     @group = Group.new(group_params)
     @group.creator_id = current_user.id
@@ -16,7 +17,7 @@ class GroupsController < ApplicationController
 
   def show
     @group = Group.find(params[:id])
-    render json: @group
+    render json: {group: @group, members: @group.members, creator: @group.creator, events: @group.events}
   end
 
   def edit

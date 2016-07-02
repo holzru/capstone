@@ -11,5 +11,16 @@ module.exports = {
       actionType: "ALL",
       groups: groups
     });
-  }
+  },
+
+  fetchGroup (id) {
+    GroupUtil.fetchGroup(id, this.recieveGroup);
+  },
+
+  recieveGroup(group) {
+    Dispatcher.dispatch({
+      actionType: "SINGLE",
+      group: group
+    });
+  },
 };

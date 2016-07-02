@@ -55,6 +55,9 @@
 	var Footer = __webpack_require__(258);
 	var Search = __webpack_require__(259);
 	var GroupDetail = __webpack_require__(264);
+	var UserDetail = __webpack_require__(271);
+	var EventDetail = __webpack_require__(275);
+	__webpack_require__(276);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -81,6 +84,8 @@
 	    { path: '/', component: App },
 	    React.createElement(_reactRouter.IndexRoute, { component: Search }),
 	    React.createElement(_reactRouter.Route, { path: '/groups/:group_id', component: GroupDetail }),
+	    React.createElement(_reactRouter.Route, { path: '/users/:user_id', component: UserDetail }),
+	    React.createElement(_reactRouter.Route, { path: '/events/:event_id', component: EventDetail }),
 	    React.createElement(_reactRouter.Route, { path: '/login', component: LoginForm }),
 	    React.createElement(_reactRouter.Route, { path: '/signup', component: LoginForm })
 	  )
@@ -25982,6 +25987,7 @@
 	  },
 	  handleUser: function handleUser() {
 	    this.setState({ current_user: SessionStore.currentUser() });
+	    $("#user-modal").modal("hide");
 	  },
 	  _logIn: function _logIn(e) {
 	    e.preventDefault();
@@ -33472,6 +33478,7 @@
 	  },
 	  _handleChange: function _handleChange() {
 	    this.setState({ groups: GroupStore.all() });
+	    $(".group-index-item-container[title]").tooltips();
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.storeListener.remove();
@@ -33484,18 +33491,19 @@
 	    });
 	  },
 	  render_row: function render_row(row) {
-	
+	    var rowKey = 0;
 	    var rowContents = row.map(function (group) {
+	      rowKey += group.id;
 	      return React.createElement(
 	        Link,
-	        { to: '/groups/' + group.id, className: 'group-index-item-container' },
-	        React.createElement('li', { key: group.id, className: 'group-index-item', style: { backgroundImage: 'url(' + group.pic_url + ')' } })
+	        { to: '/groups/' + group.id, key: group.id, className: 'group-index-item-container', title: 'Name: ' + group.name },
+	        React.createElement('li', { className: 'group-index-item', style: { backgroundImage: 'url(' + group.pic_url + ')' } })
 	      );
 	    });
 	
 	    return React.createElement(
 	      'ul',
-	      { className: 'group-rows' },
+	      { key: rowKey, className: 'group-rows' },
 	      rowContents
 	    );
 	  },
@@ -33534,6 +33542,9 @@
 	    case "ALL":
 	      resetGroups(action.groups);
 	      break;
+	    case "SINGLE":
+	      _groups = action.group;
+	      break;
 	  }
 	  this.__emitChange();
 	};
@@ -33558,6 +33569,10 @@
 	  return groups;
 	};
 	
+	GroupStore.single = function () {
+	  return _groups;
+	};
+	
 	module.exports = GroupStore;
 
 /***/ },
@@ -33578,6 +33593,15 @@
 	      actionType: "ALL",
 	      groups: groups
 	    });
+	  },
+	  fetchGroup: function fetchGroup(id) {
+	    GroupUtil.fetchGroup(id, this.recieveGroup);
+	  },
+	  recieveGroup: function recieveGroup(group) {
+	    Dispatcher.dispatch({
+	      actionType: "SINGLE",
+	      group: group
+	    });
 	  }
 	};
 
@@ -33596,6 +33620,16 @@
 	        cb(resp);
 	      }
 	    });
+	  },
+	
+	  fetchGroup: function fetchGroup(id, cb) {
+	    $.ajax({
+	      url: "/groups/" + id,
+	      type: "GET",
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
 	  }
 	};
 
@@ -33607,43 +33641,39 @@
 	
 	var React = __webpack_require__(4);
 	var GroupStore = __webpack_require__(261);
-	var EventStore = __webpack_require__(265);
 	var GroupActions = __webpack_require__(262);
-	var EventActions = __webpack_require__(266);
 	var EventIndexItem = __webpack_require__(268);
+	var Link = __webpack_require__(1).Link;
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
 	  getInitialState: function getInitialState() {
-	    return { group: GroupStore.find(this.props.params.group_id), events: [] };
+	    return { group: {}, events: [], members: [], creator: {} };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    this.eventstoreListener = EventStore.addListener(this._eventhandleChange);
 	    this.groupStoreListener = GroupStore.addListener(this.__groupHandleChange);
-	    EventActions.fetchGroupEvents(this.props.params.group_id);
-	    GroupActions.fetchAllGroups();
-	  },
-	  _eventhandleChange: function _eventhandleChange() {
-	    this.setState({ events: EventStore.all() });
+	    GroupActions.fetchGroup(this.props.params.group_id);
 	  },
 	  __groupHandleChange: function __groupHandleChange() {
-	    this.setState({ group: GroupStore.find(this.props.params.group_id) });
+	    var groupObj = GroupStore.single();
+	    this.setState({ group: groupObj.group, members: groupObj.members, creator: groupObj.creator, events: groupObj.events });
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
-	    this.eventstoreListener.remove();
 	    this.groupStoreListener.remove();
 	  },
 	  render: function render() {
+	    var _this = this;
+	
 	    var group = this.state.group;
 	    return React.createElement(
 	      'div',
-	      { className: 'group-detail-pane container-fluid' },
+	      { className: 'detail-pane container-fluid' },
 	      React.createElement(
 	        'div',
-	        { className: 'group-header' },
+	        { className: 'detail-header' },
 	        React.createElement(
 	          'div',
-	          { className: 'Group-Banner container-fluid' },
+	          { className: 'detail-banner container-fluid' },
 	          group.name
 	        )
 	      ),
@@ -33652,7 +33682,7 @@
 	        { className: 'column-container' },
 	        React.createElement(
 	          'div',
-	          { className: 'group-details' },
+	          { className: 'detail-left' },
 	          React.createElement(
 	            'div',
 	            { className: 'group-info' },
@@ -33679,11 +33709,16 @@
 	            'div',
 	            null,
 	            'Creator Stuff'
+	          ),
+	          React.createElement(
+	            Link,
+	            { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
+	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url })
 	          )
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'group-events' },
+	          { className: 'detail-main' },
 	          React.createElement(
 	            'h3',
 	            null,
@@ -33692,17 +33727,24 @@
 	            ' Members'
 	          ),
 	          this.state.events.map(function (event) {
-	            return React.createElement(EventIndexItem, { event: event, key: event.id });
+	            return React.createElement(EventIndexItem, { event: event, key: event.id + 'event', group: _this.state.group });
 	          })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'group-new' },
+	          { className: 'detail-right' },
 	          React.createElement(
 	            'h3',
 	            null,
-	            'What\'s New'
-	          )
+	            'Members'
+	          ),
+	          this.state.members.map(function (member) {
+	            return React.createElement(
+	              Link,
+	              { to: '/users/' + member.id, className: 'member-pic-container', key: '' + member.id + member.username },
+	              React.createElement('img', { id: 'member-pic', src: member.pic_url })
+	            );
+	          })
 	        )
 	      )
 	    );
@@ -33727,8 +33769,15 @@
 	    case "Group":
 	      resetEvents(action.events);
 	      break;
+	    case "Single":
+	      setSingleEvent(action.eventObj);
+	      break;
 	  }
 	  this.__emitChange();
+	};
+	
+	var setSingleEvent = function setSingleEvent(eventObj) {
+	  _events = eventObj;
 	};
 	
 	var resetEvents = function resetEvents(events) {
@@ -33745,6 +33794,10 @@
 	    }
 	  }
 	  return events;
+	};
+	
+	EventStore.current = function () {
+	  return _events;
 	};
 	
 	module.exports = EventStore;
@@ -33767,6 +33820,15 @@
 	      actionType: "Group",
 	      events: events
 	    });
+	  },
+	  getEvent: function getEvent(id) {
+	    EventUtil.fetchEvent(id, this.receiveEvent);
+	  },
+	  receiveEvent: function receiveEvent(eventObj) {
+	    Dispatcher.dispatch({
+	      actionType: "Single",
+	      eventObj: eventObj
+	    });
 	  }
 	};
 
@@ -33781,6 +33843,15 @@
 	    $.ajax({
 	      url: '/events',
 	      data: { group: { id: id } },
+	      dataType: "JSON",
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  },
+	  fetchEvent: function fetchEvent(id, cb) {
+	    $.ajax({
+	      url: "/events/" + id,
 	      dataType: "JSON",
 	      success: function success(resp) {
 	        cb(resp);
@@ -33814,13 +33885,18 @@
 	    this.setState({ members: [] });
 	  },
 	  render: function render() {
+	    debugger;
 	    return React.createElement(
 	      'div',
 	      { className: 'event-index-item' },
 	      React.createElement(
-	        'span',
-	        { className: 'event-item-title' },
-	        this.props.event.title
+	        Link,
+	        { to: 'events/' + this.props.event.id },
+	        React.createElement(
+	          'span',
+	          { className: 'event-item-title' },
+	          this.props.event.title
+	        )
 	      ),
 	      React.createElement('br', null),
 	      React.createElement(
@@ -33834,7 +33910,7 @@
 	        this.state.members.map(function (member) {
 	          return React.createElement(
 	            Link,
-	            { to: '/users/' + member.id, key: member.id },
+	            { to: '/users/' + member.id, key: member.id, event: event.id },
 	            React.createElement('img', { id: 'user-event-pic', src: member.pic_url })
 	          );
 	        })
@@ -33855,6 +33931,12 @@
 	module.exports = {
 	  getAttendees: function getAttendees(id, cb) {
 	    EventTicketUtil.fetchEventAttendees(id, cb);
+	  },
+	  registerForEvent: function registerForEvent(eventId) {
+	    EventTicketUtil.registerForEvent(eventId, this._deliverTicket);
+	  },
+	  _deliverTicket: function _deliverTicket(action) {
+	    //TODO: graphic
 	  }
 	};
 
@@ -33874,8 +33956,410 @@
 	        cb(resp);
 	      }
 	    });
+	  },
+	  registerForEvent: function registerForEvent(eventId, cb) {
+	    $.ajax({
+	      url: "/event_tickets",
+	      type: "POST",
+	      data: { ticket: { event_id: eventId } },
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
 	  }
 	};
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	var Link = __webpack_require__(1).Link;
+	var UserStore = __webpack_require__(272);
+	var UserActions = __webpack_require__(273);
+	
+	module.exports = React.createClass({
+	  displayName: 'exports',
+	  getInitialState: function getInitialState() {
+	    return { user: {}, user_groups: [] };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.userStoreListener = UserStore.addListener(this._handleChange);
+	    UserActions.fetchUser(this.props.params.user_id);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.userStoreListener.remove();
+	  },
+	  _handleChange: function _handleChange() {
+	    var userObj = UserStore.current();
+	    this.setState({ user: userObj.user, user_groups: userObj.user_groups });
+	  },
+	  render_rows: function render_rows(rows) {
+	    var _this = this;
+	
+	    return rows.map(function (row) {
+	      return _this.render_row(row);
+	    });
+	  },
+	  render_row: function render_row(row) {
+	    var rowContents = row.map(function (group) {
+	      return React.createElement(
+	        Link,
+	        { to: '/groups/' + group.id, className: 'group-index-item-container' },
+	        React.createElement('li', { key: group.id, className: 'group-index-item', style: { backgroundImage: 'url(' + group.pic_url + ')' } })
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      { className: 'group-rows' },
+	      rowContents
+	    );
+	  },
+	  render: function render() {
+	    var rows = [];
+	    var group_copy = this.state.user_groups.slice();
+	    while (group_copy.length > 0) {
+	      rows.push(group_copy.splice(0, 4));
+	    }
+	    var user = this.state.user;
+	    return React.createElement(
+	      'div',
+	      { className: 'detail-pane container-fluid' },
+	      React.createElement(
+	        'div',
+	        { className: 'detail-header' },
+	        React.createElement(
+	          'div',
+	          { className: 'detail-banner container-fluid' },
+	          user.username
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'column-container' },
+	        React.createElement(
+	          'div',
+	          { className: 'detail-left' },
+	          React.createElement(
+	            'div',
+	            { className: 'user-info' },
+	            React.createElement(
+	              'div',
+	              null,
+	              React.createElement(
+	                'div',
+	                { className: 'user-loc' },
+	                'Location Fill In'
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'user-interests' },
+	            React.createElement(
+	              'h3',
+	              null,
+	              'Interests'
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'detail-main' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            user.username,
+	            ' Groups'
+	          ),
+	          React.createElement('br', null),
+	          React.createElement('br', null),
+	          this.render_rows(rows)
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'detail-right' },
+	          React.createElement('img', { id: 'user-detail-pic', src: user.pic_url }),
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Description'
+	          ),
+	          React.createElement(
+	            'p',
+	            { className: 'user-description' },
+	            user.description
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Store = __webpack_require__(240).Store;
+	var Dispatcher = __webpack_require__(233);
+	
+	var UserStore = new Store(Dispatcher);
+	
+	var _user = {};
+	
+	UserStore.__onDispatch = function (action) {
+	  switch (action.actionType) {
+	    case "User":
+	      resetUser(action.user);
+	      break;
+	  }
+	  this.__emitChange();
+	};
+	
+	var resetUser = function resetUser(user) {
+	  _user = user;
+	};
+	
+	UserStore.current = function () {
+	  return _user;
+	};
+	
+	module.exports = UserStore;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var UserUtil = __webpack_require__(274);
+	var Dispatcher = __webpack_require__(233);
+	
+	module.exports = {
+	  fetchUser: function fetchUser(id) {
+	    UserUtil.fetchUser(id, this.recieveUser);
+	  },
+	  recieveUser: function recieveUser(user) {
+	    Dispatcher.dispatch({
+	      actionType: "User",
+	      user: user
+	    });
+	  }
+	};
+
+/***/ },
+/* 274 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  fetchUser: function fetchUser(id, cb) {
+	    $.ajax({
+	      url: "/users/" + id,
+	      dataType: "JSON",
+	      data: { user: { id: id } },
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	var EventStore = __webpack_require__(265);
+	var EventActions = __webpack_require__(266);
+	var EventIndexItem = __webpack_require__(268);
+	var Link = __webpack_require__(1).Link;
+	var SessionStore = __webpack_require__(239);
+	var EventTicketActions = __webpack_require__(269);
+	
+	module.exports = React.createClass({
+	  displayName: 'exports',
+	  getInitialState: function getInitialState() {
+	    return { event: {}, attendees: [], group: {}, creator: {} };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.eventStoreListener = EventStore.addListener(this._handleEvent);
+	    EventActions.getEvent(this.props.params.event_id);
+	  },
+	  _handleEvent: function _handleEvent() {
+	    var eventObj = EventStore.current();
+	    this.setState({ event: eventObj.event, attendees: eventObj.attendees, group: eventObj.group, creator: eventObj.creator });
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.eventStoreListener.remove();
+	  },
+	  _registerForEvent: function _registerForEvent() {
+	    EventTicketActions.registerForEvent(this.state.event.id);
+	  },
+	  render: function render() {
+	    var event = this.state.event;
+	    var group = this.state.group;
+	    var attendees = this.state.attendees;
+	    return React.createElement(
+	      'div',
+	      { className: 'detail-pane container-fluid' },
+	      React.createElement(
+	        'div',
+	        { className: 'detail-header' },
+	        React.createElement(
+	          'div',
+	          { className: 'detail-banner container-fluid' },
+	          group.name
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'column-container' },
+	        React.createElement(
+	          'div',
+	          { className: 'detail-left' },
+	          React.createElement(
+	            'div',
+	            { className: 'event-info' },
+	            React.createElement('img', { id: 'event-image', src: event.pic_url }),
+	            React.createElement('div', { className: 'event-loc', value: event.location })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'event-stats' },
+	            React.createElement(
+	              'span',
+	              { className: 'event-stat-members' },
+	              'Attendees: ',
+	              attendees.length
+	            ),
+	            React.createElement('br', null)
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            'Creator Stuff'
+	          ),
+	          React.createElement(
+	            Link,
+	            { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
+	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'detail-main' },
+	          React.createElement(
+	            'h3',
+	            { className: 'event-title' },
+	            event.title
+	          ),
+	          React.createElement(
+	            'p',
+	            { className: 'event-description' },
+	            event.description
+	          ),
+	          React.createElement('button', { className: 'btn-default', value: 'Register for Event', onClick: this._registerForEvent })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'detail-right' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Members'
+	          ),
+	          attendees.map(function (attendee) {
+	            return React.createElement(
+	              Link,
+	              { to: '/users/' + attendee.id, className: 'member-pic-container', key: '' + attendee.id + attendee.username },
+	              React.createElement('img', { id: 'member-pic', src: attendee.pic_url })
+	            );
+	          })
+	        )
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 276 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	// IIFE to ensure safe use of $
+	(function ($) {
+	
+	  // Create plugin
+	  $.fn.tooltips = function (el) {
+	
+	    var $tooltip,
+	        $body = $('body'),
+	        $el;
+	
+	    // Ensure chaining works
+	    return this.each(function (i, el) {
+	
+	      $el = $(el).attr("data-tooltip", i);
+	
+	      // Make DIV and append to page
+	      var $tooltip = $('<div class="tooltip" data-tooltip="' + i + '">' + $el.attr('title') + '<div class="arrow"></div></div>').appendTo("body");
+	
+	      // Position right away, so first appearance is smooth
+	      var linkPosition = $el.position();
+	
+	      $tooltip.css({
+	        top: linkPosition.top - $tooltip.outerHeight() - 13,
+	        left: linkPosition.left - $tooltip.width() / 2
+	      });
+	
+	      $el
+	      // Get rid of yellow box popup
+	      .removeAttr("title")
+	
+	      // Mouseenter
+	      .hover(function () {
+	
+	        $el = $(this);
+	
+	        $tooltip = $('div[data-tooltip=' + $el.data('tooltip') + ']');
+	
+	        // Reposition tooltip, in case of page movement e.g. screen resize
+	        linkPosition = $el.position();
+	
+	        $tooltip.css({
+	          top: linkPosition.top - $tooltip.outerHeight() - 13,
+	          left: linkPosition.left - $tooltip.width() / 2
+	        });
+	
+	        // Adding class handles animation through CSS
+	        $tooltip.addClass("active");
+	
+	        // Mouseleave
+	      }, function () {
+	
+	        $el = $(this);
+	
+	        // Temporary class for same-direction fadeout
+	        $tooltip = $('div[data-tooltip=' + $el.data('tooltip') + ']').addClass("out");
+	
+	        // Remove all classes
+	        setTimeout(function () {
+	          $tooltip.removeClass("active").removeClass("out");
+	        }, 300);
+	      });
+	    });
+	  };
+	})(jQuery);
 
 /***/ }
 /******/ ]);

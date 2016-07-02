@@ -5,4 +5,12 @@ module.exports = {
   getAttendees(id, cb) {
     EventTicketUtil.fetchEventAttendees(id, cb);
   },
+
+  registerForEvent(eventId) {
+    EventTicketUtil.registerForEvent(eventId, this._deliverTicket);
+  },
+
+  _deliverTicket(action) {
+    //TODO: graphic
+  }
 };

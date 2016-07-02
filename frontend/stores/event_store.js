@@ -10,8 +10,15 @@ EventStore.__onDispatch = function(action) {
     case "Group":
       resetEvents(action.events);
       break;
+    case "Single":
+      setSingleEvent(action.eventObj);
+      break;
     }
   this.__emitChange();
+};
+
+const setSingleEvent = function(eventObj){
+  _events = eventObj;
 };
 
 const resetEvents = function(events){
@@ -28,6 +35,10 @@ EventStore.all = function() {
     }
   }
   return events;
+};
+
+EventStore.current = function() {
+  return _events;
 };
 
 

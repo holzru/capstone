@@ -7,6 +7,12 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 require 'faker'
 
+GroupMembership.destroy_all
+Group.destroy_all
+Event.destroy_all
+EventTicket.destroy_all
+User.destroy_all
+
 user_pics = ["http://res.cloudinary.com/dywbzmakl/image/upload/v1467312435/url_kpbpxn.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467312435/linkedin_nnezdt.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467312435/imgres_ozj99x.jpg",
@@ -48,12 +54,6 @@ user_pics = ["http://res.cloudinary.com/dywbzmakl/image/upload/v1467312435/url_k
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467312433/images-15_cqzqxk.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467312433/images-14_gpyrdn.jpg"]
 
-u = 0
-39.times do
-  User.create(username: Faker::Name.name, password: Faker::Internet.password, description: Faker::StarWars.quote, pic_url: user_pics[u])
-  u += 1
-end
-
 pics = ["http://res.cloudinary.com/dywbzmakl/image/upload/v1467228003/images-3_dwvvxt.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467228003/images-2_wnyqcq.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467228002/images-15_e0ue5c.jpg",
@@ -63,16 +63,8 @@ pics = ["http://res.cloudinary.com/dywbzmakl/image/upload/v1467228003/images-3_d
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467228004/images-6_n3ouuh.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467228003/images_pfmg3j.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467228003/imgres_trz09n.jpg",
-"http://res.cloudinary.com/dywbzmakl/image/upload/v1467228003/imgres-1_txf6ts.jpg"]
-
-i = 0
-10.times do
-  Group.create(creator_id: (1..38).to_a.sample, name: Faker::StarWars.specie, description: Faker::StarWars.quote, location:"#{Faker::Address.street_address}, #{Faker::Address.city}", pic_url: pics[i] )
-  i += 1
-end
-
-
-event_pics = ["http://res.cloudinary.com/dywbzmakl/image/upload/v1467313286/imgres_atdfqm.jpg",
+"http://res.cloudinary.com/dywbzmakl/image/upload/v1467228003/imgres-1_txf6ts.jpg",
+"http://res.cloudinary.com/dywbzmakl/image/upload/v1467313286/imgres_atdfqm.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467313286/imgres-10_un8whc.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467313286/imgres-9_bgfyfp.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467313286/imgres-8_f9wupl.jpg",
@@ -114,16 +106,33 @@ event_pics = ["http://res.cloudinary.com/dywbzmakl/image/upload/v1467313286/imgr
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467313283/images-1_tkbcbl.jpg",
 "http://res.cloudinary.com/dywbzmakl/image/upload/v1467313283/events-heavenly-header_ozgn8a.jpg"]
 
+
+u = 0
+39.times do
+  User.create(username: Faker::Name.name, password: Faker::Internet.password, description: Faker::StarWars.quote, pic_url: user_pics[u])
+  u += 1
+end
+
+
+
+50.times do
+  Group.create(creator_id: (1..39).to_a.sample, name: Faker::StarWars.specie, description: Faker::StarWars.quote, location:"#{Faker::Address.street_address}, #{Faker::Address.city}", pic_url: pics.sample )
+end
+
+100.times do
+  Event.create(creator_id: (1..39).to_a.sample, title: Faker::StarWars.specie, group_id: (1..50).to_a.sample, description: Faker::StarWars.quote, location: "#{Faker::Address.street_address}, #{Faker::Address.city}", category: Faker::StarWars.planet, pic_url: pics.sample, date: Faker::Time.between(2.days.ago, Date.today, :all))
+end
+
+i = 0
+while i < 200
+  if EventTicket.create(user_id: (1..39).to_a.sample, event_id: (1..100).to_a.sample)
+    i += 1
+  end
+end
+
 j = 0
-40.times do
-  Event.create(creator_id: (1..38).to_a.sample, title: Faker::StarWars.specie, group_id: (1..10).to_a.sample, description: Faker::StarWars.quote, location: "#{Faker::Address.street_address}, #{Faker::Address.city}", category: Faker::StarWars.planet, pic_url: event_pics[j], date: Faker::Time.between(2.days.ago, Date.today, :all))
-  j += 1
-end
-
-70.times do
-  EventTicket.create(user_id: (1..38).to_a.sample, event_id: (1..38).to_a.sample)
-end
-
-70.times do
-  GroupMembership.create(user_id: (1..38).to_a.sample, group_id: (1..10).to_a.sample)
+while j < 100
+  if GroupMembership.create(user_id: (1..39).to_a.sample, group_id: (1..50).to_a.sample)
+    j += 1
+  end
 end

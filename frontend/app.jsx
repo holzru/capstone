@@ -6,7 +6,10 @@ const NavBar = require('./components/nav_bar');
 const LoginForm = require('./components/login_form');
 const Footer = require('./components/footer');
 const Search = require('./components/search');
-const GroupDetail = require('./components/group_detail')
+const GroupDetail = require('./components/group_detail');
+const UserDetail = require('./components/user_detail');
+const EventDetail = require('./components/event_detail')
+require('./util/tooltips_util');
 
 
 const App = React.createClass({
@@ -28,6 +31,8 @@ const router = (
     <Route path="/" component={App}>
       <IndexRoute component={Search}/>
       <Route path="/groups/:group_id" component={GroupDetail}/>
+      <Route path="/users/:user_id" component={UserDetail}/>
+      <Route path="/events/:event_id" component={EventDetail}/>
       <Route path="/login" component={ LoginForm } />
       <Route path="/signup" component={ LoginForm } />
     </Route>

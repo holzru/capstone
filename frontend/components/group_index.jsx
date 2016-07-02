@@ -15,6 +15,7 @@ componentDidMount() {
 
 _handleChange() {
   this.setState({groups: GroupStore.all()});
+  $(".group-index-item-container[title]").tooltips();
 },
 
 componentWillUnmount() {
@@ -26,12 +27,13 @@ render_rows(rows) {
 },
 
 render_row(row) {
-
+  let rowKey = 0;
   let rowContents = row.map((group) => {
-    return (<Link to={`/groups/${group.id}`} className="group-index-item-container"><li key={group.id} className="group-index-item" style={{backgroundImage: `url(${group.pic_url})`}}></li></Link>);
+    rowKey += group.id;
+    return (<Link to={`/groups/${group.id}`} key={group.id} className="group-index-item-container" title={`Name: ${group.name}`}><li className="group-index-item" style={{backgroundImage: `url(${group.pic_url})`}}></li></Link>);
   });
 
-  return (<ul className="group-rows">{rowContents}</ul>);
+  return (<ul key={rowKey} className="group-rows">{rowContents}</ul>);
 },
 
 render() {

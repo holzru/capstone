@@ -8,5 +8,16 @@ module.exports = {
         cb(resp);
       }
     });
+  },
+
+  registerForEvent(eventId, cb) {
+    $.ajax({
+      url: "/event_tickets",
+      type: "POST",
+      data: {ticket: {event_id: eventId}},
+      success (resp) {
+        cb(resp);
+      }
+    });
   }
 };

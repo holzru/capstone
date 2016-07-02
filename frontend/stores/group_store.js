@@ -10,6 +10,9 @@ GroupStore.__onDispatch = function(action) {
     case "ALL":
       resetGroups(action.groups);
       break;
+    case "SINGLE":
+      _groups = action.group;
+      break;
   }
   this.__emitChange();
 };
@@ -34,5 +37,8 @@ GroupStore.all = function() {
   return groups;
 };
 
+GroupStore.single = function() {
+  return _groups;
+};
 
 module.exports = GroupStore;
