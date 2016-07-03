@@ -17,5 +17,29 @@ module.exports = {
         cb(resp);
       }
     });
+  },
+
+  createGroup(group, cb){
+    $.ajax({
+      url: `/groups`,
+      type: 'POST',
+      dataType: 'JSON',
+      data: {group: group},
+      success (resp) {
+        cb(resp);
+      }
+    });
+  },
+
+  updateGroup(group, cb){
+    $.ajax({
+      url: `/groups/${group.id}`,
+      type: 'PATCH',
+      dataType: 'JSON',
+      data: {group: group},
+      success (resp) {
+        cb(resp);
+      }
+    });
   }
 };

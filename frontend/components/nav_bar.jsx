@@ -1,11 +1,15 @@
 const React = require('react');
 const LoginForm = require('./login_form');
+const SignupForm = require('./signup_form');
+const GroupForm = require('./group_form');
 const SessionStore = require('../stores/session_store');
+const SessionActions = require('../actions/session_actions');
 const hashHistory = require('react-router').hashHistory;
+const Link = require('react-router').Link;
 
 module.exports = React.createClass({
   getInitialState() {
-    return ({formtype: "", current_user: SessionStore.currentUser()});
+    return ({current_user: SessionStore.currentUser()});
   },
 
   componentDidMount() {
@@ -23,16 +27,17 @@ module.exports = React.createClass({
 
   _logIn(e) {
     e.preventDefault();
-    this.setState({formType: "login"}, function () {
-      $("#user-modal").modal("show");
-    });
+    $("#login-modal").modal("show");
   },
 
   _signUp(e) {
     e.preventDefault();
-    this.setState({formType: "signup"}, function () {
-      $("#user-modal").modal("show");
-    });
+    $("#user-modal").modal("show");
+  },
+
+  _signOut(e) {
+    e.preventDefault();
+    SessionActions.logOut();
   },
 
   userPic() {
@@ -43,17 +48,36 @@ module.exports = React.createClass({
     }
   },
 
-  _userProfile() {
+  _createGroup(e){
+    e.preventDefault();
     if (SessionStore.isUserLoggedIn()) {
-      hashHistory.push(`/users/${this.state.current_user.id}`);
+      $('#group-modal-new').modal('show');
     } else {
-      this.setState({formType: "login"}, function () {
-        $("#user-modal").modal("show");
-      });
+      $("#login-modal").modal("show");
+    }
+  },
+
+  _userProfile(e) {
+    e.preventDefault();
+    if (SessionStore.isUserLoggedIn()) {
+      hashHistory.push(`/users/${SessionStore.currentUser().id}`);
+    } else {
+      $("#login-modal").modal("show");
     }
   },
 
   render (){
+    const rightNavItems = SessionStore.isUserLoggedIn() ?
+      <ul className="nav navbar-nav navbar-right">
+        <li><a href="#" onClick={this._signUp} id="log-in-link">Edit</a></li>
+        <li><a href="#" onClick={this._signOut} id="sign-up-link">Sign Out</a></li>
+        <li><a href="#" onClick={this._userProfile} id="user-profile-link">{this.userPic()}</a></li>
+      </ul> :
+      <ul className="nav navbar-nav navbar-right">
+        <li><a href="#" onClick={this._logIn} id="log-in-link">Login</a></li>
+        <li><a href="#" onClick={this._signUp} id="sign-up-link">Sign Up</a></li>
+        <li><a href="#" onClick={this._userProfile} id="user-profile-link">{this.userPic()}</a></li>
+      </ul>;
     return (
       <div>
 
@@ -71,7 +95,7 @@ module.exports = React.createClass({
 
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
-              <li><a href="#">Link <span className="sr-only">(current)</span></a></li>
+              <li><a href="#" onClick={this._createGroup}>Create Group <span className="sr-only">(current)</span></a></li>
               <li><a href="#">Link</a></li>
               <li className="dropdown">
                 <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span className="caret"></span></a>
@@ -92,15 +116,13 @@ module.exports = React.createClass({
               </div>
               <button type="submit" className="btn btn-default">Submit</button>
             </form>
-            <ul className="nav navbar-nav navbar-right">
-              <li><a href="#" onClick={this._logIn} id="log-in-link">Login</a></li>
-              <li><a href="#" onClick={this._signUp} id="sign-up-link">Sign Up</a></li>
-              <li><a href="#" onClick={this._userProfile} id="user-profile-link">{this.userPic()}</a></li>
-            </ul>
+            {rightNavItems}
           </div>
         </div>
       </nav>
-      <LoginForm formType={this.state.formType}/>
+      <LoginForm formType="login"/>
+      <SignupForm formType={SessionStore.isUserLoggedIn() ? "edit" : "signup"}/>
+      <GroupForm formType="new"/>
     </div>
   );}
 });

@@ -1,6 +1,9 @@
 const React = require('react');
 const GroupStore = require('../stores/group_store');
 const GroupActions = require('../actions/group_actions');
+const GroupForm = require('./group_form');
+const SessionStore = require('../stores/session_store');
+const GroupMembershipActions = require('../actions/group_membership_actions');
 const EventIndexItem = require('./event_index_item');
 const Link = require('react-router').Link;
 
@@ -10,6 +13,7 @@ module.exports = React.createClass({
   },
 
   componentDidMount() {
+    $('.tooltip').remove();
     this.groupStoreListener = GroupStore.addListener(this.__groupHandleChange);
     GroupActions.fetchGroup(this.props.params.group_id);
   },
@@ -21,6 +25,26 @@ module.exports = React.createClass({
 
   componentWillUnmount() {
     this.groupStoreListener.remove();
+  },
+
+  editButton(){
+    if (SessionStore.currentUser().id === this.state.creator.id) {
+      return <button onClick={this._editGroup}>Edit Group</button>;
+    } else {
+      return "";
+    }
+  },
+
+  _joinGroup() {
+    if (SessionStore.isUserLoggedIn()){
+      GroupMembershipActions.joinGroup(this.state.group.id);
+    } else {
+      $('#login-modal').modal('show');
+    }
+  },
+
+  _editGroup() {
+    $('#group-modal-edit').modal('show');
   },
 
   render() {
@@ -37,17 +61,19 @@ module.exports = React.createClass({
               <div className="group-loc" value={group.location}></div>
             </div>
             <div className="group-stats">
-              <span className='group-stat-members'>Members: 10</span><br/>
+              <span className='group-stat-members'>Members: {this.state.members.length}</span><br/>
               <span className='group-stat-events'>Events: {this.state.events.length}</span>
             </div>
             <div>Creator Stuff</div>
             <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/></Link>
+            {this.editButton()}
           </div>
           <div className="detail-main">
             <h3>Welcome, {group.name} Members</h3>
             {this.state.events.map((event) => {
               return(<EventIndexItem event={event} key={`${event.id}event`} group={this.state.group}/>);
             })}
+            <button onClick={this._joinGroup}>Join Group</button>
           </div>
           <div className="detail-right">
             <h3>Members</h3>
@@ -59,6 +85,7 @@ module.exports = React.createClass({
 
           </div>
         </div>
+        <GroupForm group={group} formType="edit" />
       </div>
     );
   }

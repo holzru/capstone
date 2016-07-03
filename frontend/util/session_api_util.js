@@ -4,7 +4,7 @@ const SessionApiUtil = {
 	logIn(user, success, error) {
 		$.ajax({
 			url: '/session',
-			type: 'POST',
+			method: 'POST',
 			data: { user },
 			success,
 			error(xhr) {

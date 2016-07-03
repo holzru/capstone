@@ -1,4 +1,5 @@
 const UserUtil = require('../util/user_util');
+const SessionActions = require('./session_actions');
 const Dispatcher = require('../dispatcher/dispatcher');
 
 module.exports = {
@@ -11,5 +12,12 @@ module.exports = {
       actionType: "User",
       user: user,
     });
+  },
+
+  updateUser(user) {
+    UserUtil.updateUser(user, function (newUser) {
+      this.recieveUser(newUser);
+      SessionActions.receiveCurrentUser(newUser);
+    }.bind(this));
   }
 };

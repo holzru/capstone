@@ -4,11 +4,21 @@ class UsersController < ApplicationController
 
 		if @user.save
 			login(@user)
-			render "users/show"
+			render json: @user
 		else
 			render json: @user.errors, status: 422
 		end
 	end
+
+  def update
+    @user = current_user
+
+		if @user.update(user_params)
+			render json: @user
+		else
+			render json: @user.errors, status: 422
+		end
+  end
 
   def show
     @user = User.find(params[:user][:id])
@@ -18,7 +28,7 @@ class UsersController < ApplicationController
 	protected
 
 	def user_params
-		params.require(:user).permit(:username, :password)
+		params.require(:user).permit(:username, :password, :description, :pic_url)
 	end
 
 end

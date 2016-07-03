@@ -26,7 +26,11 @@ module.exports = React.createClass({
   },
 
   _registerForEvent() {
-    EventTicketActions.registerForEvent(this.state.event.id);
+    if (SessionStore.isUserLoggedIn()) {
+      EventTicketActions.registerForEvent(this.state.event.id);
+    } else {
+      $('#login-modal').modal('show');
+    }
   },
 
   render() {
@@ -53,7 +57,9 @@ module.exports = React.createClass({
           <div className="detail-main">
             <h3 className="event-title">{event.title}</h3>
             <p className="event-description">{event.description}</p>
-            <button className="btn-default" value="Register for Event" onClick={this._registerForEvent}/>
+            <button className="btn-default" onClick={this._registerForEvent}>
+              Register for Event
+            </button>
           </div>
           <div className="detail-right">
             <h3>Members</h3>

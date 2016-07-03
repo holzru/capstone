@@ -115,24 +115,25 @@ end
 
 
 
-50.times do
-  Group.create(creator_id: (1..39).to_a.sample, name: Faker::StarWars.specie, description: Faker::StarWars.quote, location:"#{Faker::Address.street_address}, #{Faker::Address.city}", pic_url: pics.sample )
+100.times do
+  group = Group.create(creator_id: (1..39).to_a.sample, name: Faker::StarWars.specie, description: Faker::StarWars.quote, location:"#{Faker::Address.street_address}, #{Faker::Address.city}", pic_url: pics.sample )
+  GroupMembership.create!(user_id: group.creator_id, group_id: group.id)
 end
 
-100.times do
-  Event.create(creator_id: (1..39).to_a.sample, title: Faker::StarWars.specie, group_id: (1..50).to_a.sample, description: Faker::StarWars.quote, location: "#{Faker::Address.street_address}, #{Faker::Address.city}", category: Faker::StarWars.planet, pic_url: pics.sample, date: Faker::Time.between(2.days.ago, Date.today, :all))
+300.times do
+  Event.create(creator_id: (1..39).to_a.sample, title: Faker::StarWars.specie, group_id: (1..100).to_a.sample, description: Faker::StarWars.quote, location: "#{Faker::Address.street_address}, #{Faker::Address.city}", category: Faker::StarWars.planet, pic_url: pics.sample, date: Faker::Time.between(2.days.ago, Date.today, :all))
 end
 
 i = 0
-while i < 200
-  if EventTicket.create(user_id: (1..39).to_a.sample, event_id: (1..100).to_a.sample)
+while i < 500
+  if EventTicket.create(user_id: (1..39).to_a.sample, event_id: (1..300).to_a.sample)
     i += 1
   end
 end
 
 j = 0
-while j < 100
-  if GroupMembership.create(user_id: (1..39).to_a.sample, group_id: (1..50).to_a.sample)
+while j < 400
+  if GroupMembership.create(user_id: (1..39).to_a.sample, group_id: (1..100).to_a.sample)
     j += 1
   end
 end

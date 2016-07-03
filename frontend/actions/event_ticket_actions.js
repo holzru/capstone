@@ -1,4 +1,5 @@
 const EventTicketUtil = require("../util/event_ticket_util");
+const EventActions = require('./event_actions');
 const Dispatcher = require('../dispatcher/dispatcher');
 
 module.exports = {
@@ -10,7 +11,8 @@ module.exports = {
     EventTicketUtil.registerForEvent(eventId, this._deliverTicket);
   },
 
-  _deliverTicket(action) {
+  _deliverTicket(ticket) {
+    EventActions.getEvent(ticket.event_id);
     //TODO: graphic
   }
 };

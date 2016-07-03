@@ -13,7 +13,7 @@
 #
 
 class Group < ActiveRecord::Base
-  validates :name, :description, :location, :creator_id, presence: true
+  validates :name, :description, :location, :creator_id, :pic_url, presence: true
 
   belongs_to :creator,
     foreign_key: :creator_id,

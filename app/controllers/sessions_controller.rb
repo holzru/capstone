@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
 
     if @user
 			login(@user)
-			render "users/show"
+			render json: @user
 		else
 			render(
         json: {
@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
 		@user = current_user
 		if @user
 			logout
-			render "users/show"
+			render json: @user
 		else
 			render(
         json: {

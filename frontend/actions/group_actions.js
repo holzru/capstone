@@ -8,7 +8,7 @@ module.exports = {
 
   recieveAllGroups(groups) {
     Dispatcher.dispatch({
-      actionType: "ALL",
+      actionType: "ALL_GROUP",
       groups: groups
     });
   },
@@ -19,8 +19,23 @@ module.exports = {
 
   recieveGroup(group) {
     Dispatcher.dispatch({
-      actionType: "SINGLE",
+      actionType: "SINGLE_GROUP",
       group: group
     });
   },
+
+  createGroup(group){
+    GroupUtil.createGroup(group, this.fetchAllGroups.bind(this));
+  },
+
+  updateGroup(group){
+    GroupUtil.updateGroup(group, this.appendGroup);
+  },
+
+  appendGroup(group){
+    Dispatcher.dispatch({
+      actionType: "APPEND_GROUP",
+      group: group
+    });
+  }
 };

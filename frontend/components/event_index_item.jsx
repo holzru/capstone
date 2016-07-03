@@ -20,7 +20,6 @@ module.exports = React.createClass({
   },
 
   render() {
-    debugger;
     return(
       <div className="event-index-item">
         <Link to={`events/${this.props.event.id}`}><span className="event-item-title">{this.props.event.title}</span></Link>

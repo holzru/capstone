@@ -30,7 +30,6 @@
 
       // Mouseenter
       .hover(function() {
-
         $el = $(this);
 
         $tooltip = $('div[data-tooltip=' + $el.data('tooltip') + ']');

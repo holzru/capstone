@@ -7,11 +7,14 @@ let _groups = {};
 
 GroupStore.__onDispatch = function(action) {
   switch (action.actionType) {
-    case "ALL":
+    case "ALL_GROUP":
       resetGroups(action.groups);
       break;
-    case "SINGLE":
+    case "SINGLE_GROUP":
       _groups = action.group;
+      break;
+    case "APPEND_GROUP":
+      _groups[action.group.id] = action.group;
       break;
   }
   this.__emitChange();

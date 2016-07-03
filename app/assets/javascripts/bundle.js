@@ -52,12 +52,14 @@
 	var ReactDOM = __webpack_require__(100);
 	var NavBar = __webpack_require__(230);
 	var LoginForm = __webpack_require__(231);
-	var Footer = __webpack_require__(258);
-	var Search = __webpack_require__(259);
-	var GroupDetail = __webpack_require__(264);
+	var Footer = __webpack_require__(261);
+	var Search = __webpack_require__(262);
+	var GroupDetail = __webpack_require__(267);
 	var UserDetail = __webpack_require__(271);
-	var EventDetail = __webpack_require__(275);
-	__webpack_require__(276);
+	var EventDetail = __webpack_require__(273);
+	__webpack_require__(277);
+	
+	var SessionActions = __webpack_require__(232);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -92,6 +94,9 @@
 	);
 	
 	document.addEventListener("DOMContentLoaded", function () {
+	  if (window.currentUser) {
+	    SessionActions.receiveCurrentUser(window.currentUser);
+	  }
 	  var root = document.getElementById("root");
 	  ReactDOM.render(router, root);
 	});
@@ -25971,13 +25976,17 @@
 	
 	var React = __webpack_require__(4);
 	var LoginForm = __webpack_require__(231);
+	var SignupForm = __webpack_require__(258);
+	var GroupForm = __webpack_require__(280);
 	var SessionStore = __webpack_require__(239);
+	var SessionActions = __webpack_require__(232);
 	var hashHistory = __webpack_require__(1).hashHistory;
+	var Link = __webpack_require__(1).Link;
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
 	  getInitialState: function getInitialState() {
-	    return { formtype: "", current_user: SessionStore.currentUser() };
+	    return { current_user: SessionStore.currentUser() };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.sessionListener = SessionStore.addListener(this.handleUser);
@@ -25991,15 +26000,15 @@
 	  },
 	  _logIn: function _logIn(e) {
 	    e.preventDefault();
-	    this.setState({ formType: "login" }, function () {
-	      $("#user-modal").modal("show");
-	    });
+	    $("#login-modal").modal("show");
 	  },
 	  _signUp: function _signUp(e) {
 	    e.preventDefault();
-	    this.setState({ formType: "signup" }, function () {
-	      $("#user-modal").modal("show");
-	    });
+	    $("#user-modal").modal("show");
+	  },
+	  _signOut: function _signOut(e) {
+	    e.preventDefault();
+	    SessionActions.logOut();
 	  },
 	  userPic: function userPic() {
 	    if (this.state.current_user.id) {
@@ -26008,16 +26017,84 @@
 	      return React.createElement('img', { src: 'http://res.cloudinary.com/dywbzmakl/image/upload/v1467324936/default_yduuy3.jpg', id: 'user-profile-pic' });
 	    }
 	  },
-	  _userProfile: function _userProfile() {
+	  _createGroup: function _createGroup(e) {
+	    e.preventDefault();
 	    if (SessionStore.isUserLoggedIn()) {
-	      hashHistory.push('/users/' + this.state.current_user.id);
+	      $('#group-modal-new').modal('show');
 	    } else {
-	      this.setState({ formType: "login" }, function () {
-	        $("#user-modal").modal("show");
-	      });
+	      $("#login-modal").modal("show");
+	    }
+	  },
+	  _userProfile: function _userProfile(e) {
+	    e.preventDefault();
+	    if (SessionStore.isUserLoggedIn()) {
+	      hashHistory.push('/users/' + SessionStore.currentUser().id);
+	    } else {
+	      $("#login-modal").modal("show");
 	    }
 	  },
 	  render: function render() {
+	    var rightNavItems = SessionStore.isUserLoggedIn() ? React.createElement(
+	      'ul',
+	      { className: 'nav navbar-nav navbar-right' },
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: '#', onClick: this._signUp, id: 'log-in-link' },
+	          'Edit'
+	        )
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: '#', onClick: this._signOut, id: 'sign-up-link' },
+	          'Sign Out'
+	        )
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: '#', onClick: this._userProfile, id: 'user-profile-link' },
+	          this.userPic()
+	        )
+	      )
+	    ) : React.createElement(
+	      'ul',
+	      { className: 'nav navbar-nav navbar-right' },
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: '#', onClick: this._logIn, id: 'log-in-link' },
+	          'Login'
+	        )
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: '#', onClick: this._signUp, id: 'sign-up-link' },
+	          'Sign Up'
+	        )
+	      ),
+	      React.createElement(
+	        'li',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: '#', onClick: this._userProfile, id: 'user-profile-link' },
+	          this.userPic()
+	        )
+	      )
+	    );
 	    return React.createElement(
 	      'div',
 	      null,
@@ -26059,8 +26136,8 @@
 	                null,
 	                React.createElement(
 	                  'a',
-	                  { href: '#' },
-	                  'Link ',
+	                  { href: '#', onClick: this._createGroup },
+	                  'Create Group ',
 	                  React.createElement(
 	                    'span',
 	                    { className: 'sr-only' },
@@ -26153,41 +26230,13 @@
 	                'Submit'
 	              )
 	            ),
-	            React.createElement(
-	              'ul',
-	              { className: 'nav navbar-nav navbar-right' },
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#', onClick: this._logIn, id: 'log-in-link' },
-	                  'Login'
-	                )
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#', onClick: this._signUp, id: 'sign-up-link' },
-	                  'Sign Up'
-	                )
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#', onClick: this._userProfile, id: 'user-profile-link' },
-	                  this.userPic()
-	                )
-	              )
-	            )
+	            rightNavItems
 	          )
 	        )
 	      ),
-	      React.createElement(LoginForm, { formType: this.state.formType })
+	      React.createElement(LoginForm, { formType: 'login' }),
+	      React.createElement(SignupForm, { formType: SessionStore.isUserLoggedIn() ? "edit" : "signup" }),
+	      React.createElement(GroupForm, { formType: 'new' })
 	    );
 	  }
 	});
@@ -26226,7 +26275,7 @@
 	  },
 	  closeModalIfLoggedIn: function closeModalIfLoggedIn() {
 	    if (SessionStore.isUserLoggedIn()) {
-	      $("#userModal").modal("hide");
+	      $("#login-modal").modal("hide");
 	    }
 	  },
 	  handleSubmit: function handleSubmit(e) {
@@ -26237,11 +26286,7 @@
 	      password: this.state.password
 	    };
 	
-	    if (this.props.formType === "login") {
-	      SessionActions.logIn(formData);
-	    } else {
-	      SessionActions.signUp(formData);
-	    }
+	    SessionActions.logIn(formData);
 	  },
 	  fieldErrors: function fieldErrors(field) {
 	    var errors = ErrorStore.formErrors(this.formType());
@@ -26275,25 +26320,9 @@
 	    };
 	  },
 	  render: function render() {
-	
-	    var navLink = void 0;
-	    if (this.formType() === "login") {
-	      navLink = React.createElement(
-	        Link,
-	        { to: '/signup' },
-	        'sign up instead'
-	      );
-	    } else {
-	      navLink = React.createElement(
-	        Link,
-	        { to: '/login' },
-	        'log in instead'
-	      );
-	    }
-	
 	    return React.createElement(
 	      'div',
-	      { id: 'user-modal', className: 'modal fade', tabindex: '-1', role: 'dialog' },
+	      { id: 'login-modal', className: 'modal fade', tabindex: '-1', role: 'dialog' },
 	      React.createElement(
 	        'div',
 	        { className: 'modal-dialog' },
@@ -26402,7 +26431,7 @@
 	    AppDispatcher.dispatch({
 	      actionType: "LOGOUT"
 	    });
-	    hashHistory.push("/login");
+	    hashHistory.push("/");
 	  }
 	};
 	
@@ -26736,7 +26765,7 @@
 		logIn: function logIn(user, success, _error) {
 			$.ajax({
 				url: '/session',
-				type: 'POST',
+				method: 'POST',
 				data: { user: user },
 				success: success,
 				error: function error(xhr) {
@@ -33366,6 +33395,281 @@
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var React = __webpack_require__(4);
+	var Link = __webpack_require__(1).Link;
+	var SessionActions = __webpack_require__(232);
+	var UserActions = __webpack_require__(259);
+	var SessionStore = __webpack_require__(239);
+	var ErrorStore = __webpack_require__(257);
+	var hashHistory = __webpack_require__(1).hashHistory;
+	
+	var LoginForm = React.createClass({
+	  displayName: 'LoginForm',
+	  getInitialState: function getInitialState() {
+	    return this.props.formType === "signup" ? {
+	      username: "",
+	      password: "",
+	      pic_url: "",
+	      description: ""
+	    } : {
+	      username: SessionStore.currentUser().username,
+	      password: SessionStore.currentUser().password,
+	      pic_url: SessionStore.currentUser().pic_url,
+	      description: SessionStore.currentUser().description
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+	    this.sessionListener = SessionStore.addListener(this.closeModalIfLoggedIn);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.errorListener.remove();
+	    this.sessionListener.remove();
+	  },
+	  closeModalIfLoggedIn: function closeModalIfLoggedIn() {
+	    this.setState(this.props.formType === "edit" ? {
+	      username: "",
+	      password: "",
+	      pic_url: "",
+	      description: ""
+	    } : {
+	      username: SessionStore.currentUser().username,
+	      password: SessionStore.currentUser().password,
+	      pic_url: SessionStore.currentUser().pic_url,
+	      description: SessionStore.currentUser().description
+	    });
+	    if (SessionStore.isUserLoggedIn()) {
+	      $("#userModal").modal("hide");
+	      hashHistory.push('/');
+	    }
+	  },
+	  handleSubmit: function handleSubmit(e) {
+	    e.preventDefault();
+	
+	    var formData = {
+	      id: SessionStore.currentUser().id,
+	      username: this.state.username,
+	      password: this.state.password,
+	      pic_url: this.state.pic_url,
+	      description: this.state.description
+	    };
+	
+	    if (this.props.formType === "signup") {
+	      SessionActions.signUp(formData);
+	    } else if (this.props.formType === "edit") {
+	      UserActions.updateUser(formData);
+	    }
+	  },
+	  fieldErrors: function fieldErrors(field) {
+	    var errors = ErrorStore.formErrors(this.formType());
+	
+	    if (!errors[field]) {
+	      return;
+	    }
+	
+	    var messages = errors[field].map(function (errorMsg, i) {
+	      return React.createElement(
+	        'li',
+	        { key: i },
+	        errorMsg
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      null,
+	      messages
+	    );
+	  },
+	  formType: function formType() {
+	    return this.props.formType;
+	  },
+	  update: function update(property) {
+	    var _this = this;
+	
+	    return function (e) {
+	      return _this.setState(_defineProperty({}, property, e.target.value));
+	    };
+	  },
+	  _openUploadWidget: function _openUploadWidget(e) {
+	    e.preventDefault();
+	    window.cloudinary.openUploadWidget({ cloud_name: "dywbzmakl",
+	      upload_preset: "heldi9zw",
+	      theme: "minimal",
+	      sources: ["local"],
+	      client_allowed_formats: ["png", "jpg", "jpeg"],
+	      multiple: false }, function (error, results) {
+	      if (!error) {
+	        this.setState({ pic_url: results[0].secure_url });
+	      }
+	    }.bind(this));
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { id: 'user-modal', className: 'modal fade', tabindex: '-1', role: 'dialog' },
+	      React.createElement(
+	        'div',
+	        { className: 'modal-dialog' },
+	        React.createElement(
+	          'div',
+	          { className: 'modal-content' },
+	          React.createElement(
+	            'div',
+	            { className: 'modal-header' },
+	            React.createElement(
+	              'button',
+	              { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+	              React.createElement(
+	                'span',
+	                { 'aria-hidden': 'true' },
+	                '×'
+	              )
+	            ),
+	            React.createElement(
+	              'h4',
+	              { className: 'modal-title' },
+	              this.formType()
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'modal-body' },
+	            React.createElement(
+	              'div',
+	              { className: 'login-form-container container-fluid text-center' },
+	              React.createElement(
+	                'form',
+	                { onSubmit: this.handleSubmit, className: 'login-form-box' },
+	                React.createElement('br', null),
+	                this.fieldErrors("base"),
+	                React.createElement(
+	                  'div',
+	                  { className: 'login-form' },
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'label',
+	                    null,
+	                    ' Username:',
+	                    this.fieldErrors("username"),
+	                    React.createElement('input', { type: 'text',
+	                      value: this.state.username,
+	                      onChange: this.update("username"),
+	                      className: 'login-input' })
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'label',
+	                    null,
+	                    ' Password:',
+	                    this.fieldErrors("password"),
+	                    React.createElement('input', { type: 'password',
+	                      value: this.state.password,
+	                      onChange: this.update("password"),
+	                      className: 'login-input' })
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'label',
+	                    null,
+	                    ' Description:',
+	                    React.createElement('br', null),
+	                    React.createElement('textarea', { rows: '4', cols: '30',
+	                      value: this.state.description,
+	                      onChange: this.update("description"),
+	                      className: 'login-input' })
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement('img', { src: this.state.pic_url, width: '100', height: '100' })
+	                  ),
+	                  React.createElement(
+	                    'button',
+	                    { className: 'btn btn-danger', onClick: this._openUploadWidget },
+	                    'Upload Pic'
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement('input', { type: 'submit', value: this.formType(), className: 'btn btn-success' })
+	                )
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = LoginForm;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var UserUtil = __webpack_require__(260);
+	var SessionActions = __webpack_require__(232);
+	var Dispatcher = __webpack_require__(233);
+	
+	module.exports = {
+	  fetchUser: function fetchUser(id) {
+	    UserUtil.fetchUser(id, this.recieveUser);
+	  },
+	  recieveUser: function recieveUser(user) {
+	    Dispatcher.dispatch({
+	      actionType: "User",
+	      user: user
+	    });
+	  },
+	  updateUser: function updateUser(user) {
+	    UserUtil.updateUser(user, function (newUser) {
+	      this.recieveUser(newUser);
+	      SessionActions.receiveCurrentUser(newUser);
+	    }.bind(this));
+	  }
+	};
+
+/***/ },
+/* 260 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  fetchUser: function fetchUser(id, cb) {
+	    $.ajax({
+	      url: "/users/" + id,
+	      dataType: "JSON",
+	      data: { user: { id: id } },
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  },
+	  updateUser: function updateUser(user, cb) {
+	    $.ajax({
+	      url: "/users/" + user.id,
+	      method: 'PATCH',
+	      dataType: "JSON",
+	      data: { user: user },
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 	
 	var React = __webpack_require__(4);
@@ -33430,17 +33734,19 @@
 	});
 
 /***/ },
-/* 259 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(4);
-	var GroupIndex = __webpack_require__(260);
+	var GroupIndex = __webpack_require__(263);
 	
 	var Splash = React.createClass({
 	  displayName: 'Splash',
 	  render: function render() {
+	
+	    $('.tooltip').remove();
 	    return React.createElement(
 	      'div',
 	      { id: 'splash-page' },
@@ -33457,15 +33763,15 @@
 	module.exports = Splash;
 
 /***/ },
-/* 260 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(4);
 	var Link = __webpack_require__(1).Link;
-	var GroupStore = __webpack_require__(261);
-	var GroupActions = __webpack_require__(262);
+	var GroupStore = __webpack_require__(264);
+	var GroupActions = __webpack_require__(265);
 	
 	var GroupIndex = React.createClass({
 	  displayName: 'GroupIndex',
@@ -33525,7 +33831,7 @@
 	module.exports = GroupIndex;
 
 /***/ },
-/* 261 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33539,11 +33845,14 @@
 	
 	GroupStore.__onDispatch = function (action) {
 	  switch (action.actionType) {
-	    case "ALL":
+	    case "ALL_GROUP":
 	      resetGroups(action.groups);
 	      break;
-	    case "SINGLE":
+	    case "SINGLE_GROUP":
 	      _groups = action.group;
+	      break;
+	    case "APPEND_GROUP":
+	      _groups[action.group.id] = action.group;
 	      break;
 	  }
 	  this.__emitChange();
@@ -33576,12 +33885,12 @@
 	module.exports = GroupStore;
 
 /***/ },
-/* 262 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var GroupUtil = __webpack_require__(263);
+	var GroupUtil = __webpack_require__(266);
 	var Dispatcher = __webpack_require__(233);
 	
 	module.exports = {
@@ -33590,7 +33899,7 @@
 	  },
 	  recieveAllGroups: function recieveAllGroups(groups) {
 	    Dispatcher.dispatch({
-	      actionType: "ALL",
+	      actionType: "ALL_GROUP",
 	      groups: groups
 	    });
 	  },
@@ -33599,14 +33908,26 @@
 	  },
 	  recieveGroup: function recieveGroup(group) {
 	    Dispatcher.dispatch({
-	      actionType: "SINGLE",
+	      actionType: "SINGLE_GROUP",
+	      group: group
+	    });
+	  },
+	  createGroup: function createGroup(group) {
+	    GroupUtil.createGroup(group, this.fetchAllGroups.bind(this));
+	  },
+	  updateGroup: function updateGroup(group) {
+	    GroupUtil.updateGroup(group, this.appendGroup);
+	  },
+	  appendGroup: function appendGroup(group) {
+	    Dispatcher.dispatch({
+	      actionType: "APPEND_GROUP",
 	      group: group
 	    });
 	  }
 	};
 
 /***/ },
-/* 263 */
+/* 266 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -33630,18 +33951,44 @@
 	        cb(resp);
 	      }
 	    });
+	  },
+	
+	  createGroup: function createGroup(group, cb) {
+	    $.ajax({
+	      url: "/groups",
+	      type: 'POST',
+	      dataType: 'JSON',
+	      data: { group: group },
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  },
+	  updateGroup: function updateGroup(group, cb) {
+	    $.ajax({
+	      url: "/groups/" + group.id,
+	      type: 'PATCH',
+	      dataType: 'JSON',
+	      data: { group: group },
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
 	  }
 	};
 
 /***/ },
-/* 264 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	var React = __webpack_require__(4);
-	var GroupStore = __webpack_require__(261);
-	var GroupActions = __webpack_require__(262);
+	var GroupStore = __webpack_require__(264);
+	var GroupActions = __webpack_require__(265);
+	var GroupForm = __webpack_require__(280);
+	var SessionStore = __webpack_require__(239);
+	var GroupMembershipActions = __webpack_require__(278);
 	var EventIndexItem = __webpack_require__(268);
 	var Link = __webpack_require__(1).Link;
 	
@@ -33651,6 +33998,7 @@
 	    return { group: {}, events: [], members: [], creator: {} };
 	  },
 	  componentDidMount: function componentDidMount() {
+	    $('.tooltip').remove();
 	    this.groupStoreListener = GroupStore.addListener(this.__groupHandleChange);
 	    GroupActions.fetchGroup(this.props.params.group_id);
 	  },
@@ -33660,6 +34008,27 @@
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.groupStoreListener.remove();
+	  },
+	  editButton: function editButton() {
+	    if (SessionStore.currentUser().id === this.state.creator.id) {
+	      return React.createElement(
+	        'button',
+	        { onClick: this._editGroup },
+	        'Edit Group'
+	      );
+	    } else {
+	      return "";
+	    }
+	  },
+	  _joinGroup: function _joinGroup() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      GroupMembershipActions.joinGroup(this.state.group.id);
+	    } else {
+	      $('#login-modal').modal('show');
+	    }
+	  },
+	  _editGroup: function _editGroup() {
+	    $('#group-modal-edit').modal('show');
 	  },
 	  render: function render() {
 	    var _this = this;
@@ -33695,7 +34064,8 @@
 	            React.createElement(
 	              'span',
 	              { className: 'group-stat-members' },
-	              'Members: 10'
+	              'Members: ',
+	              this.state.members.length
 	            ),
 	            React.createElement('br', null),
 	            React.createElement(
@@ -33714,7 +34084,8 @@
 	            Link,
 	            { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
 	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url })
-	          )
+	          ),
+	          this.editButton()
 	        ),
 	        React.createElement(
 	          'div',
@@ -33728,7 +34099,12 @@
 	          ),
 	          this.state.events.map(function (event) {
 	            return React.createElement(EventIndexItem, { event: event, key: event.id + 'event', group: _this.state.group });
-	          })
+	          }),
+	          React.createElement(
+	            'button',
+	            { onClick: this._joinGroup },
+	            'Join Group'
+	          )
 	        ),
 	        React.createElement(
 	          'div',
@@ -33746,119 +34122,11 @@
 	            );
 	          })
 	        )
-	      )
+	      ),
+	      React.createElement(GroupForm, { group: group, formType: 'edit' })
 	    );
 	  }
 	});
-
-/***/ },
-/* 265 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var Store = __webpack_require__(240).Store;
-	var Dispatcher = __webpack_require__(233);
-	
-	var EventStore = new Store(Dispatcher);
-	
-	var _events = {};
-	
-	EventStore.__onDispatch = function (action) {
-	  switch (action.actionType) {
-	    case "Group":
-	      resetEvents(action.events);
-	      break;
-	    case "Single":
-	      setSingleEvent(action.eventObj);
-	      break;
-	  }
-	  this.__emitChange();
-	};
-	
-	var setSingleEvent = function setSingleEvent(eventObj) {
-	  _events = eventObj;
-	};
-	
-	var resetEvents = function resetEvents(events) {
-	  events.forEach(function (event) {
-	    _events[event.id] = event;
-	  });
-	};
-	
-	EventStore.all = function () {
-	  var events = [];
-	  for (var eventKey in _events) {
-	    if (_events.hasOwnProperty(eventKey)) {
-	      events.push(_events[eventKey]);
-	    }
-	  }
-	  return events;
-	};
-	
-	EventStore.current = function () {
-	  return _events;
-	};
-	
-	module.exports = EventStore;
-
-/***/ },
-/* 266 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	var EventUtil = __webpack_require__(267);
-	var Dispatcher = __webpack_require__(233);
-	
-	module.exports = {
-	  fetchGroupEvents: function fetchGroupEvents(id) {
-	    EventUtil.fetchGroupEvents(id, this.receiveGroupEvents);
-	  },
-	  receiveGroupEvents: function receiveGroupEvents(events) {
-	    Dispatcher.dispatch({
-	      actionType: "Group",
-	      events: events
-	    });
-	  },
-	  getEvent: function getEvent(id) {
-	    EventUtil.fetchEvent(id, this.receiveEvent);
-	  },
-	  receiveEvent: function receiveEvent(eventObj) {
-	    Dispatcher.dispatch({
-	      actionType: "Single",
-	      eventObj: eventObj
-	    });
-	  }
-	};
-
-/***/ },
-/* 267 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	module.exports = {
-	  fetchGroupEvents: function fetchGroupEvents(id, cb) {
-	    $.ajax({
-	      url: '/events',
-	      data: { group: { id: id } },
-	      dataType: "JSON",
-	      success: function success(resp) {
-	        cb(resp);
-	      }
-	    });
-	  },
-	  fetchEvent: function fetchEvent(id, cb) {
-	    $.ajax({
-	      url: "/events/" + id,
-	      dataType: "JSON",
-	      success: function success(resp) {
-	        cb(resp);
-	      }
-	    });
-	  }
-	};
 
 /***/ },
 /* 268 */
@@ -33885,7 +34153,6 @@
 	    this.setState({ members: [] });
 	  },
 	  render: function render() {
-	    debugger;
 	    return React.createElement(
 	      'div',
 	      { className: 'event-index-item' },
@@ -33923,9 +34190,10 @@
 /* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var EventTicketUtil = __webpack_require__(270);
+	var EventActions = __webpack_require__(275);
 	var Dispatcher = __webpack_require__(233);
 	
 	module.exports = {
@@ -33935,7 +34203,8 @@
 	  registerForEvent: function registerForEvent(eventId) {
 	    EventTicketUtil.registerForEvent(eventId, this._deliverTicket);
 	  },
-	  _deliverTicket: function _deliverTicket(action) {
+	  _deliverTicket: function _deliverTicket(ticket) {
+	    EventActions.getEvent(ticket.event_id);
 	    //TODO: graphic
 	  }
 	};
@@ -33978,7 +34247,7 @@
 	var React = __webpack_require__(4);
 	var Link = __webpack_require__(1).Link;
 	var UserStore = __webpack_require__(272);
-	var UserActions = __webpack_require__(273);
+	var UserActions = __webpack_require__(259);
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -34137,49 +34406,9 @@
 
 	'use strict';
 	
-	var UserUtil = __webpack_require__(274);
-	var Dispatcher = __webpack_require__(233);
-	
-	module.exports = {
-	  fetchUser: function fetchUser(id) {
-	    UserUtil.fetchUser(id, this.recieveUser);
-	  },
-	  recieveUser: function recieveUser(user) {
-	    Dispatcher.dispatch({
-	      actionType: "User",
-	      user: user
-	    });
-	  }
-	};
-
-/***/ },
-/* 274 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	module.exports = {
-	  fetchUser: function fetchUser(id, cb) {
-	    $.ajax({
-	      url: "/users/" + id,
-	      dataType: "JSON",
-	      data: { user: { id: id } },
-	      success: function success(resp) {
-	        cb(resp);
-	      }
-	    });
-	  }
-	};
-
-/***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
 	var React = __webpack_require__(4);
-	var EventStore = __webpack_require__(265);
-	var EventActions = __webpack_require__(266);
+	var EventStore = __webpack_require__(274);
+	var EventActions = __webpack_require__(275);
 	var EventIndexItem = __webpack_require__(268);
 	var Link = __webpack_require__(1).Link;
 	var SessionStore = __webpack_require__(239);
@@ -34202,7 +34431,11 @@
 	    this.eventStoreListener.remove();
 	  },
 	  _registerForEvent: function _registerForEvent() {
-	    EventTicketActions.registerForEvent(this.state.event.id);
+	    if (SessionStore.isUserLoggedIn()) {
+	      EventTicketActions.registerForEvent(this.state.event.id);
+	    } else {
+	      $('#login-modal').modal('show');
+	    }
 	  },
 	  render: function render() {
 	    var event = this.state.event;
@@ -34267,7 +34500,11 @@
 	            { className: 'event-description' },
 	            event.description
 	          ),
-	          React.createElement('button', { className: 'btn-default', value: 'Register for Event', onClick: this._registerForEvent })
+	          React.createElement(
+	            'button',
+	            { className: 'btn-default', onClick: this._registerForEvent },
+	            'Register for Event'
+	          )
 	        ),
 	        React.createElement(
 	          'div',
@@ -34291,7 +34528,116 @@
 	});
 
 /***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Store = __webpack_require__(240).Store;
+	var Dispatcher = __webpack_require__(233);
+	
+	var EventStore = new Store(Dispatcher);
+	
+	var _events = {};
+	
+	EventStore.__onDispatch = function (action) {
+	  switch (action.actionType) {
+	    case "Group":
+	      resetEvents(action.events);
+	      break;
+	    case "Single":
+	      setSingleEvent(action.eventObj);
+	      break;
+	  }
+	  this.__emitChange();
+	};
+	
+	var setSingleEvent = function setSingleEvent(eventObj) {
+	  _events = eventObj;
+	};
+	
+	var resetEvents = function resetEvents(events) {
+	  events.forEach(function (event) {
+	    _events[event.id] = event;
+	  });
+	};
+	
+	EventStore.all = function () {
+	  var events = [];
+	  for (var eventKey in _events) {
+	    if (_events.hasOwnProperty(eventKey)) {
+	      events.push(_events[eventKey]);
+	    }
+	  }
+	  return events;
+	};
+	
+	EventStore.current = function () {
+	  return _events;
+	};
+	
+	module.exports = EventStore;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	var EventUtil = __webpack_require__(276);
+	var Dispatcher = __webpack_require__(233);
+	
+	module.exports = {
+	  fetchGroupEvents: function fetchGroupEvents(id) {
+	    EventUtil.fetchGroupEvents(id, this.receiveGroupEvents);
+	  },
+	  receiveGroupEvents: function receiveGroupEvents(events) {
+	    Dispatcher.dispatch({
+	      actionType: "Group",
+	      events: events
+	    });
+	  },
+	  getEvent: function getEvent(id) {
+	    EventUtil.fetchEvent(id, this.receiveEvent);
+	  },
+	  receiveEvent: function receiveEvent(eventObj) {
+	    Dispatcher.dispatch({
+	      actionType: "Single",
+	      eventObj: eventObj
+	    });
+	  }
+	};
+
+/***/ },
 /* 276 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  fetchGroupEvents: function fetchGroupEvents(id, cb) {
+	    $.ajax({
+	      url: '/events',
+	      data: { group: { id: id } },
+	      dataType: "JSON",
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  },
+	  fetchEvent: function fetchEvent(id, cb) {
+	    $.ajax({
+	      url: "/events/" + id,
+	      dataType: "JSON",
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 277 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34328,7 +34674,6 @@
 	
 	      // Mouseenter
 	      .hover(function () {
-	
 	        $el = $(this);
 	
 	        $tooltip = $('div[data-tooltip=' + $el.data('tooltip') + ']');
@@ -34360,6 +34705,258 @@
 	    });
 	  };
 	})(jQuery);
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var GroupMembershipUtil = __webpack_require__(279);
+	var GroupActions = __webpack_require__(265);
+	
+	module.exports = {
+	  joinGroup: function joinGroup(groupId) {
+	    GroupMembershipUtil.joinGroup(groupId, this._deliverMembership);
+	  },
+	  _deliverMembership: function _deliverMembership(membership) {
+	    GroupActions.fetchGroup(membership.group_id);
+	    // TODO
+	  }
+	};
+
+/***/ },
+/* 279 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  joinGroup: function joinGroup(groupId, cb) {
+	    $.ajax({
+	      url: "/group_memberships",
+	      type: 'POST',
+	      dataType: "JSON",
+	      data: { membership: { group_id: groupId } },
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var React = __webpack_require__(4);
+	var Link = __webpack_require__(1).Link;
+	var GroupActions = __webpack_require__(265);
+	var GroupStore = __webpack_require__(264);
+	var ErrorStore = __webpack_require__(257);
+	var hashHistory = __webpack_require__(1).hashHistory;
+	
+	var GroupForm = React.createClass({
+	  displayName: 'GroupForm',
+	  getInitialState: function getInitialState() {
+	    return this.props.formType === "new" ? {
+	      name: "",
+	      location: "",
+	      pic_url: "",
+	      description: ""
+	    } : {
+	      name: this.props.group.name,
+	      location: this.props.group.location,
+	      pic_url: this.props.group.pic_url,
+	      description: this.props.group.description
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
+	    this.groupListener = GroupStore.addListener(this.closeModal);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.errorListener.remove();
+	    this.groupListener.remove();
+	  },
+	  closeModal: function closeModal() {
+	    this.setState(this.props.formType === "new" ? {
+	      name: "",
+	      location: "",
+	      pic_url: "",
+	      description: ""
+	    } : {
+	      name: this.props.group.name,
+	      location: this.props.group.location,
+	      pic_url: this.props.group.pic_url,
+	      description: this.props.group.description
+	    });
+	    $('#group-modal-' + this.props.formType).modal("hide");
+	  },
+	  handleSubmit: function handleSubmit(e) {
+	    e.preventDefault();
+	
+	    var formData = {
+	      id: this.props.group ? this.props.group.id : "",
+	      name: this.state.name,
+	      location: this.state.location,
+	      pic_url: this.state.pic_url,
+	      description: this.state.description
+	    };
+	
+	    if (this.props.formType === "new") {
+	      GroupActions.createGroup(formData);
+	    } else if (this.props.formType === "edit") {
+	      GroupActions.updateGroup(formData);
+	    }
+	  },
+	  fieldErrors: function fieldErrors(field) {
+	    var errors = ErrorStore.formErrors(this.formType());
+	
+	    if (!errors[field]) {
+	      return;
+	    }
+	
+	    var messages = errors[field].map(function (errorMsg, i) {
+	      return React.createElement(
+	        'li',
+	        { key: i },
+	        errorMsg
+	      );
+	    });
+	
+	    return React.createElement(
+	      'ul',
+	      null,
+	      messages
+	    );
+	  },
+	  formType: function formType() {
+	    return this.props.formType;
+	  },
+	  update: function update(property) {
+	    var _this = this;
+	
+	    return function (e) {
+	      return _this.setState(_defineProperty({}, property, e.target.value));
+	    };
+	  },
+	  _openUploadWidget: function _openUploadWidget(e) {
+	    e.preventDefault();
+	    window.cloudinary.openUploadWidget({ cloud_name: "dywbzmakl",
+	      upload_preset: "heldi9zw",
+	      theme: "minimal",
+	      sources: ["local"],
+	      client_allowed_formats: ["png", "jpg", "jpeg"],
+	      multiple: false }, function (error, results) {
+	      if (!error) {
+	        this.setState({ pic_url: results[0].secure_url });
+	      }
+	    }.bind(this));
+	  },
+	  render: function render() {
+	    return React.createElement(
+	      'div',
+	      { id: 'group-modal-' + this.props.formType, className: 'modal fade', tabindex: '-1', role: 'dialog' },
+	      React.createElement(
+	        'div',
+	        { className: 'modal-dialog' },
+	        React.createElement(
+	          'div',
+	          { className: 'modal-content' },
+	          React.createElement(
+	            'div',
+	            { className: 'modal-header' },
+	            React.createElement(
+	              'button',
+	              { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-label': 'Close' },
+	              React.createElement(
+	                'span',
+	                { 'aria-hidden': 'true' },
+	                '×'
+	              )
+	            ),
+	            React.createElement(
+	              'h4',
+	              { className: 'modal-title' },
+	              this.formType()
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'modal-body' },
+	            React.createElement(
+	              'div',
+	              { className: 'login-form-container container-fluid text-center' },
+	              React.createElement(
+	                'form',
+	                { onSubmit: this.handleSubmit, className: 'login-form-box' },
+	                React.createElement('br', null),
+	                this.fieldErrors("base"),
+	                React.createElement(
+	                  'div',
+	                  { className: 'login-form' },
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'label',
+	                    null,
+	                    ' Name:',
+	                    this.fieldErrors("name"),
+	                    React.createElement('input', { type: 'text',
+	                      value: this.state.name,
+	                      onChange: this.update("name"),
+	                      className: 'login-input' })
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'label',
+	                    null,
+	                    ' Location:',
+	                    this.fieldErrors("location"),
+	                    React.createElement('input', { type: 'text',
+	                      value: this.state.location,
+	                      onChange: this.update("location"),
+	                      className: 'login-input' })
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'label',
+	                    null,
+	                    ' Description:',
+	                    React.createElement('br', null),
+	                    React.createElement('textarea', { rows: '4', cols: '30',
+	                      value: this.state.description,
+	                      onChange: this.update("description"),
+	                      className: 'login-input' })
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement(
+	                    'div',
+	                    null,
+	                    React.createElement('img', { src: this.state.pic_url, width: '100', height: '100' })
+	                  ),
+	                  React.createElement(
+	                    'button',
+	                    { className: 'btn btn-danger', onClick: this._openUploadWidget },
+	                    'Upload Pic'
+	                  ),
+	                  React.createElement('br', null),
+	                  React.createElement('input', { type: 'submit', value: this.formType(), className: 'btn btn-success' })
+	                )
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = GroupForm;
 
 /***/ }
 /******/ ]);

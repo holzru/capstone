@@ -4,6 +4,7 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
     @group.creator_id = current_user.id
     if @group.save
+      GroupMembership.create!(user_id: current_user.id, group_id: @group.id)
       render json: @group
     else
       render json: @group.errors.full_messages
@@ -49,6 +50,6 @@ class GroupsController < ApplicationController
 
   protected
   def group_params
-    params.require(:group).permit(:name, :descrption, :location)
+    params.require(:group).permit(:name, :description, :location, :pic_url, :id)
   end
 end

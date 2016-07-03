@@ -11,6 +11,8 @@ const UserDetail = require('./components/user_detail');
 const EventDetail = require('./components/event_detail')
 require('./util/tooltips_util');
 
+const SessionActions = require('./actions/session_actions');
+
 
 const App = React.createClass({
   render () {
@@ -40,6 +42,9 @@ const router = (
 );
 
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.currentUser) {
+    SessionActions.receiveCurrentUser(window.currentUser);
+  }
   const root = document.getElementById("root");
   ReactDOM.render(router, root);
 });

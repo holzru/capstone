@@ -8,26 +8,25 @@
 
 MeatUp is a web application inspired by Meetup that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
 
-- [ ] Hosting on Heroku
-- [ ] New account creation, login, and guest/demo login
-- [ ] A production README, replacing this README (**NB**: check out the [sample production README](docs/production_readme.md) -- you'll write this later)
-- [ ] Members
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Groups with members
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Events for groups
-  - [ ] Invitations for group members to group events
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
-- [ ] Members register for events
-  - [ ] Smooth, bug-free navigation
-  - [ ] Adequate seed data to demonstrate the site's features
-  - [ ] Adequate CSS styling
+- [X] Hosting on Heroku
+- [X] New account creation, login, and guest/demo login
+- [X] A production README, replacing this README (**NB**: check out the [sample production README](docs/production_readme.md) -- you'll write this later)
+- [X] Members
+  - [X] Smooth, bug-free navigation
+  - [X] Adequate seed data to demonstrate the site's features
+  - [X] Adequate CSS styling
+- [X] Groups with members
+  - [X] Smooth, bug-free navigation
+  - [X] Adequate seed data to demonstrate the site's features
+  - [X] Adequate CSS styling
+- [X] Events for groups
+  - [X] Smooth, bug-free navigation
+  - [X] Adequate seed data to demonstrate the site's features
+  - [X] Adequate CSS styling
+- [X] Members register for events
+  - [X] Smooth, bug-free navigation
+  - [X] Adequate seed data to demonstrate the site's features
+  - [X] Adequate CSS styling
 
 ## Design Docs
 * [View Wireframes][views]
@@ -44,42 +43,40 @@ MeatUp is a web application inspired by Meetup that will be build using Ruby on 
 
 ## Implementation Timeline
 
-### Phase 1: Backend setup and Front End User Authentication, Models (2 days, W1 Wed 6pm)
+### Phase 1: Backend setup and Front End User Authentication, Models (2 days, W1 Thur 6pm)
 
 **Objective:** Functioning rails project with Authentication
 
-- [ ] create new project
-- [ ] create Models
-- [ ] authentication
-- [ ] user signup/signin pages
-- [ ] splash page after signin
-- [ ] setup Webpack & Flux scaffold
-- [ ] learn bootstrap-sass
+- [X] create new project
+- [X] create Models
+- [X] authentication
+- [X] user signup/signin pages
+- [X] splash page after signin
+- [X] setup Webpack & Flux scaffold
+- [X] learn bootstrap-sass
 
 
-# Phase 2: Flux Architecture and Group Continued (2 days Friday W1 6pm)
+# Phase 2: Flux Architecture and Group Continued (2 days Monday W1 6pm)
 
-- [ ] Finish out Actions/Stores for events/groups
-- [ ] create a basic style guide
-- [ ] position elements on the page
-- [ ] add basic colors & styles
-- [ ] seed the database with a small amount of test data
-- [ ] API for groups/events
-- [ ] jBuilder views for groups/events
-- [ ] setup `APIUtil` to interact with the API
-- [ ] test out API interaction in the console.
-- [ ] setup the flux loop with skeleton files
-- [ ] setup React Router
-- [ ] implement each component, building out the flux loop as needed.
+- [X] Finish out Actions/Stores for events/groups
+- [X] create a basic style guide
+- [X] position elements on the page
+- [X] add basic colors & styles
+- [X] seed the database with a small amount of test data
+- [X] API for groups/events
+- [X] test out interaction in the console.
+- [X] setup the flux loop with skeleton files
+- [X] setup React Router
+- [X] implement each component, building out the flux loop as needed.
 
 
-### Phase 3: Search (2 days, W2 M 6pm)
+### Phase 3: Search (2 days, W2 Tues 6pm)
 - [ ] Setup global search
 - [ ] allow for search through users/groups/events
 - [ ] pane filtering for toggling between calendar vs Bootstrap view
 
 
-### Phase 4: Finish Styling (2 days, W2 Tue 6pm)
+### Phase 4: Finish Styling (1 day, W2 Wed 6pm)
 
 **Objective:** Existing pages (including signup/signin) will look good.
 
@@ -88,7 +85,7 @@ MeatUp is a web application inspired by Meetup that will be build using Ruby on 
 - [ ] bug fix, code refactoring
 
 
-### Phase 5: Reminders and Garbage Collection, Fix Up (2 days, W2 Thur 6pm)
+### Phase 5: Reminders and Garbage Collection, Fix Up (1days, W2 Thur 6pm)
 - [ ] Implementation of peer suggestions
 - [ ] reminder model and Implementation
 - [ ] additional styling as needed

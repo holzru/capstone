@@ -23,7 +23,6 @@ const SessionActions = {
 
   logOut() {
     SessionApiUtil.logOut(SessionActions.removeCurrentUser);
-
   },
 
   fetchCurrentUser(complete){
@@ -42,7 +41,7 @@ const SessionActions = {
     AppDispatcher.dispatch({
       actionType: "LOGOUT"
     });
-    hashHistory.push("/login");
+    hashHistory.push("/");
   }
 
 };
