@@ -14,8 +14,11 @@
     "babel-preset-react": "^6.11.1",
     "cloudinary": "^1.4.1",
     "flux": "^2.1.1",
+    "moment": "^2.14.1",
+    "moment-range": "^2.2.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
+    "react-input-calendar": "^0.3.10",
     "react-router": "^2.5.1",
     "webpack": "^1.13.1"
   },

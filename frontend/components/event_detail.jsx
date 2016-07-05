@@ -5,6 +5,7 @@ const EventIndexItem = require('./event_index_item');
 const Link = require('react-router').Link;
 const SessionStore = require('../stores/session_store');
 const EventTicketActions = require('../actions/event_ticket_actions');
+const EventForm = require('./event_form');
 
 module.exports = React.createClass({
   getInitialState(){
@@ -25,6 +26,15 @@ module.exports = React.createClass({
     this.eventStoreListener.remove();
   },
 
+  _unregisterForEvent(e) {
+    e.preventDefault();
+    if (SessionStore.isUserLoggedIn()) {
+      EventTicketActions.unregisterForEvent(this.state.event.id);
+    } else {
+      $('#login-modal').modal('show');
+    }
+  },
+
   _registerForEvent() {
     if (SessionStore.isUserLoggedIn()) {
       EventTicketActions.registerForEvent(this.state.event.id);
@@ -32,6 +42,36 @@ module.exports = React.createClass({
       $('#login-modal').modal('show');
     }
   },
+
+  edit() {
+    if (this.state.creator.id === SessionStore.currentUser().id) {
+      return <button onClick={this._editEvent} className="btn-default">Edit Event</button>;
+    } else {
+      return <div></div>;
+    }
+  },
+
+  _editEvent(e) {
+    e.preventDefault();
+    $('#event-modal-edit').modal('show');
+  },
+
+  register() {
+    let attendee_ids = [];
+    this.state.attendees.forEach((attendee) => {
+      attendee_ids.push(attendee.id);
+    });
+    if (attendee_ids.indexOf(SessionStore.currentUser().id) === -1) {
+      return (<button className="btn-default" onClick={this._registerForEvent}>
+        Register for Event
+      </button>);
+    } else {
+      return (<button className="btn-default" onClick={this._unregisterForEvent}>
+        Unregister for Event
+      </button>);
+    }
+  },
+
 
   render() {
     let event = this.state.event;
@@ -53,13 +93,12 @@ module.exports = React.createClass({
             </div>
             <div>Creator Stuff</div>
             <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/></Link>
+            { this.edit() }
           </div>
           <div className="detail-main">
             <h3 className="event-title">{event.title}</h3>
             <p className="event-description">{event.description}</p>
-            <button className="btn-default" onClick={this._registerForEvent}>
-              Register for Event
-            </button>
+            { this.register() }
           </div>
           <div className="detail-right">
             <h3>Members</h3>
@@ -70,6 +109,7 @@ module.exports = React.createClass({
             }
           </div>
         </div>
+        <EventForm event={event} group={group} formType='edit'/>
       </div>
     );
   }

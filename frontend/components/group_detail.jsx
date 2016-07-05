@@ -5,6 +5,7 @@ const GroupForm = require('./group_form');
 const SessionStore = require('../stores/session_store');
 const GroupMembershipActions = require('../actions/group_membership_actions');
 const EventIndexItem = require('./event_index_item');
+const EventForm = require('./event_form');
 const Link = require('react-router').Link;
 
 module.exports = React.createClass({
@@ -32,6 +33,36 @@ module.exports = React.createClass({
       return <button onClick={this._editGroup}>Edit Group</button>;
     } else {
       return "";
+    }
+  },
+
+  _createEvent(e){
+    e.preventDefault();
+    if (SessionStore.isUserLoggedIn()) {
+      $('#event-modal-new').modal('show');
+    } else {
+      $("#login-modal").modal("show");
+    }
+  },
+
+  _leaveGroup(e) {
+    e.preventDefault();
+    if (SessionStore.isUserLoggedIn()) {
+      GroupMembershipActions.leaveGroup(this.state.group.id);
+    } else {
+      $('#login-modal').modal('show');
+    }
+  },
+
+  joinGroupButton() {
+    let memberIds = [];
+    this.state.members.forEach((member) => {
+      memberIds.push(member.id);
+    });
+    if (memberIds.indexOf(SessionStore.currentUser().id) === -1) {
+      return <button onClick={this._joinGroup}>Join Group</button>;
+    } else {
+      return <button onClick={this._leaveGroup}>Leave Group</button>;
     }
   },
 
@@ -73,7 +104,8 @@ module.exports = React.createClass({
             {this.state.events.map((event) => {
               return(<EventIndexItem event={event} key={`${event.id}event`} group={this.state.group}/>);
             })}
-            <button onClick={this._joinGroup}>Join Group</button>
+            {this.joinGroupButton()}
+            <button onClick={this._createEvent}>Create Group Event</button>
           </div>
           <div className="detail-right">
             <h3>Members</h3>
@@ -86,6 +118,7 @@ module.exports = React.createClass({
           </div>
         </div>
         <GroupForm group={group} formType="edit" />
+        <EventForm group={group} formType="new"/>
       </div>
     );
   }

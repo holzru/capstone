@@ -19,5 +19,16 @@ module.exports = {
         cb(resp);
       }
     });
+  },
+
+  destroyTicket(id, cb) {
+    $.ajax({
+      url: `/event_tickets/${id}`,
+      method: "delete",
+      data: {event_id: id},
+      success (resp) {
+        cb(id);
+      }
+    });
   }
 };

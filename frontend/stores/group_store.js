@@ -21,6 +21,7 @@ GroupStore.__onDispatch = function(action) {
 };
 
 const resetGroups = function(groups) {
+  _groups = {};
   groups.forEach((group) => {
     _groups[group.id] = group;
   });

@@ -8,9 +8,8 @@ const Footer = require('./components/footer');
 const Search = require('./components/search');
 const GroupDetail = require('./components/group_detail');
 const UserDetail = require('./components/user_detail');
-const EventDetail = require('./components/event_detail')
-require('./util/tooltips_util');
-
+const EventDetail = require('./components/event_detail');
+const EventActions = require('./actions/event_actions');
 const SessionActions = require('./actions/session_actions');
 
 
@@ -35,8 +34,6 @@ const router = (
       <Route path="/groups/:group_id" component={GroupDetail}/>
       <Route path="/users/:user_id" component={UserDetail}/>
       <Route path="/events/:event_id" component={EventDetail}/>
-      <Route path="/login" component={ LoginForm } />
-      <Route path="/signup" component={ LoginForm } />
     </Route>
   </Router>
 );

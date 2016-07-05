@@ -1,18 +1,8 @@
 const EventUtil = require("../util/event_util");
 const Dispatcher = require('../dispatcher/dispatcher');
+const GroupActions = require('./group_actions');
 
 module.exports = {
-  fetchGroupEvents(id) {
-    EventUtil.fetchGroupEvents(id, this.receiveGroupEvents);
-  },
-
-  receiveGroupEvents(events) {
-    Dispatcher.dispatch({
-      actionType: "Group",
-      events: events,
-    });
-  },
-
   getEvent(id) {
     EventUtil.fetchEvent(id, this.receiveEvent);
   },
@@ -22,5 +12,13 @@ module.exports = {
       actionType: "Single",
       eventObj: eventObj,
     });
-  }
+  },
+
+  createEvent(formData) {
+    EventUtil.createEvent(formData, GroupActions.fetchGroup.bind(GroupActions));
+  },
+
+  updateEvent(formData) {
+    EventUtil.updateEvent(formData, this.getEvent.bind(this));
+  },
 };

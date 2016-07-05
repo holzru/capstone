@@ -18,5 +18,29 @@ module.exports = {
         cb(resp);
       }
     });
+  },
+
+  createEvent(event, cb) {
+    $.ajax({
+      url: `/events`,
+      type: "POST",
+      dataType: "JSON",
+      data: { event: event},
+      success (resp) {
+        cb(resp.group_id);
+      }
+    });
+  },
+
+  updateEvent(event, cb) {
+    $.ajax({
+      url: `/events/${event.id}`,
+      type: "PATCH",
+      dataType: "JSON",
+      data: { event: event},
+      success (resp) {
+        cb(resp.id);
+      }
+    });
   }
 };

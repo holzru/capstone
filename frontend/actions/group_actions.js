@@ -29,13 +29,6 @@ module.exports = {
   },
 
   updateGroup(group){
-    GroupUtil.updateGroup(group, this.appendGroup);
-  },
-
-  appendGroup(group){
-    Dispatcher.dispatch({
-      actionType: "APPEND_GROUP",
-      group: group
-    });
+    GroupUtil.updateGroup(group, this.fetchGroup.bind(this));
   }
 };

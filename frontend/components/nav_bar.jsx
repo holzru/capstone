@@ -66,6 +66,11 @@ module.exports = React.createClass({
     }
   },
 
+  _index(e) {
+    e.preventDefault();
+    hashHistory.push("/");
+  },
+
   render (){
     const rightNavItems = SessionStore.isUserLoggedIn() ?
       <ul className="nav navbar-nav navbar-right">
@@ -90,7 +95,7 @@ module.exports = React.createClass({
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" id="logo" href="#">MeatUp</a>
+            <a className="navbar-brand" onClick={this._index} id="logo" href="#">MeatUp</a>
           </div>
 
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

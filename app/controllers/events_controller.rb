@@ -13,7 +13,7 @@ class EventsController < ApplicationController
   def index
     @events = Event.all
     if (params[:group][:id])
-      @events = Event.where(id: params[:group][:id])
+      @events = Event.where(group_id: params[:group][:id])
     end
     render json: @events
   end
@@ -48,6 +48,6 @@ class EventsController < ApplicationController
 
   protected
   def event_params
-    params.require(:event).permit(:group_id, :description, :location, :type, :date)
+    params.require(:event).permit(:id, :group_id, :description, :location, :type, :date, :title, :category, :pic_url)
   end
 end

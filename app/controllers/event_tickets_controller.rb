@@ -22,8 +22,9 @@ class EventTicketsController < ApplicationController
   end
 
   def destroy
-    @ticket = Ticket.find(params[:id])
+    @ticket = EventTicket.where(user_id: current_user.id, event_id: params[:event_id])[0]
     @ticket.destroy if @ticket.user_id == current_user.id
+    render json: @ticket.event_id
   end
 
   def ticket_params

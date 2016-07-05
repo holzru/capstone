@@ -15,7 +15,6 @@ componentDidMount() {
 
 _handleChange() {
   this.setState({groups: GroupStore.all()});
-  $(".group-index-item-container[title]").tooltips();
 },
 
 componentWillUnmount() {

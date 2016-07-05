@@ -8,5 +8,9 @@ module.exports = {
   _deliverMembership(membership){
     GroupActions.fetchGroup(membership.group_id);
     // TODO
+  },
+
+  leaveGroup(id) {
+    GroupMembershipUtil.leaveGroup(id, GroupActions.fetchGroup.bind(GroupActions));
   }
 };
