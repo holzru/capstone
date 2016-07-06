@@ -26386,7 +26386,7 @@
 	                      className: 'login-input' })
 	                  ),
 	                  React.createElement('br', null),
-	                  React.createElement('input', { type: 'submit', value: this.formType(), className: 'btn btn-success' })
+	                  React.createElement('button', { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' })
 	                )
 	              )
 	            )
@@ -33597,7 +33597,7 @@
 	                    'Upload Pic'
 	                  ),
 	                  React.createElement('br', null),
-	                  React.createElement('input', { type: 'submit', value: this.formType(), className: 'btn btn-success' })
+	                  React.createElement('button', { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' })
 	                )
 	              )
 	            )
@@ -34143,7 +34143,7 @@
 	    this.storeListener.remove();
 	  },
 	  _groupTip: function _groupTip(group) {
-	    return 'Name: ' + group.name + '\nDescription: ' + group.description;
+	    return 'Name: ' + group.name + ' <br /> Description: ' + group.description;
 	  },
 	  render_row: function render_row(row) {
 	    var _this = this;
@@ -34166,7 +34166,7 @@
 	      'ul',
 	      { key: rowKey, className: 'group-rows' },
 	      rowContents,
-	      React.createElement(ReactTooltip, { place: 'top', type: 'dark', effect: 'float', id: 'item' })
+	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'item' })
 	    );
 	  },
 	  render: function render() {

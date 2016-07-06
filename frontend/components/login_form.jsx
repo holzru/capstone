@@ -98,7 +98,7 @@ const LoginForm = React.createClass({
         								className="login-input" />
         						</label>
         		        <br/>
-        						<input type="submit" value={this.formType()} className="btn btn-success"/>
+        						<button onClick={this.handleSubmit} value={this.formType()} className="btn btn-success"/>
         					</div>
         				</form>
         			</div>
