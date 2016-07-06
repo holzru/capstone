@@ -5,7 +5,7 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
     @comment = Comment.new(comment_params)
     @comment.author_id = current_user.id
     if @comment.save
-      render json: {comment: @comment}
+      render json: @comment
     else
       # render json: @comment.errors.full_messages
       render 'shared/errors', @comment.errors.full_messages
@@ -38,6 +38,7 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
   def destroy
     @comment = Comment.find(params[:id])
     @comment.destroy
+    render json: @comment.event_id
   end
 
   protected

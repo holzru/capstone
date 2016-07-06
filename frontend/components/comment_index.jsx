@@ -1,15 +1,45 @@
 const React = require('react');
 const SessionStore = require('../stores/session_store');
+const CommentActions = require('../actions/comment_actions');
 
 module.exports = React.createClass({
+  getInitialState() {
+    return ({body: ""});
+  },
+
+  deleteButton(comment_id, authorId) {
+    if (SessionStore.currentUser().id === authorId) {
+      return <button onClick={this.deleteComment.bind(this, comment_id)} className="btn-default success"/>;
+    }
+  },
+
+  deleteComment(comment_id, e) {
+    e.preventDefault();
+    CommentActions.deleteComment(comment_id);
+  },
+
   comment_render() {
     let comments = this.props.comments.map((commentObj) => {
       return(
         <div className="comment-container">
+          <li className="comment-item">
           <img id="user-event-pic" src={commentObj.author.pic_url}/>
-          <li className="comment-body">{commentObj.comment.body}</li>
+          <span className="comment-body">{commentObj.comment.body}</span>
+          { this.deleteButton(commentObj.comment.id, commentObj.author.id) }
+          </li>
         </div>);
     });
+    return (comments);
+  },
+
+  handleInput(e) {
+    this.setState({body: e.currentTarget.value});
+  },
+
+  _submitComment() {
+    let data = {body: this.state.body, event_id: this.props.event_id};
+    CommentActions.createComment(data);
+    this.setState({body: ""});
   },
 
   render() {
@@ -19,6 +49,10 @@ module.exports = React.createClass({
     return(
       <h4>Comments<div className="comment-board">
         {this.comment_render()}
+        <form className="new-comment-form">
+          <input type="text" placeholder="Comment" onChange={this.handleInput} value={this.state.body}/>
+          <button onClick={this._submitComment} className="btn-success"/>
+        </form>
       </div></h4>);
   }
 });

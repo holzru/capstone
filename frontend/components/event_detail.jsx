@@ -100,7 +100,7 @@ module.exports = React.createClass({
             <h3 className="event-title">{event.title}</h3>
             <p className="event-description">{event.description}</p>
             { this.register() }
-            <CommentIndex comments={this.state.comments}/>
+            <CommentIndex comments={this.state.comments} event_id={event.id}/>
           </div>
           <div className="detail-right">
             <h3>Members</h3>

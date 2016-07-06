@@ -46,7 +46,7 @@ const SearchIndex = React.createClass({
         </Link>
       </div>);
     });
-    return (<ul key="users" className="group-rows">{users}</ul>);
+    return (<ul key="users" className="group-rows">{users}<ReactTooltip multiline={true} place="top" type="dark" effect="float" id="search-item"/></ul>);
   },
 
 

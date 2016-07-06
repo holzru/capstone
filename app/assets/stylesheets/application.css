@@ -13,8 +13,11 @@
  *= require_tree .
  *= require_self
  */
+.comment-item {
+  list-style: none;
+}
 
- .comment-board {
+.comment-board {
    height: 500px;
    width: 90%;
    border: 1px solid black;

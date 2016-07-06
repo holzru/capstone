@@ -545,7 +545,7 @@ end
 end
 
 2400.times do
-  Comment.create(author_id: (1..u).to_a.sample), body: Faker::StarWars.quote, event_id: (1..1000).to_a.sample
+  Comment.create(author_id: (1..u).to_a.sample, body: Faker::StarWars.quote, event_id: (1..1000).to_a.sample)
 end
 
 i = 0
