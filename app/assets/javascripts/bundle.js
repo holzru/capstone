@@ -35260,7 +35260,6 @@
 	  },
 	  __groupHandleChange: function __groupHandleChange() {
 	    var groupObj = GroupStore.single();
-	    debugger;
 	    this.setState({ group: groupObj.group, members: groupObj.members, creator: groupObj.creator, events: groupObj.events });
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
