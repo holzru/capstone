@@ -14,6 +14,10 @@
  *= require_self
  */
 
+.place-top {
+  white-space:pre-wrap;
+}
+
 .login-form-container {
    text-align: center;
 }
@@ -24,9 +28,12 @@
   width: 30px;
 }
 
-#splash-pic {
-  height: 700px;
+.splash-pic-container {
+  background-image: url("http://res.cloudinary.com/dywbzmakl/image/upload/v1467236626/slider-1_tgihov.jpg");
+  background-size: cover;
+  height: 500px;
   width: 100%;
+  background-position: 50% 30%;
 }
 
 
@@ -84,6 +91,8 @@
   margin-left: 0px;
   margin-right: 10px;
   height: 150px;
+  flex-flow: row wrap;
+  flex
 }
 
 .group-pic-user-detail-container {
@@ -99,8 +108,10 @@
 
 .group-index-item-container {
   display: block;
-  width: 23%;
+  width: 200px;
   height: auto;
+  min-height: 200px;
+  margin-bottom: 20px
 }
 
 .group-index-item {

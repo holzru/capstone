@@ -11,6 +11,7 @@ const UserDetail = require('./components/user_detail');
 const EventDetail = require('./components/event_detail');
 const EventActions = require('./actions/event_actions');
 const SessionActions = require('./actions/session_actions');
+const ReactTooltip = require("react-tooltip");
 
 
 const App = React.createClass({

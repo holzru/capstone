@@ -265,7 +265,7 @@ end
 end
 
 i = 0
-while i < 1000
+while i < 3000
   if EventTicket.create(user_id: (1..39).to_a.sample, event_id: (1..300).to_a.sample)
     i += 1
   end

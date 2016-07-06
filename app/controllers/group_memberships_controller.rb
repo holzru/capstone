@@ -14,7 +14,7 @@ class GroupMembershipsController < ApplicationController
   def destroy
     @membership = GroupMembership.where(user_id: current_user.id, group_id: params[:group_id])[0]
     @membership.destroy if @membership.user_id == current_user.id
-    render json: ""
+    render json: @membership
   end
 
   def membership_params
