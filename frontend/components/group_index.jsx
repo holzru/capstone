@@ -31,7 +31,7 @@ render_row(row) {
   let rowKey = 0;
   let rowContents = row.map((group) => {
     rowKey += group.id;
-    return (<div key={group.id} data-tip={this._groupTip(group)} data-for="item" className="group-index-item-container"><Link to={`/groups/${group.id}`}><li className="group-index-item" style={{backgroundImage: `url(${group.pic_url})`}}></li></Link></div>);
+    return (<div key={group.id} group={group} data-tip={this._groupTip(group)} data-for="item" className="group-index-item-container"><Link to={`/groups/${group.id}`} group={group}><li className="group-index-item" group={group} style={{backgroundImage: `url(${group.pic_url})`}}></li></Link></div>);
   });
 
   return (<ul key={rowKey} className="group-rows">{rowContents}<ReactTooltip place="top" type="dark" effect="float" id="item"/></ul>);
