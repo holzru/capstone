@@ -540,8 +540,12 @@ end
   GroupMembership.create!(user_id: group.creator_id, group_id: group.id)
 end
 
-800.times do
+1000.times do
   Event.create(creator_id: (1..u).to_a.sample, title: Faker::StarWars.specie, group_id: (1..200).to_a.sample, description: Faker::StarWars.quote, location: "#{Faker::Address.street_address}, #{Faker::Address.city}", category: Faker::StarWars.planet, pic_url: pics.sample, date: Faker::Time.between(10.days.ago, Date.today, :all))
+end
+
+2400.times do
+  Comment.create(author_id: (1..u).to_a.sample), body: Faker::StarWars.quote, event_id: (1..1000).to_a.sample
 end
 
 i = 0

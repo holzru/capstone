@@ -5,7 +5,7 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
     @comment = Comment.new(comment_params)
     @comment.author_id = current_user.id
     if @comment.save
-      render json: @comment
+      render json: {comment: @comment}
     else
       # render json: @comment.errors.full_messages
       render 'shared/errors', @comment.errors.full_messages
@@ -14,7 +14,11 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
 
   def index
     @comments = Comment.find_by_event_id(params[:event_id])
-    render json: @comments
+    @output = []
+    @comments.each do |comment|
+      @output << {comment: comment, author: comment.author}
+    end
+    render json: @output
   end
 
   def edit

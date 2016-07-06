@@ -26218,20 +26218,6 @@
 	                )
 	              )
 	            ),
-	            React.createElement(
-	              'form',
-	              { className: 'navbar-form navbar-left', role: 'search' },
-	              React.createElement(
-	                'div',
-	                { className: 'form-group' },
-	                React.createElement('input', { type: 'text', className: 'form-control', placeholder: 'Search' })
-	              ),
-	              React.createElement(
-	                'button',
-	                { type: 'submit', className: 'btn btn-default' },
-	                'Submit'
-	              )
-	            ),
 	            rightNavItems
 	          )
 	        )
@@ -34098,17 +34084,47 @@
 	
 	var React = __webpack_require__(4);
 	var GroupIndex = __webpack_require__(267);
+	var SearchStore = __webpack_require__(491);
+	var SearchIndex = __webpack_require__(492);
+	var SearchActions = __webpack_require__(489);
 	
 	var Splash = React.createClass({
 	  displayName: 'Splash',
+	  getInitialState: function getInitialState() {
+	    return { query: "", searchObj: {} };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    this.storeListener = SearchStore.addListener(this.handleChange);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.storeListener.remove();
+	  },
+	  handleChange: function handleChange() {
+	    this.setState({ searchObj: SearchStore.results() });
+	  },
+	  componentToRender: function componentToRender() {
+	    if (this.state.query === "") {
+	      return React.createElement(GroupIndex, null);
+	    } else {
+	      return React.createElement(SearchIndex, { searchResults: this.state.searchObj });
+	    }
+	  },
+	  _handleSearch: function _handleSearch(e) {
+	    this.setState({ query: e.currentTarget.value }, this.fireSearch);
+	  },
+	  fireSearch: function fireSearch() {
+	    SearchActions.fetchSearch(this.state.query);
+	  },
 	  render: function render() {
-	
-	    $('.tooltip').remove();
 	    return React.createElement(
 	      'div',
 	      { id: 'splash-page' },
-	      React.createElement('div', { className: 'splash-pic-container' }),
-	      React.createElement(GroupIndex, null)
+	      React.createElement(
+	        'div',
+	        { className: 'splash-pic-container' },
+	        React.createElement('input', { type: 'text', className: 'splash-page-search-bar', onChange: this._handleSearch, placeholder: 'Search Site' })
+	      ),
+	      this.componentToRender()
 	    );
 	  }
 	});
@@ -34170,9 +34186,8 @@
 	    );
 	  },
 	  render: function render() {
-	    var copy = this.state.groups.slice();
 	    var row = [];
-	    copy.forEach(function (item) {
+	    this.state.groups.forEach(function (item) {
 	      row.push(item);
 	    });
 	
@@ -53234,11 +53249,12 @@
 	var SessionStore = __webpack_require__(239);
 	var EventTicketActions = __webpack_require__(282);
 	var EventForm = __webpack_require__(286);
+	var CommentIndex = __webpack_require__(493);
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
 	  getInitialState: function getInitialState() {
-	    return { event: {}, attendees: [], group: {}, creator: {} };
+	    return { event: {}, attendees: [], group: {}, creator: {}, comments: [] };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.eventStoreListener = EventStore.addListener(this._handleEvent);
@@ -53246,7 +53262,7 @@
 	  },
 	  _handleEvent: function _handleEvent() {
 	    var eventObj = EventStore.current();
-	    this.setState({ event: eventObj.event, attendees: eventObj.attendees, group: eventObj.group, creator: eventObj.creator });
+	    this.setState({ event: eventObj.event, attendees: eventObj.attendees, group: eventObj.group, creator: eventObj.creator, comments: eventObj.comments });
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.eventStoreListener.remove();
@@ -53364,7 +53380,8 @@
 	            { className: 'event-description' },
 	            event.description
 	          ),
-	          this.register()
+	          this.register(),
+	          React.createElement(CommentIndex, { comments: this.state.comments })
 	        ),
 	        React.createElement(
 	          'div',
@@ -53384,6 +53401,240 @@
 	        )
 	      ),
 	      React.createElement(EventForm, { event: event, group: group, formType: 'edit' })
+	    );
+	  }
+	});
+
+/***/ },
+/* 489 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var SearchUtil = __webpack_require__(490);
+	var Dispatcher = __webpack_require__(233);
+	
+	module.exports = {
+	  fetchSearch: function fetchSearch(query) {
+	    SearchUtil.fetchSearch(query, this.receiveSearch);
+	  },
+	  receiveSearch: function receiveSearch(searchObj) {
+	    Dispatcher.dispatch({
+	      actionType: "ALL",
+	      searchObj: searchObj
+	    });
+	  }
+	};
+
+/***/ },
+/* 490 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  fetchSearch: function fetchSearch(query, cb) {
+	    $.ajax({
+	      url: '/search',
+	      type: "GET",
+	      data: { query: query },
+	      dataType: "JSON",
+	      success: function success(resp) {
+	        cb(resp);
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 491 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var Store = __webpack_require__(240).Store;
+	var Dispatcher = __webpack_require__(233);
+	
+	var SearchStore = new Store(Dispatcher);
+	
+	var searchObj = {};
+	
+	SearchStore.__onDispatch = function (action) {
+	  switch (action.actionType) {
+	    case "ALL":
+	      resetStore(action.searchObj);
+	      break;
+	  }
+	};
+	
+	var resetStore = function resetStore(searchObject) {
+	  searchObj = {};
+	  searchObj = searchObject;
+	  SearchStore.__emitChange();
+	};
+	
+	SearchStore.results = function () {
+	  return searchObj;
+	};
+	
+	module.exports = SearchStore;
+
+/***/ },
+/* 492 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	var Link = __webpack_require__(1).Link;
+	var ReactTooltip = __webpack_require__(268);
+	
+	var SearchIndex = React.createClass({
+	  displayName: 'SearchIndex',
+	  _groupTip: function _groupTip(group) {
+	    return 'Name: ' + group.name + ' <br /> Description: ' + group.description;
+	  },
+	  _eventTip: function _eventTip(event) {
+	    return 'Title: ' + event.title + ' <br /> Description: ' + event.description;
+	  },
+	  _userTip: function _userTip(user) {
+	    return 'Name: ' + user.username + ' <br /> Description: ' + user.description;
+	  },
+	  group_render: function group_render() {
+	    var _this = this;
+	
+	    var groups = this.props.searchResults.groups.map(function (group) {
+	      return React.createElement(
+	        'div',
+	        { key: group.id, group: group, 'data-tip': _this._groupTip(group), 'data-for': 'search-item', className: 'group-index-item-container' },
+	        React.createElement(
+	          Link,
+	          { to: '/groups/' + group.id, group: group },
+	          React.createElement('li', { className: 'group-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      'ul',
+	      { key: 'group', className: 'group-rows' },
+	      groups,
+	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'search-item' })
+	    );
+	  },
+	  event_render: function event_render() {
+	    var _this2 = this;
+	
+	    var events = this.props.searchResults.events.map(function (e) {
+	      return React.createElement(
+	        'div',
+	        { key: e.id, event: e, 'data-tip': _this2._eventTip(e), 'data-for': 'search-item', className: 'group-index-item-container' },
+	        React.createElement(
+	          Link,
+	          { to: '/events/' + e.id, event: e },
+	          React.createElement('li', { className: 'group-index-item', event: e, style: { backgroundImage: 'url(' + e.pic_url + ')' } })
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      'ul',
+	      { key: 'event', className: 'group-rows' },
+	      events,
+	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'search-item' })
+	    );
+	  },
+	  user_render: function user_render() {
+	    var _this3 = this;
+	
+	    var users = this.props.searchResults.users.map(function (user) {
+	      return React.createElement(
+	        'div',
+	        { key: user.id, user: user, 'data-tip': _this3._userTip(user), 'data-for': 'search-item', className: 'group-index-item-container' },
+	        React.createElement(
+	          Link,
+	          { to: '/users/' + user.id, user: user },
+	          React.createElement('li', { className: 'group-index-item', user: user, style: { backgroundImage: 'url(' + user.pic_url + ')' } })
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      'ul',
+	      { key: 'users', className: 'group-rows' },
+	      users
+	    );
+	  },
+	  render: function render() {
+	    if (!this.props.searchResults.groups) {
+	      return React.createElement('div', null);
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'search-index' },
+	      React.createElement(
+	        'h4',
+	        { className: 'search-index-title' },
+	        'Groups'
+	      ),
+	      this.group_render(),
+	      React.createElement(
+	        'h4',
+	        { className: 'search-index-title' },
+	        'Events'
+	      ),
+	      this.event_render(),
+	      React.createElement(
+	        'h4',
+	        { className: 'search-index-title' },
+	        'User'
+	      ),
+	      this.user_render()
+	    );
+	  }
+	});
+	
+	module.exports = SearchIndex;
+
+/***/ },
+/* 493 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	var SessionStore = __webpack_require__(239);
+	
+	module.exports = React.createClass({
+	  displayName: 'exports',
+	  comment_render: function comment_render() {
+	    var comments = this.props.comments.map(function (commentObj) {
+	      return React.createElement(
+	        'div',
+	        { className: 'comment-container' },
+	        React.createElement('img', { id: 'user-event-pic', src: commentObj.author.pic_url }),
+	        React.createElement(
+	          'li',
+	          { className: 'comment-body' },
+	          commentObj.comment.body
+	        )
+	      );
+	    });
+	  },
+	  render: function render() {
+	    if (this.props.comments.length === 0) {
+	      return React.createElement(
+	        'div',
+	        null,
+	        'No comments so far'
+	      );
+	    }
+	    return React.createElement(
+	      'h4',
+	      null,
+	      'Comments',
+	      React.createElement(
+	        'div',
+	        { className: 'comment-board' },
+	        this.comment_render()
+	      )
 	    );
 	  }
 	});

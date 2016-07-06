@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   resources :event_tickets
   resources :group_memberships
   resources :groups
+  resource :search
 
 end

@@ -32,5 +32,7 @@ class Event < ActiveRecord::Base
     through: :event_tickets,
     source: :user
 
+  has_many :comments
+
 
 end

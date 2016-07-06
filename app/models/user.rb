@@ -29,6 +29,10 @@ class User < ActiveRecord::Base
     foreign_key: :user_id,
     class_name: :EventTicket
 
+  has_many :comments,
+    foreign_key: :author_id,
+    class_name: :comment
+
   has_many :created_events,
     foreign_key: :creator_id,
     class_name: :Event

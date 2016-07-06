@@ -20,7 +20,11 @@ class EventsController < ApplicationController
 
   def show
     @event = Event.find(params[:id])
-    render json: {event: @event, group: @event.group, attendees: @event.attendees, creator: @event.creator}
+    @event_comments = []
+    @event.comments.each do |comment|
+      @event_comments << {comment: comment, author: comment.author}
+    end
+    render json: {event: @event, group: @event.group, attendees: @event.attendees, creator: @event.creator, comments: @event_comments}
   end
 
   def edit

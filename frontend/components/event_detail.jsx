@@ -6,10 +6,11 @@ const Link = require('react-router').Link;
 const SessionStore = require('../stores/session_store');
 const EventTicketActions = require('../actions/event_ticket_actions');
 const EventForm = require('./event_form');
+const CommentIndex = require('./comment_index');
 
 module.exports = React.createClass({
   getInitialState(){
-    return({event: {}, attendees: [], group: {}, creator:{}});
+    return({event: {}, attendees: [], group: {}, creator:{}, comments: []});
   },
 
   componentDidMount() {
@@ -19,7 +20,7 @@ module.exports = React.createClass({
 
   _handleEvent() {
     let eventObj = EventStore.current();
-    this.setState({event: eventObj.event, attendees: eventObj.attendees, group: eventObj.group, creator: eventObj.creator});
+    this.setState({event: eventObj.event, attendees: eventObj.attendees, group: eventObj.group, creator: eventObj.creator, comments: eventObj.comments});
   },
 
   componentWillUnmount(){
@@ -99,6 +100,7 @@ module.exports = React.createClass({
             <h3 className="event-title">{event.title}</h3>
             <p className="event-description">{event.description}</p>
             { this.register() }
+            <CommentIndex comments={this.state.comments}/>
           </div>
           <div className="detail-right">
             <h3>Members</h3>
