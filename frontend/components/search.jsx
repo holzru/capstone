@@ -42,7 +42,9 @@ const Splash = React.createClass({
     return(
       <div id="splash-page">
         <div className="splash-pic-container">
-          <input type="text" className="splash-page-search-bar" onChange={this._handleSearch} placeholder="Search Site"/>
+          <div className="search-bar-container">
+            <input type="text" className="splash-page-search-bar" onChange={this._handleSearch} placeholder="Search Site"/>
+          </div>
         </div>
         {this.componentToRender()}
       </div>

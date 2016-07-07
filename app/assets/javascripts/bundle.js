@@ -34122,7 +34122,11 @@
 	      React.createElement(
 	        'div',
 	        { className: 'splash-pic-container' },
-	        React.createElement('input', { type: 'text', className: 'splash-page-search-bar', onChange: this._handleSearch, placeholder: 'Search Site' })
+	        React.createElement(
+	          'div',
+	          { className: 'search-bar-container' },
+	          React.createElement('input', { type: 'text', className: 'splash-page-search-bar', onChange: this._handleSearch, placeholder: 'Search Site' })
+	        )
 	      ),
 	      this.componentToRender()
 	    );
@@ -35570,15 +35574,22 @@
 	              this.state.events.length
 	            )
 	          ),
+	          React.createElement('br', null),
 	          React.createElement(
 	            'div',
 	            null,
-	            'Creator Stuff'
+	            'Created By:'
 	          ),
 	          React.createElement(
 	            Link,
 	            { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
-	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url })
+	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url }),
+	            React.createElement('br', null),
+	            React.createElement(
+	              'span',
+	              { className: 'member-pic-username' },
+	              this.state.creator.username
+	            )
 	          ),
 	          this.editButton()
 	        ),
@@ -35614,7 +35625,13 @@
 	            return React.createElement(
 	              Link,
 	              { to: '/users/' + member.id, className: 'member-pic-container', key: '' + member.id + member.username },
-	              React.createElement('img', { id: 'member-pic', src: member.pic_url })
+	              React.createElement('img', { id: 'member-pic', src: member.pic_url }),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'span',
+	                { className: 'member-pic-username' },
+	                member.username
+	              )
 	            );
 	          })
 	        )
@@ -35707,30 +35724,39 @@
 	      'div',
 	      { className: 'event-index-item' },
 	      React.createElement(
-	        Link,
-	        { to: 'events/' + this.props.event.id },
+	        'div',
+	        { className: 'event-index-item-left' },
+	        React.createElement(
+	          Link,
+	          { to: 'events/' + this.props.event.id },
+	          React.createElement(
+	            'span',
+	            { className: 'event-item-title' },
+	            this.props.event.title
+	          )
+	        ),
+	        React.createElement('br', null),
 	        React.createElement(
 	          'span',
-	          { className: 'event-item-title' },
-	          this.props.event.title
+	          { className: 'event-item-location' },
+	          this.props.event.location
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'event-attendees' },
+	          this.state.members.map(function (member) {
+	            return React.createElement(
+	              Link,
+	              { to: '/users/' + member.id, key: member.id, event: event.id },
+	              React.createElement('img', { id: 'user-event-pic', src: member.pic_url })
+	            );
+	          })
 	        )
 	      ),
-	      React.createElement('br', null),
 	      React.createElement(
-	        'span',
-	        { className: 'event-item-location' },
-	        this.props.event.location
-	      ),
-	      React.createElement(
-	        'ul',
-	        { className: 'event-attendees' },
-	        this.state.members.map(function (member) {
-	          return React.createElement(
-	            Link,
-	            { to: '/users/' + member.id, key: member.id, event: event.id },
-	            React.createElement('img', { id: 'user-event-pic', src: member.pic_url })
-	          );
-	        })
+	        'div',
+	        { className: 'event-index-item-right' },
+	        React.createElement('li', { className: 'event-index-pic', style: { backgroundImage: 'url(' + this.props.event.pic_url + ')' } })
 	      )
 	    );
 	  }
@@ -53518,7 +53544,15 @@
 	        React.createElement(
 	          'div',
 	          { className: 'detail-banner container-fluid' },
-	          group.name
+	          React.createElement(
+	            Link,
+	            { to: 'groups/' + group.id },
+	            React.createElement(
+	              'span',
+	              { id: 'detial-banner-words' },
+	              group.name
+	            )
+	          )
 	        )
 	      ),
 	      React.createElement(
@@ -53544,15 +53578,22 @@
 	            ),
 	            React.createElement('br', null)
 	          ),
+	          React.createElement('br', null),
 	          React.createElement(
 	            'div',
 	            null,
-	            'Creator Stuff'
+	            'Created By:'
 	          ),
 	          React.createElement(
 	            Link,
 	            { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
-	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url })
+	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url }),
+	            React.createElement('br', null),
+	            React.createElement(
+	              'span',
+	              { className: 'member-pic-username' },
+	              this.state.creator.username
+	            )
 	          ),
 	          this.edit()
 	        ),
@@ -53584,7 +53625,13 @@
 	            return React.createElement(
 	              Link,
 	              { to: '/users/' + attendee.id, className: 'member-pic-container', key: '' + attendee.id + attendee.username },
-	              React.createElement('img', { id: 'member-pic', src: attendee.pic_url })
+	              React.createElement('img', { id: 'member-pic', src: attendee.pic_url }),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'span',
+	                { className: 'member-pic-username' },
+	                attendee.username
+	              )
 	            );
 	          })
 	        )
@@ -53611,7 +53658,11 @@
 	  },
 	  deleteButton: function deleteButton(comment_id, authorId) {
 	    if (SessionStore.currentUser().id === authorId) {
-	      return React.createElement('button', { onClick: this.deleteComment.bind(this, comment_id), className: 'btn-default success' });
+	      return React.createElement(
+	        'button',
+	        { onClick: this.deleteComment.bind(this, comment_id), className: 'btn-default success' },
+	        'Delete'
+	      );
 	    }
 	  },
 	  deleteComment: function deleteComment(comment_id, e) {
@@ -53644,9 +53695,13 @@
 	    this.setState({ body: e.currentTarget.value });
 	  },
 	  _submitComment: function _submitComment() {
-	    var data = { body: this.state.body, event_id: this.props.event_id };
-	    CommentActions.createComment(data);
-	    this.setState({ body: "" });
+	    if (SessionStore.isUserLoggedIn()) {
+	      var data = { body: this.state.body, event_id: this.props.event_id };
+	      CommentActions.createComment(data);
+	      this.setState({ body: "" });
+	    } else {
+	      $("#login-modal").modal("show");
+	    }
 	  },
 	  render: function render() {
 	    if (this.props.comments.length === 0) {
@@ -53667,8 +53722,12 @@
 	        React.createElement(
 	          'form',
 	          { className: 'new-comment-form' },
-	          React.createElement('input', { type: 'text', placeholder: 'Comment', onChange: this.handleInput, value: this.state.body }),
-	          React.createElement('button', { onClick: this._submitComment, className: 'btn-success' })
+	          React.createElement('input', { type: 'text', placeholder: 'Comment', className: 'comment-input', onChange: this.handleInput, value: this.state.body }),
+	          React.createElement(
+	            'button',
+	            { onClick: this._submitComment, className: 'btn-success' },
+	            'Create Comment'
+	          )
 	        )
 	      )
 	    );

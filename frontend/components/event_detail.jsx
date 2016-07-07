@@ -81,7 +81,7 @@ module.exports = React.createClass({
     return (
       <div className="detail-pane container-fluid">
         <div className="detail-header">
-          <div className="detail-banner container-fluid">{group.name}</div>
+          <div className="detail-banner container-fluid"><Link to={`groups/${group.id}`}><span id="detial-banner-words">{group.name}</span></Link></div>
         </div>
         <div className="column-container">
           <div className="detail-left">
@@ -91,9 +91,9 @@ module.exports = React.createClass({
             </div>
             <div className="event-stats">
               <span className='event-stat-members'>Attendees: {attendees.length}</span><br/>
-            </div>
-            <div>Creator Stuff</div>
-            <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/></Link>
+            </div><br/>
+            <div>Created By:</div>
+            <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/><br/><span className = "member-pic-username">{this.state.creator.username}</span></Link>
             { this.edit() }
           </div>
           <div className="detail-main">
@@ -106,7 +106,7 @@ module.exports = React.createClass({
             <h3>Members</h3>
             {
               attendees.map((attendee) => {
-                return (<Link to={`/users/${attendee.id}`} className="member-pic-container" key={`${attendee.id}${attendee.username}`}><img id="member-pic" src={attendee.pic_url}/></Link>);
+                return (<Link to={`/users/${attendee.id}`} className="member-pic-container" key={`${attendee.id}${attendee.username}`}><img id="member-pic" src={attendee.pic_url}/><br/><span className="member-pic-username">{attendee.username}</span></Link>);
               })
             }
           </div>

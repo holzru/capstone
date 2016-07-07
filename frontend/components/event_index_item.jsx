@@ -22,6 +22,7 @@ module.exports = React.createClass({
   render() {
     return(
       <div className="event-index-item">
+        <div className="event-index-item-left">
         <Link to={`events/${this.props.event.id}`}><span className="event-item-title">{this.props.event.title}</span></Link>
         <br/>
         <span className="event-item-location">{this.props.event.location}</span>
@@ -31,6 +32,10 @@ module.exports = React.createClass({
           })
         }
         </ul>
+        </div>
+        <div className="event-index-item-right">
+          <li className="event-index-pic" style={{backgroundImage: `url(${this.props.event.pic_url})`}}></li>
+        </div>
       </div>
     );
   }

@@ -9,7 +9,7 @@ module.exports = React.createClass({
 
   deleteButton(comment_id, authorId) {
     if (SessionStore.currentUser().id === authorId) {
-      return <button onClick={this.deleteComment.bind(this, comment_id)} className="btn-default success"/>;
+      return (<button onClick={this.deleteComment.bind(this, comment_id)} className="btn-default success">Delete</button>);
     }
   },
 
@@ -37,9 +37,13 @@ module.exports = React.createClass({
   },
 
   _submitComment() {
-    let data = {body: this.state.body, event_id: this.props.event_id};
-    CommentActions.createComment(data);
-    this.setState({body: ""});
+    if (SessionStore.isUserLoggedIn()) {
+      let data = {body: this.state.body, event_id: this.props.event_id};
+      CommentActions.createComment(data);
+      this.setState({body: ""});
+    } else {
+      $("#login-modal").modal("show");
+    }
   },
 
   render() {
@@ -50,8 +54,8 @@ module.exports = React.createClass({
       <h4>Comments<div className="comment-board">
         {this.comment_render()}
         <form className="new-comment-form">
-          <input type="text" placeholder="Comment" onChange={this.handleInput} value={this.state.body}/>
-          <button onClick={this._submitComment} className="btn-success"/>
+          <input type="text" placeholder="Comment" className="comment-input" onChange={this.handleInput} value={this.state.body}/>
+          <button onClick={this._submitComment} className="btn-success">Create Comment</button>
         </form>
       </div></h4>);
   }

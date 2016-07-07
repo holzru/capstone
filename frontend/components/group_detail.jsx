@@ -93,9 +93,9 @@ module.exports = React.createClass({
             <div className="group-stats">
               <span className='group-stat-members'>Members: {this.state.members.length}</span><br/>
               <span className='group-stat-events'>Events: {this.state.events.length}</span>
-            </div>
-            <div>Creator Stuff</div>
-            <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/></Link>
+            </div><br/>
+            <div>Created By:</div>
+            <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/><br/><span className = "member-pic-username">{this.state.creator.username}</span></Link>
             {this.editButton()}
           </div>
           <div className="detail-main">
@@ -110,7 +110,7 @@ module.exports = React.createClass({
             <h3>Members</h3>
             {
               this.state.members.map((member) => {
-                return (<Link to={`/users/${member.id}`} className="member-pic-container" key={`${member.id}${member.username}`}><img id="member-pic" src={member.pic_url}/></Link>);
+                return (<Link to={`/users/${member.id}`} className="member-pic-container" key={`${member.id}${member.username}`}><img id="member-pic" src={member.pic_url}/><br/><span className="member-pic-username">{member.username}</span></Link>);
               })
             }
 
