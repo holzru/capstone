@@ -153,7 +153,7 @@ const LoginForm = React.createClass({
                       Upload Pic
                     </button>
                     <br/>
-        						<button onClick={this.handleSubmit} value={this.formType()} className="btn btn-success"/>
+        						<button onClick={this.handleSubmit} value={this.formType()} className="btn btn-success">{this.formType()}</button>
         					</div>
         				</form>
         			</div>

@@ -135,6 +135,7 @@ a:hover #detial-banner-words {
 }
 
 .detail-left{
+  min-width: 110px;
   width: 15%;
   border: 2px solid #CFCFCF;
   border-radius: 10px;
@@ -152,7 +153,8 @@ h3 {
   border: 2px solid #CFCFCF;
   border-radius: 10px;
   margin: 5px;
-  justify-content: center;
+  justify-content: flex-start;
+  top: 0;
   position: relative;
   display: flex;
   flex-flow: column;
@@ -235,6 +237,7 @@ h3 {
 }
 
 .detail-right {
+  min-width: 110px;
   width: 15%;
   border: 2px solid #CFCFCF;
   border-radius: 10px;

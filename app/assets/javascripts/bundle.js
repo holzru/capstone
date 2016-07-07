@@ -26372,7 +26372,11 @@
 	                      className: 'login-input' })
 	                  ),
 	                  React.createElement('br', null),
-	                  React.createElement('button', { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' })
+	                  React.createElement(
+	                    'button',
+	                    { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' },
+	                    'Login'
+	                  )
 	                )
 	              )
 	            )
@@ -33583,7 +33587,11 @@
 	                    'Upload Pic'
 	                  ),
 	                  React.createElement('br', null),
-	                  React.createElement('button', { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' })
+	                  React.createElement(
+	                    'button',
+	                    { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' },
+	                    this.formType()
+	                  )
 	                )
 	              )
 	            )
@@ -33854,7 +33862,11 @@
 	                    'Upload Pic'
 	                  ),
 	                  React.createElement('br', null),
-	                  React.createElement('input', { type: 'submit', value: this.formType(), className: 'btn btn-success' })
+	                  React.createElement(
+	                    'button',
+	                    { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' },
+	                    this.formType()
+	                  )
 	                )
 	              )
 	            )
