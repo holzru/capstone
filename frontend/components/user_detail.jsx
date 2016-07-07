@@ -2,6 +2,7 @@ const React = require('react');
 const Link = require('react-router').Link;
 const UserStore = require('../stores/user_store');
 const UserActions = require('../actions/user_actions');
+const ReactTooltip = require("react-tooltip");
 
 
 module.exports = React.createClass({
@@ -27,12 +28,21 @@ module.exports = React.createClass({
     return (rows.map((row) => this.render_row(row)));
   },
 
+  _groupTip(group) {
+    return (`Name: ${group.name} <br /> Description: ${group.description}`);
+  },
+
   render_row(row) {
     let rowContents = row.map((group) => {
-      return (<Link to={`/groups/${group.id}`} className="group-index-item-container"><li key={group.id} className="group-index-item" style={{backgroundImage: `url(${group.pic_url})`}}></li></Link>);
+      return (
+      <div key={group.id} group={group} data-tip={this._groupTip(group)} data-for="item" className="group-index-item-container">
+        <Link to={`/groups/${group.id}`} group={group}>
+          <li className="group-index-item" group={group} style={{backgroundImage: `url(${group.pic_url})`}}></li>
+        </Link>
+      </div>);
     });
 
-    return (<ul className="group-rows">{rowContents}</ul>);
+    return (<ul className="group-rows">{rowContents}<ReactTooltip multiline={true} place="top" type="dark" effect="float" id="item"/></ul>);
   },
 
 

@@ -13,7 +13,6 @@ module.exports = {
 
   _deliverTicket(ticket) {
     EventActions.getEvent(ticket.event_id);
-    //TODO: graphic
   },
 
   unregisterForEvent(id) {

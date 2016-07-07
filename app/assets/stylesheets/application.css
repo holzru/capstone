@@ -13,7 +13,6 @@
  *= require_tree .
  *= require_self
  */
-
 a #detial-banner-words {
   color: white;
 }
@@ -112,24 +111,51 @@ a:hover #detial-banner-words {
 .event-index-item {
   width: 100%;
   height: auto;
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
   margin: 0 auto;
   padding: 10px;
+  border-top: 1px solid grey;
+  border-bottom: 1px solid grey;
 }
 
 .event-index-item-right {
   height: 100px;
   width: 100px;
   position: relative;
+  float: right;
+  max-width: 150px;
+  min-width: 150px;
 }
+
+.group-event-button{
+  width: 25%;
+  min-width: 150px;
+  margin: 0 auto;
+}
+
+.event-item-title{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.event-index-item-left {
+  float: left;
+  max-width: 250px;
+  min-width: 250px;
+  padding: 5px;
+}
+
+.event-index-item-middle {
+  float: left;
+  max-width: 200px;
+  min-width: 100px;
+}
+
 
 .event-index-pic {
   vertical-align: top;
   display: block;
   list-style: none;
-  height: 100%;
+  height: inherit;
   width: 100%;
   background-size: cover;
 }
@@ -148,7 +174,7 @@ h3 {
 }
 
 .detail-main{
-  min-width: 400px;
+  min-width: 500px;
   width: 65%;
   border: 2px solid #CFCFCF;
   border-radius: 10px;

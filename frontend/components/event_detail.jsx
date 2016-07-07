@@ -39,6 +39,7 @@ module.exports = React.createClass({
   _registerForEvent() {
     if (SessionStore.isUserLoggedIn()) {
       EventTicketActions.registerForEvent(this.state.event.id);
+      alert(`Congrats ${SessionStore.currentUser().username} you registered for ${this.state.event.title}`);
     } else {
       $('#login-modal').modal('show');
     }

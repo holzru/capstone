@@ -1,6 +1,7 @@
 const React = require('react');
 const SessionStore = require('../stores/session_store');
 const CommentActions = require('../actions/comment_actions');
+const Link = require('react-router').Link;
 
 module.exports = React.createClass({
   getInitialState() {
@@ -23,7 +24,7 @@ module.exports = React.createClass({
       return(
         <div className="comment-container">
           <li className="comment-item">
-          <img id="user-event-pic" src={commentObj.author.pic_url}/>
+          <Link to={`users/${commentObj.author.id}`}><img id="user-event-pic" src={commentObj.author.pic_url}/></Link>
           <span className="comment-body">{commentObj.comment.body}</span>
           { this.deleteButton(commentObj.comment.id, commentObj.author.id) }
           </li>

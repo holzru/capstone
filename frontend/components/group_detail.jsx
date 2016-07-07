@@ -59,15 +59,16 @@ module.exports = React.createClass({
       memberIds.push(member.id);
     });
     if (memberIds.indexOf(SessionStore.currentUser().id) === -1) {
-      return <button onClick={this._joinGroup}>Join Group</button>;
+      return <button onClick={this._joinGroup} className="group-event-button">Join Group</button>;
     } else {
-      return <button onClick={this._leaveGroup}>Leave Group</button>;
+      return <button onClick={this._leaveGroup} className="group-event-button">Leave Group</button>;
     }
   },
 
   _joinGroup() {
     if (SessionStore.isUserLoggedIn()){
       GroupMembershipActions.joinGroup(this.state.group.id);
+      alert(`Congrats ${SessionStore.currentUser().username} you joined ${this.state.group.name}`);
     } else {
       $('#login-modal').modal('show');
     }
@@ -104,7 +105,7 @@ module.exports = React.createClass({
               return(<EventIndexItem event={event} key={`${event.id}event`} group={this.state.group}/>);
             })}
             {this.joinGroupButton()}
-            <button onClick={this._createEvent}>Create Group Event</button>
+            <button onClick={this._createEvent} className="group-event-button">Create Group Event</button>
           </div>
           <div className="detail-right">
             <h3>Members</h3>

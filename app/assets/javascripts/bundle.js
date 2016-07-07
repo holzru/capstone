@@ -35520,13 +35520,13 @@
 	    if (memberIds.indexOf(SessionStore.currentUser().id) === -1) {
 	      return React.createElement(
 	        'button',
-	        { onClick: this._joinGroup },
+	        { onClick: this._joinGroup, className: 'group-event-button' },
 	        'Join Group'
 	      );
 	    } else {
 	      return React.createElement(
 	        'button',
-	        { onClick: this._leaveGroup },
+	        { onClick: this._leaveGroup, className: 'group-event-button' },
 	        'Leave Group'
 	      );
 	    }
@@ -35534,6 +35534,7 @@
 	  _joinGroup: function _joinGroup() {
 	    if (SessionStore.isUserLoggedIn()) {
 	      GroupMembershipActions.joinGroup(this.state.group.id);
+	      alert('Congrats ' + SessionStore.currentUser().username + ' you joined ' + this.state.group.name);
 	    } else {
 	      $('#login-modal').modal('show');
 	    }
@@ -35621,7 +35622,7 @@
 	          this.joinGroupButton(),
 	          React.createElement(
 	            'button',
-	            { onClick: this._createEvent },
+	            { onClick: this._createEvent, className: 'group-event-button' },
 	            'Create Group Event'
 	          )
 	        ),
@@ -35767,6 +35768,21 @@
 	      ),
 	      React.createElement(
 	        'div',
+	        { className: 'event-index-item-middle' },
+	        React.createElement(
+	          'label',
+	          null,
+	          'Description:'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'p',
+	          { className: 'event-index-description' },
+	          this.props.event.description
+	        )
+	      ),
+	      React.createElement(
+	        'div',
 	        { className: 'event-index-item-right' },
 	        React.createElement('li', { className: 'event-index-pic', style: { backgroundImage: 'url(' + this.props.event.pic_url + ')' } })
 	      )
@@ -35793,7 +35809,6 @@
 	  },
 	  _deliverTicket: function _deliverTicket(ticket) {
 	    EventActions.getEvent(ticket.event_id);
-	    //TODO: graphic
 	  },
 	  unregisterForEvent: function unregisterForEvent(id) {
 	    EventTicketUtil.destroyTicket(id, EventActions.getEvent.bind(EventActions));
@@ -53310,6 +53325,7 @@
 	var Link = __webpack_require__(1).Link;
 	var UserStore = __webpack_require__(491);
 	var UserActions = __webpack_require__(259);
+	var ReactTooltip = __webpack_require__(268);
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -53334,19 +53350,29 @@
 	      return _this.render_row(row);
 	    });
 	  },
+	  _groupTip: function _groupTip(group) {
+	    return 'Name: ' + group.name + ' <br /> Description: ' + group.description;
+	  },
 	  render_row: function render_row(row) {
+	    var _this2 = this;
+	
 	    var rowContents = row.map(function (group) {
 	      return React.createElement(
-	        Link,
-	        { to: '/groups/' + group.id, className: 'group-index-item-container' },
-	        React.createElement('li', { key: group.id, className: 'group-index-item', style: { backgroundImage: 'url(' + group.pic_url + ')' } })
+	        'div',
+	        { key: group.id, group: group, 'data-tip': _this2._groupTip(group), 'data-for': 'item', className: 'group-index-item-container' },
+	        React.createElement(
+	          Link,
+	          { to: '/groups/' + group.id, group: group },
+	          React.createElement('li', { className: 'group-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
+	        )
 	      );
 	    });
 	
 	    return React.createElement(
 	      'ul',
 	      { className: 'group-rows' },
-	      rowContents
+	      rowContents,
+	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'item' })
 	    );
 	  },
 	  render: function render() {
@@ -53505,6 +53531,7 @@
 	  _registerForEvent: function _registerForEvent() {
 	    if (SessionStore.isUserLoggedIn()) {
 	      EventTicketActions.registerForEvent(this.state.event.id);
+	      alert('Congrats ' + SessionStore.currentUser().username + ' you registered for ' + this.state.event.title);
 	    } else {
 	      $('#login-modal').modal('show');
 	    }
@@ -53662,6 +53689,7 @@
 	var React = __webpack_require__(4);
 	var SessionStore = __webpack_require__(239);
 	var CommentActions = __webpack_require__(494);
+	var Link = __webpack_require__(1).Link;
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -53691,7 +53719,11 @@
 	        React.createElement(
 	          'li',
 	          { className: 'comment-item' },
-	          React.createElement('img', { id: 'user-event-pic', src: commentObj.author.pic_url }),
+	          React.createElement(
+	            Link,
+	            { to: 'users/' + commentObj.author.id },
+	            React.createElement('img', { id: 'user-event-pic', src: commentObj.author.pic_url })
+	          ),
 	          React.createElement(
 	            'span',
 	            { className: 'comment-body' },

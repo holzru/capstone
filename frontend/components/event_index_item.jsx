@@ -33,6 +33,10 @@ module.exports = React.createClass({
         }
         </ul>
         </div>
+        <div className="event-index-item-middle">
+          <label>Description:</label><br/>
+          <p className="event-index-description">{this.props.event.description}</p>
+        </div>
         <div className="event-index-item-right">
           <li className="event-index-pic" style={{backgroundImage: `url(${this.props.event.pic_url})`}}></li>
         </div>
