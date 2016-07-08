@@ -288,7 +288,7 @@ h3 {
   width: 200px;
   height: auto;
   min-height: 200px;
-  margin: 5px
+  margin: 5px;
 }
 
 .group-index-item {
@@ -390,8 +390,6 @@ h3 {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-
-
 
 .input-calendar {
   font-family: 'Pontano Sans', sans-serif;
