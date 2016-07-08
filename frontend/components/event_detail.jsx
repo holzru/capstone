@@ -47,7 +47,7 @@ module.exports = React.createClass({
 
   edit() {
     if (this.state.creator.id === SessionStore.currentUser().id) {
-      return <button onClick={this._editEvent} className="btn-default">Edit Event</button>;
+      return <button onClick={this._editEvent} className="group-event-button">Edit Event</button>;
     } else {
       return <div></div>;
     }
@@ -64,11 +64,11 @@ module.exports = React.createClass({
       attendee_ids.push(attendee.id);
     });
     if (attendee_ids.indexOf(SessionStore.currentUser().id) === -1) {
-      return (<button className="btn-default" onClick={this._registerForEvent}>
+      return (<button className="btn-default" id="register-button" onClick={this._registerForEvent}>
         Register for Event
       </button>);
     } else {
-      return (<button className="btn-default" onClick={this._unregisterForEvent}>
+      return (<button className="btn-default" id="register-button" onClick={this._unregisterForEvent}>
         Unregister for Event
       </button>);
     }
@@ -93,14 +93,16 @@ module.exports = React.createClass({
             <div className="event-stats">
               <span className='event-stat-members'>Attendees: {attendees.length}</span><br/>
             </div><br/>
-            <div>Created By:</div>
-            <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/><br/><span className = "member-pic-username">{this.state.creator.username}</span></Link>
+            <div className="creator-box">
+              <div>Created By:</div>
+              <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><li id="creator-pic" event={event} style={{backgroundImage: `url(${this.state.creator.pic_url})`}}></li><br/><span className = "member-pic-username">{this.state.creator.username}</span></Link><br/>
             { this.edit() }
+          </div>
           </div>
           <div className="detail-main">
             <h3 className="event-title">{event.title}</h3>
             <p className="event-description">{event.description}</p>
-            { this.register() }
+            { this.register() }<br/><br/>
             <CommentIndex comments={this.state.comments} event_id={event.id}/>
           </div>
           <div className="detail-right">

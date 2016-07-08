@@ -26044,7 +26044,7 @@
 	        null,
 	        React.createElement(
 	          'a',
-	          { href: '#', onClick: this._signUp, id: 'log-in-link' },
+	          { href: '#', onClick: this._signUp, id: 'login-signup-link' },
 	          'Edit'
 	        )
 	      ),
@@ -26053,7 +26053,7 @@
 	        null,
 	        React.createElement(
 	          'a',
-	          { href: '#', onClick: this._signOut, id: 'sign-up-link' },
+	          { href: '#', onClick: this._signOut, id: 'login-signup-link' },
 	          'Sign Out'
 	        )
 	      ),
@@ -26074,7 +26074,7 @@
 	        null,
 	        React.createElement(
 	          'a',
-	          { href: '#', onClick: this._logIn, id: 'log-in-link' },
+	          { href: '#', onClick: this._logIn, id: 'login-signup-link' },
 	          'Login'
 	        )
 	      ),
@@ -26083,7 +26083,7 @@
 	        null,
 	        React.createElement(
 	          'a',
-	          { href: '#', onClick: this._signUp, id: 'sign-up-link' },
+	          { href: '#', onClick: this._signUp, id: 'login-signup-link' },
 	          'Sign Up'
 	        )
 	      ),
@@ -26138,82 +26138,12 @@
 	                null,
 	                React.createElement(
 	                  'a',
-	                  { href: '#', onClick: this._createGroup },
+	                  { href: '#', id: 'group-create', onClick: this._createGroup },
 	                  'Create Group ',
 	                  React.createElement(
 	                    'span',
 	                    { className: 'sr-only' },
 	                    '(current)'
-	                  )
-	                )
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#' },
-	                  'Link'
-	                )
-	              ),
-	              React.createElement(
-	                'li',
-	                { className: 'dropdown' },
-	                React.createElement(
-	                  'a',
-	                  { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-	                  'Dropdown ',
-	                  React.createElement('span', { className: 'caret' })
-	                ),
-	                React.createElement(
-	                  'ul',
-	                  { className: 'dropdown-menu' },
-	                  React.createElement(
-	                    'li',
-	                    null,
-	                    React.createElement(
-	                      'a',
-	                      { href: '#' },
-	                      'Action'
-	                    )
-	                  ),
-	                  React.createElement(
-	                    'li',
-	                    null,
-	                    React.createElement(
-	                      'a',
-	                      { href: '#' },
-	                      'Another action'
-	                    )
-	                  ),
-	                  React.createElement(
-	                    'li',
-	                    null,
-	                    React.createElement(
-	                      'a',
-	                      { href: '#' },
-	                      'Something else here'
-	                    )
-	                  ),
-	                  React.createElement('li', { role: 'separator', className: 'divider' }),
-	                  React.createElement(
-	                    'li',
-	                    null,
-	                    React.createElement(
-	                      'a',
-	                      { href: '#' },
-	                      'Separated link'
-	                    )
-	                  ),
-	                  React.createElement('li', { role: 'separator', className: 'divider' }),
-	                  React.createElement(
-	                    'li',
-	                    null,
-	                    React.createElement(
-	                      'a',
-	                      { href: '#' },
-	                      'One more separated link'
-	                    )
 	                  )
 	                )
 	              )
@@ -26298,7 +26228,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.formType;
+	    return this.props.formType[0].toUpperCase() + this.props.formType.slice(1);
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -26306,6 +26236,14 @@
 	    return function (e) {
 	      return _this.setState(_defineProperty({}, property, e.target.value));
 	    };
+	  },
+	  handleDemo: function handleDemo() {
+	    var formData = {
+	      username: "demo",
+	      password: "demo_user"
+	    };
+	
+	    SessionActions.logIn(formData);
 	  },
 	  render: function render() {
 	    return React.createElement(
@@ -26376,6 +26314,11 @@
 	                    'button',
 	                    { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' },
 	                    'Login'
+	                  ),
+	                  React.createElement(
+	                    'button',
+	                    { onClick: this.handleDemo, className: 'btn btn-success' },
+	                    'Demo'
 	                  )
 	                )
 	              )
@@ -33478,7 +33421,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.formType;
+	    return this.props.formType[0].toUpperCase() + this.props.formType.slice(1);
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -33753,7 +33696,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.formType;
+	    return this.props.formType[0].toUpperCase() + this.props.formType.slice(1);
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -34025,60 +33968,65 @@
 /* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	var React = __webpack_require__(4);
+	var hashHistory = __webpack_require__(1).hashHistory;
 	
 	module.exports = React.createClass({
-	  displayName: "exports",
+	  displayName: 'exports',
+	  _creatorLink: function _creatorLink(e) {
+	    e.preventDefault();
+	    hashHistory.push("/users/1");
+	  },
 	  render: function render() {
 	    return React.createElement(
-	      "nav",
-	      { className: "navbar navbar-default navbar-fixed-bottom", id: "footer" },
+	      'nav',
+	      { className: 'navbar navbar-default navbar-fixed-bottom', id: 'footer' },
 	      React.createElement(
-	        "div",
-	        { className: "container-fluid" },
+	        'div',
+	        { className: 'container-fluid' },
 	        React.createElement(
-	          "div",
-	          { className: "navbar-footer", id: "footer-links" },
+	          'div',
+	          { className: 'navbar-footer', id: 'footer-links' },
 	          React.createElement(
-	            "ul",
-	            { className: "nav navbar-nav" },
+	            'ul',
+	            { className: 'nav navbar-nav' },
 	            React.createElement(
-	              "li",
+	              'li',
 	              null,
 	              React.createElement(
-	                "a",
-	                { href: "#", id: "footer_link" },
-	                "Action"
+	                'a',
+	                { href: '#', onClick: this._creatorLink, id: 'footer_link' },
+	                'Creator'
 	              )
 	            ),
 	            React.createElement(
-	              "li",
+	              'li',
 	              null,
 	              React.createElement(
-	                "a",
-	                { href: "#", id: "footer_link" },
-	                "Another action"
+	                'a',
+	                { href: 'https://www.linkedin.com/in/russellholz', id: 'footer_link' },
+	                'Creator LinkedIn'
 	              )
 	            ),
 	            React.createElement(
-	              "li",
+	              'li',
 	              null,
 	              React.createElement(
-	                "a",
-	                { href: "#", id: "footer_link" },
-	                "Something else here"
+	                'a',
+	                { href: 'https://github.com/holzru', id: 'footer_link' },
+	                'Creator GitHub'
 	              )
 	            ),
-	            React.createElement("li", { role: "separator", className: "divider" }),
+	            React.createElement('li', { role: 'separator', className: 'divider' }),
 	            React.createElement(
-	              "li",
+	              'li',
 	              null,
 	              React.createElement(
-	                "a",
-	                { href: "#", id: "footer_link" },
-	                "Separated link"
+	                'a',
+	                { href: 'http://www.meetup.com/', id: 'footer_link' },
+	                'MeetUp'
 	              )
 	            )
 	          )
@@ -35321,7 +35269,7 @@
 	  group_render: function group_render() {
 	    var _this = this;
 	
-	    var groups = this.props.searchResults.groups.map(function (group) {
+	    var groups = this.props.searchResults.groups.map(function (group, idx) {
 	      return React.createElement(
 	        'div',
 	        { key: group.id, group: group, 'data-tip': _this._groupTip(group), 'data-for': 'search-item', className: 'group-index-item-container' },
@@ -35329,14 +35277,14 @@
 	          Link,
 	          { to: '/groups/' + group.id, group: group },
 	          React.createElement('li', { className: 'group-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
-	        )
+	        ),
+	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'search-item' }) : ""
 	      );
 	    });
 	    return React.createElement(
 	      'ul',
 	      { key: 'group', className: 'group-rows' },
-	      groups,
-	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'search-item' })
+	      groups
 	    );
 	  },
 	  event_render: function event_render() {
@@ -35356,8 +35304,7 @@
 	    return React.createElement(
 	      'ul',
 	      { key: 'event', className: 'group-rows' },
-	      events,
-	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'search-item' })
+	      events
 	    );
 	  },
 	  user_render: function user_render() {
@@ -35377,8 +35324,7 @@
 	    return React.createElement(
 	      'ul',
 	      { key: 'users', className: 'group-rows' },
-	      users,
-	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'search-item' })
+	      users
 	    );
 	  },
 	  render: function render() {
@@ -35489,7 +35435,7 @@
 	    if (SessionStore.currentUser().id === this.state.creator.id) {
 	      return React.createElement(
 	        'button',
-	        { onClick: this._editGroup },
+	        { onClick: this._editGroup, className: 'group-event-button' },
 	        'Edit Group'
 	      );
 	    } else {
@@ -35587,24 +35533,28 @@
 	              this.state.events.length
 	            )
 	          ),
-	          React.createElement('br', null),
 	          React.createElement(
 	            'div',
-	            null,
-	            'Created By:'
-	          ),
-	          React.createElement(
-	            Link,
-	            { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
-	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url }),
-	            React.createElement('br', null),
+	            { className: 'creator-box' },
 	            React.createElement(
-	              'span',
-	              { className: 'member-pic-username' },
-	              this.state.creator.username
-	            )
-	          ),
-	          this.editButton()
+	              'div',
+	              null,
+	              'Created By:'
+	            ),
+	            React.createElement(
+	              Link,
+	              { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
+	              React.createElement('li', { id: 'creator-pic', event: event, style: { backgroundImage: 'url(' + this.state.creator.pic_url + ')' } }),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'span',
+	                { className: 'member-pic-username' },
+	                this.state.creator.username
+	              )
+	            ),
+	            React.createElement('br', null),
+	            this.editButton()
+	          )
 	        ),
 	        React.createElement(
 	          'div',
@@ -35619,11 +35569,15 @@
 	          this.state.events.map(function (event) {
 	            return React.createElement(EventIndexItem, { event: event, key: event.id + 'event', group: _this.state.group });
 	          }),
-	          this.joinGroupButton(),
 	          React.createElement(
-	            'button',
-	            { onClick: this._createEvent, className: 'group-event-button' },
-	            'Create Group Event'
+	            'span',
+	            { className: 'group-button-container' },
+	            this.joinGroupButton(),
+	            React.createElement(
+	              'button',
+	              { onClick: this._createEvent, className: 'group-event-button' },
+	              'Create Group Event'
+	            )
 	          )
 	        ),
 	        React.createElement(
@@ -35750,9 +35704,13 @@
 	        ),
 	        React.createElement('br', null),
 	        React.createElement(
-	          'span',
+	          'div',
 	          { className: 'event-item-location' },
-	          this.props.event.location
+	          React.createElement(
+	            'span',
+	            null,
+	            this.props.event.location
+	          )
 	        ),
 	        React.createElement(
 	          'ul',
@@ -35771,7 +35729,7 @@
 	        { className: 'event-index-item-middle' },
 	        React.createElement(
 	          'label',
-	          null,
+	          { className: 'event-index-item-title' },
 	          'Description:'
 	        ),
 	        React.createElement('br', null),
@@ -36044,7 +36002,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.formType;
+	    return this.props.formType[0].toUpperCase() + this.props.formType.slice(1);
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -53330,7 +53288,7 @@
 	module.exports = React.createClass({
 	  displayName: 'exports',
 	  getInitialState: function getInitialState() {
-	    return { user: {}, user_groups: [] };
+	    return { user: {}, user_groups: [], created_groups: [], created_events: [] };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.userStoreListener = UserStore.addListener(this._handleChange);
@@ -53341,46 +53299,83 @@
 	  },
 	  _handleChange: function _handleChange() {
 	    var userObj = UserStore.current();
-	    this.setState({ user: userObj.user, user_groups: userObj.user_groups });
-	  },
-	  render_rows: function render_rows(rows) {
-	    var _this = this;
-	
-	    return rows.map(function (row) {
-	      return _this.render_row(row);
-	    });
+	    this.setState({ user: userObj.user, user_groups: userObj.user_groups, created_groups: userObj.created_groups, created_events: userObj.created_events });
 	  },
 	  _groupTip: function _groupTip(group) {
 	    return 'Name: ' + group.name + ' <br /> Description: ' + group.description;
 	  },
+	  _eventTip: function _eventTip(event) {
+	    return 'Title: ' + event.title + ' <br /> Description: ' + event.description;
+	  },
 	  render_row: function render_row(row) {
-	    var _this2 = this;
+	    var _this = this;
 	
-	    var rowContents = row.map(function (group) {
+	    var rowContents = row.map(function (group, idx) {
 	      return React.createElement(
 	        'div',
-	        { key: group.id, group: group, 'data-tip': _this2._groupTip(group), 'data-for': 'item', className: 'group-index-item-container' },
+	        { key: group.id, group: group, 'data-tip': _this._groupTip(group), 'data-for': 'user-item', className: 'group-index-item-container' },
 	        React.createElement(
 	          Link,
 	          { to: '/groups/' + group.id, group: group },
 	          React.createElement('li', { className: 'group-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
-	        )
+	        ),
+	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'user-item' }) : ""
 	      );
 	    });
 	
 	    return React.createElement(
 	      'ul',
-	      { className: 'group-rows' },
-	      rowContents,
-	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'item' })
+	      { key: 'user', className: 'group-rows' },
+	      rowContents
 	    );
 	  },
+	  render_group_row: function render_group_row(row) {
+	    var _this2 = this;
+	
+	    var rowContents = row.map(function (group, idx) {
+	      return React.createElement(
+	        'div',
+	        { key: group.id, group: group, 'data-tip': _this2._groupTip(group), 'data-for': 'user-item', className: 'created-index-item-container' },
+	        React.createElement(
+	          Link,
+	          { to: '/groups/' + group.id, group: group },
+	          React.createElement('li', { className: 'created-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
+	        ),
+	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'user-item' }) : ""
+	      );
+	    });
+	    return rowContents;
+	  },
+	  render_event_row: function render_event_row(row) {
+	    var _this3 = this;
+	
+	    var rowContents = row.map(function (event) {
+	      return React.createElement(
+	        'div',
+	        { key: event.id, event: event, 'data-tip': _this3._eventTip(event), 'data-for': 'user-item', className: 'created-index-item-container' },
+	        React.createElement(
+	          Link,
+	          { to: '/events/' + event.id, event: event },
+	          React.createElement('li', { className: 'created-index-item', event: event, style: { backgroundImage: 'url(' + event.pic_url + ')' } })
+	        )
+	      );
+	    });
+	
+	    return rowContents;
+	  },
 	  render: function render() {
-	    var rows = [];
-	    var group_copy = this.state.user_groups.slice();
-	    while (group_copy.length > 0) {
-	      rows.push(group_copy.splice(0, 4));
-	    }
+	    var row = [];
+	    this.state.user_groups.forEach(function (item) {
+	      row.push(item);
+	    });
+	    var created_groups = [];
+	    this.state.created_groups.forEach(function (item) {
+	      created_groups.push(item);
+	    });
+	    var created_events = [];
+	    this.state.created_events.forEach(function (item) {
+	      created_events.push(item);
+	    });
 	    var user = this.state.user;
 	    return React.createElement(
 	      'div',
@@ -53404,13 +53399,10 @@
 	            'div',
 	            { className: 'user-info' },
 	            React.createElement(
-	              'div',
-	              null,
-	              React.createElement(
-	                'div',
-	                { className: 'user-loc' },
-	                'Location Fill In'
-	              )
+	              'span',
+	              { className: 'user-since' },
+	              'Member Since: ',
+	              new Date(Date.parse(user.created_at)).getFullYear()
 	            )
 	          ),
 	          React.createElement(
@@ -53419,7 +53411,13 @@
 	            React.createElement(
 	              'h3',
 	              null,
-	              'Interests'
+	              'Groups & Events Created'
+	            ),
+	            React.createElement(
+	              'ul',
+	              { className: 'group-rows' },
+	              this.render_group_row(created_groups),
+	              this.render_event_row(created_events)
 	            )
 	          )
 	        ),
@@ -53434,7 +53432,7 @@
 	          ),
 	          React.createElement('br', null),
 	          React.createElement('br', null),
-	          this.render_rows(rows)
+	          this.render_row(row)
 	        ),
 	        React.createElement(
 	          'div',
@@ -53540,7 +53538,7 @@
 	    if (this.state.creator.id === SessionStore.currentUser().id) {
 	      return React.createElement(
 	        'button',
-	        { onClick: this._editEvent, className: 'btn-default' },
+	        { onClick: this._editEvent, className: 'group-event-button' },
 	        'Edit Event'
 	      );
 	    } else {
@@ -53559,13 +53557,13 @@
 	    if (attendee_ids.indexOf(SessionStore.currentUser().id) === -1) {
 	      return React.createElement(
 	        'button',
-	        { className: 'btn-default', onClick: this._registerForEvent },
+	        { className: 'btn-default', id: 'register-button', onClick: this._registerForEvent },
 	        'Register for Event'
 	      );
 	    } else {
 	      return React.createElement(
 	        'button',
-	        { className: 'btn-default', onClick: this._unregisterForEvent },
+	        { className: 'btn-default', id: 'register-button', onClick: this._unregisterForEvent },
 	        'Unregister for Event'
 	      );
 	    }
@@ -53620,21 +53618,26 @@
 	          React.createElement('br', null),
 	          React.createElement(
 	            'div',
-	            null,
-	            'Created By:'
-	          ),
-	          React.createElement(
-	            Link,
-	            { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
-	            React.createElement('img', { id: 'creator-pic', src: this.state.creator.pic_url }),
-	            React.createElement('br', null),
+	            { className: 'creator-box' },
 	            React.createElement(
-	              'span',
-	              { className: 'member-pic-username' },
-	              this.state.creator.username
-	            )
-	          ),
-	          this.edit()
+	              'div',
+	              null,
+	              'Created By:'
+	            ),
+	            React.createElement(
+	              Link,
+	              { to: '/users/' + this.state.creator.id, className: 'creator-pic-container' },
+	              React.createElement('li', { id: 'creator-pic', event: event, style: { backgroundImage: 'url(' + this.state.creator.pic_url + ')' } }),
+	              React.createElement('br', null),
+	              React.createElement(
+	                'span',
+	                { className: 'member-pic-username' },
+	                this.state.creator.username
+	              )
+	            ),
+	            React.createElement('br', null),
+	            this.edit()
+	          )
 	        ),
 	        React.createElement(
 	          'div',
@@ -53650,6 +53653,8 @@
 	            event.description
 	          ),
 	          this.register(),
+	          React.createElement('br', null),
+	          React.createElement('br', null),
 	          React.createElement(CommentIndex, { comments: this.state.comments, event_id: event.id })
 	        ),
 	        React.createElement(
@@ -53757,7 +53762,7 @@
 	    }
 	    return React.createElement(
 	      'h4',
-	      null,
+	      { className: 'comment-board-title' },
 	      'Comments',
 	      React.createElement(
 	        'div',

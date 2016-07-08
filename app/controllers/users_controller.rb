@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:user][:id])
-    render json: {user: @user, user_groups: @user.groups}
+    render json: {user: @user, user_groups: @user.groups, created_groups: @user.created_groups, created_events: @user.created_events}
   end
 
 	protected

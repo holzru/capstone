@@ -29,7 +29,7 @@ module.exports = React.createClass({
 
   editButton(){
     if (SessionStore.currentUser().id === this.state.creator.id) {
-      return <button onClick={this._editGroup}>Edit Group</button>;
+      return <button onClick={this._editGroup} className="group-event-button">Edit Group</button>;
     } else {
       return "";
     }
@@ -94,18 +94,22 @@ module.exports = React.createClass({
             <div className="group-stats">
               <span className='group-stat-members'>Members: {this.state.members.length}</span><br/>
               <span className='group-stat-events'>Events: {this.state.events.length}</span>
-            </div><br/>
-            <div>Created By:</div>
-            <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><img id="creator-pic" src={this.state.creator.pic_url}/><br/><span className = "member-pic-username">{this.state.creator.username}</span></Link>
-            {this.editButton()}
+            </div>
+            <div className="creator-box">
+              <div>Created By:</div>
+              <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><li id="creator-pic" event={event} style={{backgroundImage: `url(${this.state.creator.pic_url})`}}></li><br/><span className = "member-pic-username">{this.state.creator.username}</span></Link><br/>
+              {this.editButton()}
+          </div>
           </div>
           <div className="detail-main">
             <h3>Welcome, {group.name} Members</h3>
             {this.state.events.map((event) => {
               return(<EventIndexItem event={event} key={`${event.id}event`} group={this.state.group}/>);
             })}
+            <span className="group-button-container">
             {this.joinGroupButton()}
             <button onClick={this._createEvent} className="group-event-button">Create Group Event</button>
+            </span>
           </div>
           <div className="detail-right">
             <h3>Members</h3>

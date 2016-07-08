@@ -52,7 +52,7 @@ module.exports = React.createClass({
       return (<div>No comments so far</div>);
     }
     return(
-      <h4>Comments<div className="comment-board">
+      <h4 className="comment-board-title">Comments<div className="comment-board">
         {this.comment_render()}
         <form className="new-comment-form">
           <input type="text" placeholder="Comment" className="comment-input" onChange={this.handleInput} value={this.state.body}/>

@@ -91,7 +91,7 @@ const EventForm = React.createClass({
   },
 
   formType() {
-    return this.props.formType;
+    return (this.props.formType[0].toUpperCase() + this.props.formType.slice(1));
   },
 
   update(property) {

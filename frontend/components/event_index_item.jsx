@@ -25,7 +25,7 @@ module.exports = React.createClass({
         <div className="event-index-item-left">
         <Link to={`events/${this.props.event.id}`}><span className="event-item-title">{this.props.event.title}</span></Link>
         <br/>
-        <span className="event-item-location">{this.props.event.location}</span>
+        <div className="event-item-location"><span>{this.props.event.location}</span></div>
         <ul className="event-attendees">
           {this.state.members.map((member) => {
             return (<Link to={`/users/${member.id}`} key={member.id} event={event.id}><img id="user-event-pic" src={member.pic_url}/></Link>);
@@ -34,7 +34,7 @@ module.exports = React.createClass({
         </ul>
         </div>
         <div className="event-index-item-middle">
-          <label>Description:</label><br/>
+          <label className="event-index-item-title">Description:</label><br/>
           <p className="event-index-description">{this.props.event.description}</p>
         </div>
         <div className="event-index-item-right">

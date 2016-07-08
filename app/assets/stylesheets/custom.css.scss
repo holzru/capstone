@@ -1,11 +1,11 @@
-$navbar-default-bg: #D82D19;
+$navbar-default-bg: #3b5998;
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
 #footer {
-  background-color: #190071;
-  border-color: #190071;
+  background-color: #3b5998;
+  border-color: #3b5998;
   color: #fff;
 }
 
@@ -25,10 +25,34 @@ $navbar-default-bg: #D82D19;
   float: left;
   font-size: 1.7 em;
   color: #fff;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 #logo:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+#group-create{
+  float: left;
+  font-size: 1.8 em;
+  color: #fff;
+  font-weight: bold;
+}
+
+#group-create:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+#login-signup-link {
+  float: left;
+  font-size: 1.8 em;
+  color: #fff;
+  font-weight: bold;
+}
+
+#login-signup-link:hover {
   color: #fff;
   text-decoration: none;
 }

@@ -16,15 +16,16 @@ const SearchIndex = React.createClass({
   },
 
   group_render() {
-    let groups = this.props.searchResults.groups.map((group) => {
+    let groups = this.props.searchResults.groups.map((group, idx) => {
       return (
-      <div key={group.id} group={group} data-tip={this._groupTip(group)} data-for="search-item" className="group-index-item-container">
-        <Link to={`/groups/${group.id}`} group={group}>
-          <li className="group-index-item" group={group} style={{backgroundImage: `url(${group.pic_url})`}}></li>
-        </Link>
-      </div>);
-    });
-    return (<ul key="group" className="group-rows">{groups}<ReactTooltip multiline={true} place="top" type="dark" effect="float" id="search-item"/></ul>);
+        <div key={group.id} group={group} data-tip={this._groupTip(group)} data-for="search-item" className="group-index-item-container">
+          <Link to={`/groups/${group.id}`} group={group}>
+            <li className="group-index-item" group={group} style={{backgroundImage: `url(${group.pic_url})`}}></li>
+          </Link>
+          {idx === 0 ? <ReactTooltip multiline={true} place="top" type="dark" effect="float" id="search-item"/> : ""}
+        </div>);
+      });
+    return (<ul key="group" className="group-rows">{groups}</ul>);
   },
 
   event_render() {
@@ -35,7 +36,7 @@ const SearchIndex = React.createClass({
         </Link>
       </div>);
     });
-    return (<ul key="event" className="group-rows">{events}<ReactTooltip multiline={true} place="top" type="dark" effect="float" id="search-item"/></ul>);
+    return (<ul key="event" className="group-rows">{events}</ul>);
   },
 
   user_render() {
@@ -46,7 +47,7 @@ const SearchIndex = React.createClass({
         </Link>
       </div>);
     });
-    return (<ul key="users" className="group-rows">{users}<ReactTooltip multiline={true} place="top" type="dark" effect="float" id="search-item"/></ul>);
+    return (<ul key="users" className="group-rows">{users}</ul>);
   },
 
 

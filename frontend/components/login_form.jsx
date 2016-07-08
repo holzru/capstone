@@ -58,11 +58,20 @@ const LoginForm = React.createClass({
   },
 
   formType() {
-    return this.props.formType;
+    return (this.props.formType[0].toUpperCase() + this.props.formType.slice(1));
   },
 
   update(property) {
     return (e) => this.setState({[property]: e.target.value});
+  },
+
+  handleDemo() {
+    const formData = {
+			username: "demo",
+			password: "demo_user",
+		};
+
+    SessionActions.logIn(formData);
   },
 
 	render() {
@@ -99,6 +108,7 @@ const LoginForm = React.createClass({
         						</label>
         		        <br/>
         						<button onClick={this.handleSubmit} value={this.formType()} className="btn btn-success">Login</button>
+                    <button onClick={this.handleDemo} className="btn btn-success">Demo</button>
         					</div>
         				</form>
         			</div>
