@@ -63,12 +63,12 @@ const GroupForm = React.createClass({
     }
 	},
 
-  fieldErrors(field) {
+  fieldErrors() {
     const errors = ErrorStore.formErrors(this.formType());
 
-    if (!errors[field]) { return; }
+    if (!errors["errors"]) return;
 
-    const messages = errors[field].map( (errorMsg, i) => {
+    const messages = errors["errors"].map( (errorMsg, i) => {
       return <li key={ i }>{ errorMsg }</li>;
     });
 
@@ -76,7 +76,7 @@ const GroupForm = React.createClass({
   },
 
   formType() {
-    return (this.props.formType[0].toUpperCase() + this.props.formType.slice(1));
+    return (this.props.formType);
   },
 
   update(property) {
@@ -107,17 +107,16 @@ const GroupForm = React.createClass({
           <div className="modal-content">
             <div className="modal-header">
               <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 className="modal-title">{ this.formType() }</h4>
+              <h4 className="modal-title">{ this.formType()[0].toUpperCase() + this.props.formType.slice(1) }</h4>
             </div>
             <div className="modal-body">
               <div className="login-form-container container-fluid text-center">
         				<form onSubmit={this.handleSubmit} className="login-form-box">
         					<br/>
-        	        { this.fieldErrors("base") }
+        	        { this.fieldErrors() }
         					<div className="login-form">
         		        <br />
         						<label> Name:
-        		          { this.fieldErrors("name") }
         							<input type="text"
         		            value={this.state.name}
         		            onChange={this.update("name")}
@@ -126,7 +125,6 @@ const GroupForm = React.createClass({
 
         		        <br/>
         						<label> Location:
-        		          { this.fieldErrors("location") }
         		          <input type="text"
         		            value={this.state.location}
         		            onChange={this.update("location")}

@@ -8,7 +8,7 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
       render json: @comment
     else
       # render json: @comment.errors.full_messages
-      render 'shared/errors', @comment.errors.full_messages
+      render json: {errors: @comment.errors.full_messages}
     end
   end
 
@@ -31,7 +31,7 @@ before_action :require_logged_in, only: [:create, :edit, :update, :destroy]
     if @comment.author_id == current_user.id && @comment.update(comment_params)
       render json: @comment
     else
-      render 'shared/errors', @comment.errors.full_messages
+      render json: {errors: @comment.errors.full_messages}
     end
   end
 

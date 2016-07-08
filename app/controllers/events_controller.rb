@@ -6,7 +6,7 @@ class EventsController < ApplicationController
     if @event.save
       render json: @event
     else
-      render json: @event.errors.full_messages
+      render json: {errors: @event.errors.full_messages}, status: 422
     end
   end
 
@@ -38,15 +38,15 @@ class EventsController < ApplicationController
       if @event.update(event_params)
         render json: @event
       else
-        render json: @event.errors.full_messages
+        render json: {errors: @event.errors.full_messages}, status: 422
       end
     else
-      render json: "Not yours to fix"
+      render json: {errors: "Not yours to fix"}
     end
   end
 
   def destroy
-    @event = Event.find(params[:id])
+    @event = Event.find(params[:event][:id])
     @event.destroy
   end
 

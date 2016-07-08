@@ -4,15 +4,15 @@ const ReactTooltip = require("react-tooltip");
 
 const SearchIndex = React.createClass({
   _groupTip(group) {
-    return (`Name: ${group.name} <br /> Description: ${group.description}`);
+    return (`Group <br/> Name: ${group.name} <br /> Description: ${group.description}`);
   },
 
   _eventTip(event) {
-    return (`Title: ${event.title} <br /> Description: ${event.description}`);
+    return (`Event <br/> Title: ${event.title} <br /> Description: ${event.description}`);
   },
 
   _userTip(user) {
-    return (`Name: ${user.username} <br /> Description: ${user.description}`);
+    return (`User <br/> Name: ${user.username} <br /> Description: ${user.description}`);
   },
 
   group_render() {
@@ -22,7 +22,7 @@ const SearchIndex = React.createClass({
           <Link to={`/groups/${group.id}`} group={group}>
             <li className="group-index-item" group={group} style={{backgroundImage: `url(${group.pic_url})`}}></li>
           </Link>
-          {idx === 0 ? <ReactTooltip multiline={true} place="top" type="dark" effect="float" id="search-item"/> : ""}
+          {idx === 0 ? <ReactTooltip multiline={true} class="tooltip-container" place="top" type="dark" effect="float" id="search-item"/> : ""}
         </div>);
       });
     return (<ul key="group" className="group-rows">{groups}</ul>);

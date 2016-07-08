@@ -7,7 +7,7 @@ class GroupMembershipsController < ApplicationController
     if @membership.save
       render json: @membership
     else
-      render json: @membership.errors.full_messages
+      render json: {errors: @membership.errors.full_messages}, status: 422
     end
   end
 

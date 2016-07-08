@@ -13,6 +13,8 @@
  *= require_tree .
  *= require_self
  */
+
+
 a #detial-banner-words {
   color: white;
 }
@@ -31,7 +33,6 @@ a:hover #detial-banner-words {
 
 .new-comment-form{
   bottom: 0;
-  position: absolute;
   width: 100%;
 }
 
@@ -41,18 +42,32 @@ a:hover #detial-banner-words {
   height: 100%;
 }
 
+.comment-body {
+  text-decoration: none;
+}
+
 .comment-item {
   list-style: none;
+  padding-top: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .comment-board {
-   height: 500px;
+   height: auto;
+   overflow: auto;
    width: 85%;
-   border: 2px ridge #cbcbcf;
+   background-color: #e9ebee;
    border-radius: 5px;
    text-align: left;
    position: relative;
    margin: 0 auto;
+ }
+
+ .comment-board-title {
+   text-align: center;
+   text-decoration: underline;
+   font-weight: bold;
  }
 
 .place-top {
@@ -130,7 +145,7 @@ a:hover #detial-banner-words {
   display: block;
   margin: 0 auto;
   background-color: #f7f7f9;
-  border-top: 3px inset white;
+  border-top: 1px inset white;
   padding-right: 2px;
   padding-left: 2px;
 }
@@ -146,7 +161,7 @@ a:hover #detial-banner-words {
 .event-index-item-left {
   float: left;
   width: 30%;
-  min-width: 250px;
+  min-width: 200px;
   padding: 10px;
 }
 
@@ -193,9 +208,17 @@ a:hover #detial-banner-words {
 }
 
 .event-item-title{
-  font-size: 30px;
+  font-size: 28px;
   font-weight: bold;
   line-height: .875em;
+}
+
+.search-index-title{
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
+  padding-top: 10px;
 }
 
 .event-item-location{
@@ -220,10 +243,6 @@ a:hover #detial-banner-words {
   font-weight: bold;
 }
 
-.comment-board-title {
-  text-align: center;
-}
-
 .detail-right {
   min-width: 130px;
   width: 15%;
@@ -237,6 +256,11 @@ a:hover #detial-banner-words {
 h3 {
   text-align: center;
 }
+
+h4 {
+  text-align: center;
+}
+
 
 .detail-main{
   min-width: 605px;

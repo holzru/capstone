@@ -21,7 +21,9 @@ class Group < ActiveRecord::Base
 
   has_many :memberships,
     foreign_key: :group_id,
-    class_name: :GroupMembership
+    class_name: :GroupMembership,
+    dependent: :destroy
+
 
   has_many :members,
     through: :memberships,

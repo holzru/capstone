@@ -25,11 +25,11 @@ module.exports = React.createClass({
   },
 
   _groupTip(group) {
-    return (`Name: ${group.name} <br /> Description: ${group.description}`);
+    return (`Group <br/> Name: ${group.name} <br /> Description: ${group.description}`);
   },
 
   _eventTip(event) {
-    return (`Title: ${event.title} <br /> Description: ${event.description}`);
+    return (`Event <br/> Title: ${event.title} <br /> Description: ${event.description}`);
   },
 
   render_row(row) {
@@ -39,7 +39,7 @@ module.exports = React.createClass({
         <Link to={`/groups/${group.id}`} group={group}>
           <li className="group-index-item" group={group} style={{backgroundImage: `url(${group.pic_url})`}}></li>
         </Link>
-        {idx === 0 ? <ReactTooltip multiline={true} place="top" type="dark" effect="float" id="user-item"/> : ""}
+        {idx === 0 ? <ReactTooltip multiline={true} place="top" class="tooltip-container" type="dark" effect="float" id="user-item"/> : ""}
       </div>);
     });
 
@@ -47,13 +47,12 @@ module.exports = React.createClass({
   },
 
   render_group_row(row) {
-    let rowContents = row.map((group, idx) => {
+    let rowContents = row.map((group) => {
       return (
       <div key={group.id} group={group} data-tip={this._groupTip(group)} data-for="user-item" className="created-index-item-container">
         <Link to={`/groups/${group.id}`} group={group}>
           <li className="created-index-item" group={group} style={{backgroundImage: `url(${group.pic_url})`}}></li>
         </Link>
-        {idx === 0 ? <ReactTooltip multiline={true} place="top" type="dark" effect="float" id="user-item"/> : ""}
       </div>);
     });
     return (rowContents);

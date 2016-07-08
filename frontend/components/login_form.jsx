@@ -45,12 +45,12 @@ const LoginForm = React.createClass({
     SessionActions.logIn(formData);
 	},
 
-  fieldErrors(field) {
+  fieldErrors() {
     const errors = ErrorStore.formErrors(this.formType());
 
-    if (!errors[field]) { return; }
+    if (!errors["errors"]) return;
 
-    const messages = errors[field].map( (errorMsg, i) => {
+    const messages = errors["errors"].map( (errorMsg, i) => {
       return <li key={ i }>{ errorMsg }</li>;
     });
 
@@ -58,7 +58,7 @@ const LoginForm = React.createClass({
   },
 
   formType() {
-    return (this.props.formType[0].toUpperCase() + this.props.formType.slice(1));
+    return (this.props.formType);
   },
 
   update(property) {
@@ -81,17 +81,16 @@ const LoginForm = React.createClass({
           <div className="modal-content">
             <div className="modal-header">
               <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 className="modal-title">{ this.formType() }</h4>
+              <h4 className="modal-title">{ this.formType()[0].toUpperCase() + this.props.formType.slice(1) }</h4>
             </div>
             <div className="modal-body">
               <div className="login-form-container container-fluid text-center">
         				<form onSubmit={this.handleSubmit} className="login-form-box">
         					<br/>
-        	        { this.fieldErrors("base") }
+        	        { this.fieldErrors() }
         					<div className="login-form">
         		        <br />
         						<label> Username:
-        		          { this.fieldErrors("username") }
         							<input type="text"
         		            value={this.state.username}
         		            onChange={this.update("username")}
@@ -100,7 +99,6 @@ const LoginForm = React.createClass({
 
         		        <br/>
         						<label> Password:
-        		          { this.fieldErrors("password") }
         		          <input type="password"
         		            value={this.state.password}
         		            onChange={this.update("password")}

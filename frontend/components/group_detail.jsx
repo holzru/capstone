@@ -7,6 +7,7 @@ const GroupMembershipActions = require('../actions/group_membership_actions');
 const EventIndexItem = require('./event_index_item');
 const EventForm = require('./event_form');
 const Link = require('react-router').Link;
+const hashHistory = require('react-router').hashHistory;
 
 module.exports = React.createClass({
   getInitialState(){
@@ -33,6 +34,20 @@ module.exports = React.createClass({
     } else {
       return "";
     }
+  },
+
+  delete() {
+    if (this.state.creator.id === SessionStore.currentUser().id) {
+      return <button onClick={this._deleteGroup} className="group-event-button">Delete Group</button>;
+    } else {
+      return <div></div>;
+    }
+  },
+
+  _deleteGroup(e) {
+    e.preventDefault();
+    GroupActions.deleteGroup(this.state.group.id);
+    hashHistory.push(`/`);
   },
 
   _createEvent(e){
@@ -68,7 +83,6 @@ module.exports = React.createClass({
   _joinGroup() {
     if (SessionStore.isUserLoggedIn()){
       GroupMembershipActions.joinGroup(this.state.group.id);
-      alert(`Congrats ${SessionStore.currentUser().username} you joined ${this.state.group.name}`);
     } else {
       $('#login-modal').modal('show');
     }
@@ -98,11 +112,19 @@ module.exports = React.createClass({
             <div className="creator-box">
               <div>Created By:</div>
               <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><li id="creator-pic" event={event} style={{backgroundImage: `url(${this.state.creator.pic_url})`}}></li><br/><span className = "member-pic-username">{this.state.creator.username}</span></Link><br/>
-              {this.editButton()}
+              {this.editButton()}<br/>
+              {this.delete()}
           </div>
+            <div>
+              <h5> Group Description: </h5>
+              <p> { group.description } </p><br/><br/>
+              <h5> Group Location: </h5>
+              <span> { group.location } </span>
+            </div>
           </div>
           <div className="detail-main">
             <h3>Welcome, {group.name} Members</h3>
+            <h4> {group.name} Events:</h4>
             {this.state.events.map((event) => {
               return(<EventIndexItem event={event} key={`${event.id}event`} group={this.state.group}/>);
             })}

@@ -19,9 +19,11 @@
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-input-calendar": "^0.3.10",
+    "react-loading": "0.0.9",
     "react-router": "^2.5.1",
     "react-search-bar": "^1.1.4",
     "react-tooltip": "^3.0.8",
+    "spinkit": "^1.2.5",
     "webpack": "^1.13.1"
   },
   "devDependencies": {},

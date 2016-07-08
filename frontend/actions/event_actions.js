@@ -1,6 +1,7 @@
 const EventUtil = require("../util/event_util");
 const Dispatcher = require('../dispatcher/dispatcher');
 const GroupActions = require('./group_actions');
+const ErrorActions = require('./error_actions');
 
 module.exports = {
   getEvent(id) {
@@ -15,10 +16,14 @@ module.exports = {
   },
 
   createEvent(formData) {
-    EventUtil.createEvent(formData, GroupActions.fetchGroup.bind(GroupActions));
+    EventUtil.createEvent(formData, GroupActions.fetchGroup.bind(GroupActions), ErrorActions.setErrors);
   },
 
   updateEvent(formData) {
-    EventUtil.updateEvent(formData, this.getEvent.bind(this));
+    EventUtil.updateEvent(formData, this.getEvent.bind(this), ErrorActions.setErrors);
+  },
+
+  deleteEvent(id) {
+    EventUtil.deleteEvent(id);
   },
 };

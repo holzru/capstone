@@ -19,7 +19,7 @@ module.exports = {
     });
   },
 
-  createGroup(group, cb){
+  createGroup(group, cb, error){
     $.ajax({
       url: `/groups`,
       type: 'POST',
@@ -27,18 +27,40 @@ module.exports = {
       data: {group: group},
       success (resp) {
         cb(resp);
+      },
+      error(xhr) {
+				const errors = xhr.responseJSON;
+
+				error("new", errors);
       }
     });
   },
 
-  updateGroup(group, cb){
+  updateGroup(group, cb, error){
     $.ajax({
       url: `/groups/${group.id}`,
       type: 'PATCH',
       dataType: 'JSON',
       data: {group: group},
       success (resp) {
-        cb(resp);
+        cb(resp.id);
+      },
+      error(xhr) {
+				const errors = xhr.responseJSON;
+
+				error("edit", errors);
+      }
+    });
+  },
+
+  deleteGroup(id) {
+    $.ajax({
+      url: `/groups/${id}`,
+      method: "delete",
+      dataType: "JSON",
+      data: { group: {id: id}},
+      success() {
+        return;
       }
     });
   }

@@ -26,7 +26,9 @@ class Event < ActiveRecord::Base
 
   has_many :event_tickets,
     foreign_key: :event_id,
-    class_name: :EventTicket
+    class_name: :EventTicket,
+    dependent: :destroy
+
 
   has_many :attendees,
     through: :event_tickets,

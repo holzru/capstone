@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 			login(@user)
 			render json: @user
 		else
-			render json: @user.errors, status: 422
+			render json: {errors: @user.errors.full_messages}, status: 422
 		end
 	end
 
@@ -16,7 +16,7 @@ class UsersController < ApplicationController
 		if @user.update(user_params)
 			render json: @user
 		else
-			render json: @user.errors, status: 422
+			render json: {errors: @user.errors.full_messages}, status: 422
 		end
   end
 

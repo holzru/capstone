@@ -78,12 +78,12 @@ const EventForm = React.createClass({
     }
 	},
 
-  fieldErrors(field) {
+  fieldErrors() {
     const errors = ErrorStore.formErrors(this.formType());
 
-    if (!errors[field]) { return; }
+    if (!errors["errors"]) return;
 
-    const messages = errors[field].map( (errorMsg, i) => {
+    const messages = errors["errors"].map( (errorMsg, i) => {
       return <li key={ i }>{ errorMsg }</li>;
     });
 
@@ -91,7 +91,7 @@ const EventForm = React.createClass({
   },
 
   formType() {
-    return (this.props.formType[0].toUpperCase() + this.props.formType.slice(1));
+    return (this.props.formType);
   },
 
   update(property) {
@@ -126,17 +126,16 @@ const EventForm = React.createClass({
           <div className="modal-content">
             <div className="modal-header">
               <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 className="modal-title">{ this.formType() }</h4>
+              <h4 className="modal-title">{ this.formType()[0].toUpperCase() + this.props.formType.slice(1) }</h4>
             </div>
             <div className="modal-body">
               <div className="login-form-container container-fluid text-center">
         				<form onSubmit={this.handleSubmit} className="login-form-box">
         					<br/>
-        	        { this.fieldErrors("base") }
+        	        { this.fieldErrors() }
         					<div className="login-form">
         		        <br />
         						<label> Title:
-        		          { this.fieldErrors("title") }
         							<input type="text"
         		            value={this.state.title}
         		            onChange={this.update("title")}
@@ -145,7 +144,6 @@ const EventForm = React.createClass({
 
         		        <br/>
         						<label> Location:
-        		          { this.fieldErrors("location") }
         		          <input type="text"
         		            value={this.state.location}
         		            onChange={this.update("location")}
@@ -154,13 +152,11 @@ const EventForm = React.createClass({
 
                     <br/>
                       <label> Date:
-          		          { this.fieldErrors("date") }
           		          <Calendar onChange={this.handleCalenderSelect} closeOnSelect={true} type="calender" format='DD/MM/YYYY' date={this.state.date} defaultValue='Click Here to Set Date'/>
           						</label>
 
                       <br/>
                       <label> Category:
-          		          { this.fieldErrors("category") }
           		          <input type="text"
           		            value={this.state.category}
           		            onChange={this.update("category")}
@@ -182,7 +178,7 @@ const EventForm = React.createClass({
                       Upload Pic
                     </button>
                     <br/>
-                    <button onClick={this.handleSubmit} value={this.formType()} className="btn btn-success">Create</button>
+                    <button onClick={this.handleSubmit} className="btn btn-success">{this.formType()}</button>
         					</div>
         				</form>
         			</div>

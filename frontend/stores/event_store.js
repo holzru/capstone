@@ -14,17 +14,18 @@ EventStore.__onDispatch = function(action) {
       setSingleEvent(action.eventObj);
       break;
     }
-  this.__emitChange();
 };
 
 const setSingleEvent = function(eventObj){
   _events = eventObj;
+  EventStore.__emitChange();
 };
 
 const resetEvents = function(events){
   events.forEach((event) => {
     _events[event.id] = event;
   });
+  EventStore.__emitChange();
 };
 
 EventStore.all = function() {

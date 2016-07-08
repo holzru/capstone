@@ -17,7 +17,7 @@ class EventTicketsController < ApplicationController
     if @ticket.save
       render json: @ticket
     else
-      render json: @ticket.errors.full_messages
+      render json: {errors: @ticket.errors.full_messages}, status: 422
     end
   end
 

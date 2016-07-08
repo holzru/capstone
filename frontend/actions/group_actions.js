@@ -1,5 +1,6 @@
 const GroupUtil = require('../util/group_util');
 const Dispatcher = require('../dispatcher/dispatcher');
+const ErrorActions = require('./error_actions');
 
 module.exports = {
   fetchAllGroups () {
@@ -25,10 +26,14 @@ module.exports = {
   },
 
   createGroup(group){
-    GroupUtil.createGroup(group, this.fetchAllGroups.bind(this));
+    GroupUtil.createGroup(group, this.fetchAllGroups.bind(this), ErrorActions.setErrors);
   },
 
   updateGroup(group){
-    GroupUtil.updateGroup(group, this.fetchGroup.bind(this));
-  }
+    GroupUtil.updateGroup(group, this.fetchGroup.bind(this), ErrorActions.setErrors);
+  },
+
+  deleteGroup(id){
+    GroupUtil.deleteGroup(id);
+  },
 };

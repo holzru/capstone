@@ -23,7 +23,7 @@ componentWillUnmount() {
 },
 
 _groupTip(group) {
-  return (`Name: ${group.name} <br /> Description: ${group.description}`);
+  return (`Group <br/> Name: ${group.name} <br /> Description: ${group.description}`);
 },
 
 
@@ -39,7 +39,7 @@ render_row(row) {
       </div>);
   });
 
-  return (<ul key={rowKey} className="group-rows">{rowContents}<ReactTooltip multiline={true} place="top" type="dark" effect="float" id="item"/></ul>);
+  return (<ul key={rowKey} className="group-rows">{rowContents}<ReactTooltip class="tooltip-container" multiline={true} place="top" type="dark" effect="float" id="item"/></ul>);
 },
 
 render() {

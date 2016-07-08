@@ -10,12 +10,7 @@ class SessionsController < ApplicationController
 			login(@user)
 			render json: @user
 		else
-			render(
-        json: {
-          base: ["Invalid username/password combination"]
-        },
-        status: 401
-      )
+			render json: { errors: ["Invalid username/password combination"] }, status: 401
 		end
 	end
 
@@ -25,12 +20,7 @@ class SessionsController < ApplicationController
 			logout
 			render json: @user
 		else
-			render(
-        json: {
-          base: ["Nobody signed in"]
-        },
-        status: 404
-      )
+			render json: {errors: ["Nobody signed in"]}, status: 404
 		end
 	end
 

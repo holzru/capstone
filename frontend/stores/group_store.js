@@ -12,12 +12,13 @@ GroupStore.__onDispatch = function(action) {
       break;
     case "SINGLE_GROUP":
       _groups = action.group;
+      GroupStore.__emitChange();
       break;
     case "APPEND_GROUP":
       _groups[action.group.id] = action.group;
+      GroupStore.__emitChange();
       break;
   }
-  this.__emitChange();
 };
 
 const resetGroups = function(groups) {
@@ -25,6 +26,8 @@ const resetGroups = function(groups) {
   groups.forEach((group) => {
     _groups[group.id] = group;
   });
+
+  GroupStore.__emitChange();
 };
 
 GroupStore.find = function(id) {

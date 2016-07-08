@@ -7,7 +7,7 @@ class GroupsController < ApplicationController
       GroupMembership.create!(user_id: current_user.id, group_id: @group.id)
       render json: @group
     else
-      render json: @group.errors.full_messages
+      render json:  {errors: @group.errors.full_messages}, status: 422
     end
   end
 
@@ -32,19 +32,19 @@ class GroupsController < ApplicationController
       if @group.update(group_params)
         render json: @group
       else
-        render json: @group.errors.full_messages
+        render json: {errors: @group.errors.full_messages}, status: 422
       end
     else
-      render json: "Not yours to fix"
+      render json: {errors: "Not yours to edit"}
     end
   end
 
   def destroy
-    @group = Group.find(params[:id])
+    @group = Group.find(params[:group][:id])
     if @group.creator_id == current_user.id
       @group.destroy
     else
-      render json: "Not yours to delete"
+      render json: {errors: "Not yours to delete"}
     end
   end
 

@@ -26206,14 +26206,12 @@
 	
 	    SessionActions.logIn(formData);
 	  },
-	  fieldErrors: function fieldErrors(field) {
+	  fieldErrors: function fieldErrors() {
 	    var errors = ErrorStore.formErrors(this.formType());
 	
-	    if (!errors[field]) {
-	      return;
-	    }
+	    if (!errors["errors"]) return;
 	
-	    var messages = errors[field].map(function (errorMsg, i) {
+	    var messages = errors["errors"].map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
 	        { key: i },
@@ -26228,7 +26226,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.formType[0].toUpperCase() + this.props.formType.slice(1);
+	    return this.props.formType;
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -26270,7 +26268,7 @@
 	            React.createElement(
 	              'h4',
 	              { className: 'modal-title' },
-	              this.formType()
+	              this.formType()[0].toUpperCase() + this.props.formType.slice(1)
 	            )
 	          ),
 	          React.createElement(
@@ -26283,7 +26281,7 @@
 	                'form',
 	                { onSubmit: this.handleSubmit, className: 'login-form-box' },
 	                React.createElement('br', null),
-	                this.fieldErrors("base"),
+	                this.fieldErrors(),
 	                React.createElement(
 	                  'div',
 	                  { className: 'login-form' },
@@ -26292,7 +26290,6 @@
 	                    'label',
 	                    null,
 	                    ' Username:',
-	                    this.fieldErrors("username"),
 	                    React.createElement('input', { type: 'text',
 	                      value: this.state.username,
 	                      onChange: this.update("username"),
@@ -26303,7 +26300,6 @@
 	                    'label',
 	                    null,
 	                    ' Password:',
-	                    this.fieldErrors("password"),
 	                    React.createElement('input', { type: 'password',
 	                      value: this.state.password,
 	                      onChange: this.update("password"),
@@ -33378,8 +33374,7 @@
 	      description: SessionStore.currentUser().description
 	    });
 	    if (SessionStore.isUserLoggedIn()) {
-	      $("#userModal").modal("hide");
-	      hashHistory.push('/');
+	      $("#user-modal").modal("hide");
 	    }
 	  },
 	  handleSubmit: function handleSubmit(e) {
@@ -33402,11 +33397,11 @@
 	  fieldErrors: function fieldErrors(field) {
 	    var errors = ErrorStore.formErrors(this.formType());
 	
-	    if (!errors[field]) {
+	    if (!errors["errors"]) {
 	      return;
 	    }
 	
-	    var messages = errors[field].map(function (errorMsg, i) {
+	    var messages = errors["errors"].map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
 	        { key: i },
@@ -33421,7 +33416,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.formType[0].toUpperCase() + this.props.formType.slice(1);
+	    return this.props.formType;
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -33468,7 +33463,7 @@
 	            React.createElement(
 	              'h4',
 	              { className: 'modal-title' },
-	              this.formType()
+	              this.formType()[0].toUpperCase() + this.props.formType.slice(1)
 	            )
 	          ),
 	          React.createElement(
@@ -33481,7 +33476,7 @@
 	                'form',
 	                { onSubmit: this.handleSubmit, className: 'login-form-box' },
 	                React.createElement('br', null),
-	                this.fieldErrors("base"),
+	                this.fieldErrors(),
 	                React.createElement(
 	                  'div',
 	                  { className: 'login-form' },
@@ -33490,7 +33485,6 @@
 	                    'label',
 	                    null,
 	                    ' Username:',
-	                    this.fieldErrors("username"),
 	                    React.createElement('input', { type: 'text',
 	                      value: this.state.username,
 	                      onChange: this.update("username"),
@@ -33501,7 +33495,6 @@
 	                    'label',
 	                    null,
 	                    ' Password:',
-	                    this.fieldErrors("password"),
 	                    React.createElement('input', { type: 'password',
 	                      value: this.state.password,
 	                      onChange: this.update("password"),
@@ -33674,14 +33667,12 @@
 	      GroupActions.updateGroup(formData);
 	    }
 	  },
-	  fieldErrors: function fieldErrors(field) {
+	  fieldErrors: function fieldErrors() {
 	    var errors = ErrorStore.formErrors(this.formType());
 	
-	    if (!errors[field]) {
-	      return;
-	    }
+	    if (!errors["errors"]) return;
 	
-	    var messages = errors[field].map(function (errorMsg, i) {
+	    var messages = errors["errors"].map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
 	        { key: i },
@@ -33696,7 +33687,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.formType[0].toUpperCase() + this.props.formType.slice(1);
+	    return this.props.formType;
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -33743,7 +33734,7 @@
 	            React.createElement(
 	              'h4',
 	              { className: 'modal-title' },
-	              this.formType()
+	              this.formType()[0].toUpperCase() + this.props.formType.slice(1)
 	            )
 	          ),
 	          React.createElement(
@@ -33756,7 +33747,7 @@
 	                'form',
 	                { onSubmit: this.handleSubmit, className: 'login-form-box' },
 	                React.createElement('br', null),
-	                this.fieldErrors("base"),
+	                this.fieldErrors(),
 	                React.createElement(
 	                  'div',
 	                  { className: 'login-form' },
@@ -33765,7 +33756,6 @@
 	                    'label',
 	                    null,
 	                    ' Name:',
-	                    this.fieldErrors("name"),
 	                    React.createElement('input', { type: 'text',
 	                      value: this.state.name,
 	                      onChange: this.update("name"),
@@ -33776,7 +33766,6 @@
 	                    'label',
 	                    null,
 	                    ' Location:',
-	                    this.fieldErrors("location"),
 	                    React.createElement('input', { type: 'text',
 	                      value: this.state.location,
 	                      onChange: this.update("location"),
@@ -33830,6 +33819,7 @@
 	
 	var GroupUtil = __webpack_require__(263);
 	var Dispatcher = __webpack_require__(233);
+	var ErrorActions = __webpack_require__(238);
 	
 	module.exports = {
 	  fetchAllGroups: function fetchAllGroups() {
@@ -33851,10 +33841,13 @@
 	    });
 	  },
 	  createGroup: function createGroup(group) {
-	    GroupUtil.createGroup(group, this.fetchAllGroups.bind(this));
+	    GroupUtil.createGroup(group, this.fetchAllGroups.bind(this), ErrorActions.setErrors);
 	  },
 	  updateGroup: function updateGroup(group) {
-	    GroupUtil.updateGroup(group, this.fetchGroup.bind(this));
+	    GroupUtil.updateGroup(group, this.fetchGroup.bind(this), ErrorActions.setErrors);
+	  },
+	  deleteGroup: function deleteGroup(id) {
+	    GroupUtil.deleteGroup(id);
 	  }
 	};
 
@@ -33885,7 +33878,7 @@
 	    });
 	  },
 	
-	  createGroup: function createGroup(group, cb) {
+	  createGroup: function createGroup(group, cb, _error) {
 	    $.ajax({
 	      url: "/groups",
 	      type: 'POST',
@@ -33893,17 +33886,38 @@
 	      data: { group: group },
 	      success: function success(resp) {
 	        cb(resp);
+	      },
+	      error: function error(xhr) {
+	        var errors = xhr.responseJSON;
+	
+	        _error("new", errors);
 	      }
 	    });
 	  },
-	  updateGroup: function updateGroup(group, cb) {
+	  updateGroup: function updateGroup(group, cb, _error2) {
 	    $.ajax({
 	      url: "/groups/" + group.id,
 	      type: 'PATCH',
 	      dataType: 'JSON',
 	      data: { group: group },
 	      success: function success(resp) {
-	        cb(resp);
+	        cb(resp.id);
+	      },
+	      error: function error(xhr) {
+	        var errors = xhr.responseJSON;
+	
+	        _error2("edit", errors);
+	      }
+	    });
+	  },
+	  deleteGroup: function deleteGroup(id) {
+	    $.ajax({
+	      url: "/groups/" + id,
+	      method: "delete",
+	      dataType: "JSON",
+	      data: { group: { id: id } },
+	      success: function success() {
+	        return;
 	      }
 	    });
 	  }
@@ -33929,12 +33943,13 @@
 	      break;
 	    case "SINGLE_GROUP":
 	      _groups = action.group;
+	      GroupStore.__emitChange();
 	      break;
 	    case "APPEND_GROUP":
 	      _groups[action.group.id] = action.group;
+	      GroupStore.__emitChange();
 	      break;
 	  }
-	  this.__emitChange();
 	};
 	
 	var resetGroups = function resetGroups(groups) {
@@ -33942,6 +33957,8 @@
 	  groups.forEach(function (group) {
 	    _groups[group.id] = group;
 	  });
+	
+	  GroupStore.__emitChange();
 	};
 	
 	GroupStore.find = function (id) {
@@ -34051,7 +34068,7 @@
 	var Splash = React.createClass({
 	  displayName: 'Splash',
 	  getInitialState: function getInitialState() {
-	    return { query: "", searchObj: {} };
+	    return { query: "", searchObj: {}, loading: false };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.storeListener = SearchStore.addListener(this.handleChange);
@@ -34060,13 +34077,28 @@
 	    this.storeListener.remove();
 	  },
 	  handleChange: function handleChange() {
-	    this.setState({ searchObj: SearchStore.results() });
+	    this.setState({ searchObj: SearchStore.results(), loading: SearchStore.loading() });
 	  },
 	  componentToRender: function componentToRender() {
 	    if (this.state.query === "") {
 	      return React.createElement(GroupIndex, null);
-	    } else {
+	    } else if (!this.state.loading) {
 	      return React.createElement(SearchIndex, { searchResults: this.state.searchObj });
+	    } else {
+	      return React.createElement(
+	        'li',
+	        { className: 'loading-container' },
+	        React.createElement(
+	          'div',
+	          { className: 'loader' },
+	          React.createElement('div', { className: 'loader__bar' }),
+	          React.createElement('div', { className: 'loader__bar' }),
+	          React.createElement('div', { className: 'loader__bar' }),
+	          React.createElement('div', { className: 'loader__bar' }),
+	          React.createElement('div', { className: 'loader__bar' }),
+	          React.createElement('div', { className: 'loader__ball' })
+	        )
+	      );
 	    }
 	  },
 	  _handleSearch: function _handleSearch(e) {
@@ -34123,7 +34155,7 @@
 	    this.storeListener.remove();
 	  },
 	  _groupTip: function _groupTip(group) {
-	    return 'Name: ' + group.name + ' <br /> Description: ' + group.description;
+	    return 'Group <br/> Name: ' + group.name + ' <br /> Description: ' + group.description;
 	  },
 	  render_row: function render_row(row) {
 	    var _this = this;
@@ -34146,7 +34178,7 @@
 	      'ul',
 	      { key: rowKey, className: 'group-rows' },
 	      rowContents,
-	      React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'item' })
+	      React.createElement(ReactTooltip, { 'class': 'tooltip-container', multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'item' })
 	    );
 	  },
 	  render: function render() {
@@ -35224,11 +35256,15 @@
 	var SearchStore = new Store(Dispatcher);
 	
 	var searchObj = {};
+	var loadingState = false;
 	
 	SearchStore.__onDispatch = function (action) {
 	  switch (action.actionType) {
 	    case "ALL":
 	      resetStore(action.searchObj);
+	      break;
+	    case "Animation":
+	      triggerAnimation();
 	      break;
 	  }
 	};
@@ -35236,7 +35272,17 @@
 	var resetStore = function resetStore(searchObject) {
 	  searchObj = {};
 	  searchObj = searchObject;
+	  loadingState = false;
 	  SearchStore.__emitChange();
+	};
+	
+	var triggerAnimation = function triggerAnimation() {
+	  loadingState = true;
+	  SearchStore.__emitChange();
+	};
+	
+	SearchStore.loading = function () {
+	  return loadingState;
 	};
 	
 	SearchStore.results = function () {
@@ -35258,13 +35304,13 @@
 	var SearchIndex = React.createClass({
 	  displayName: 'SearchIndex',
 	  _groupTip: function _groupTip(group) {
-	    return 'Name: ' + group.name + ' <br /> Description: ' + group.description;
+	    return 'Group <br/> Name: ' + group.name + ' <br /> Description: ' + group.description;
 	  },
 	  _eventTip: function _eventTip(event) {
-	    return 'Title: ' + event.title + ' <br /> Description: ' + event.description;
+	    return 'Event <br/> Title: ' + event.title + ' <br /> Description: ' + event.description;
 	  },
 	  _userTip: function _userTip(user) {
-	    return 'Name: ' + user.username + ' <br /> Description: ' + user.description;
+	    return 'User <br/> Name: ' + user.username + ' <br /> Description: ' + user.description;
 	  },
 	  group_render: function group_render() {
 	    var _this = this;
@@ -35278,7 +35324,7 @@
 	          { to: '/groups/' + group.id, group: group },
 	          React.createElement('li', { className: 'group-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
 	        ),
-	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'search-item' }) : ""
+	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, 'class': 'tooltip-container', place: 'top', type: 'dark', effect: 'float', id: 'search-item' }) : ""
 	      );
 	    });
 	    return React.createElement(
@@ -35370,11 +35416,17 @@
 	module.exports = {
 	  fetchSearch: function fetchSearch(query) {
 	    SearchUtil.fetchSearch(query, this.receiveSearch);
+	    this.triggerAnimation();
 	  },
 	  receiveSearch: function receiveSearch(searchObj) {
 	    Dispatcher.dispatch({
 	      actionType: "ALL",
 	      searchObj: searchObj
+	    });
+	  },
+	  triggerAnimation: function triggerAnimation() {
+	    Dispatcher.dispatch({
+	      actionType: "Animation"
 	    });
 	  }
 	};
@@ -35414,6 +35466,7 @@
 	var EventIndexItem = __webpack_require__(285);
 	var EventForm = __webpack_require__(290);
 	var Link = __webpack_require__(1).Link;
+	var hashHistory = __webpack_require__(1).hashHistory;
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -35441,6 +35494,22 @@
 	    } else {
 	      return "";
 	    }
+	  },
+	  delete: function _delete() {
+	    if (this.state.creator.id === SessionStore.currentUser().id) {
+	      return React.createElement(
+	        'button',
+	        { onClick: this._deleteGroup, className: 'group-event-button' },
+	        'Delete Group'
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  },
+	  _deleteGroup: function _deleteGroup(e) {
+	    e.preventDefault();
+	    GroupActions.deleteGroup(this.state.group.id);
+	    hashHistory.push('/');
 	  },
 	  _createEvent: function _createEvent(e) {
 	    e.preventDefault();
@@ -35480,7 +35549,6 @@
 	  _joinGroup: function _joinGroup() {
 	    if (SessionStore.isUserLoggedIn()) {
 	      GroupMembershipActions.joinGroup(this.state.group.id);
-	      alert('Congrats ' + SessionStore.currentUser().username + ' you joined ' + this.state.group.name);
 	    } else {
 	      $('#login-modal').modal('show');
 	    }
@@ -35553,7 +35621,39 @@
 	              )
 	            ),
 	            React.createElement('br', null),
-	            this.editButton()
+	            this.editButton(),
+	            React.createElement('br', null),
+	            this.delete()
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	              'h5',
+	              null,
+	              ' Group Description: '
+	            ),
+	            React.createElement(
+	              'p',
+	              null,
+	              ' ',
+	              group.description,
+	              ' '
+	            ),
+	            React.createElement('br', null),
+	            React.createElement('br', null),
+	            React.createElement(
+	              'h5',
+	              null,
+	              ' Group Location: '
+	            ),
+	            React.createElement(
+	              'span',
+	              null,
+	              ' ',
+	              group.location,
+	              ' '
+	            )
 	          )
 	        ),
 	        React.createElement(
@@ -35565,6 +35665,13 @@
 	            'Welcome, ',
 	            group.name,
 	            ' Members'
+	          ),
+	          React.createElement(
+	            'h4',
+	            null,
+	            ' ',
+	            group.name,
+	            ' Events:'
 	          ),
 	          this.state.events.map(function (event) {
 	            return React.createElement(EventIndexItem, { event: event, key: event.id + 'event', group: _this.state.group });
@@ -35821,6 +35928,7 @@
 	var EventUtil = __webpack_require__(289);
 	var Dispatcher = __webpack_require__(233);
 	var GroupActions = __webpack_require__(262);
+	var ErrorActions = __webpack_require__(238);
 	
 	module.exports = {
 	  getEvent: function getEvent(id) {
@@ -35833,10 +35941,13 @@
 	    });
 	  },
 	  createEvent: function createEvent(formData) {
-	    EventUtil.createEvent(formData, GroupActions.fetchGroup.bind(GroupActions));
+	    EventUtil.createEvent(formData, GroupActions.fetchGroup.bind(GroupActions), ErrorActions.setErrors);
 	  },
 	  updateEvent: function updateEvent(formData) {
-	    EventUtil.updateEvent(formData, this.getEvent.bind(this));
+	    EventUtil.updateEvent(formData, this.getEvent.bind(this), ErrorActions.setErrors);
+	  },
+	  deleteEvent: function deleteEvent(id) {
+	    EventUtil.deleteEvent(id);
 	  }
 	};
 
@@ -35866,7 +35977,7 @@
 	      }
 	    });
 	  },
-	  createEvent: function createEvent(event, cb) {
+	  createEvent: function createEvent(event, cb, _error) {
 	    $.ajax({
 	      url: "/events",
 	      type: "POST",
@@ -35874,10 +35985,15 @@
 	      data: { event: event },
 	      success: function success(resp) {
 	        cb(resp.group_id);
+	      },
+	      error: function error(xhr) {
+	        var errors = xhr.responseJSON;
+	
+	        _error("new", errors);
 	      }
 	    });
 	  },
-	  updateEvent: function updateEvent(event, cb) {
+	  updateEvent: function updateEvent(event, cb, _error2) {
 	    $.ajax({
 	      url: "/events/" + event.id,
 	      type: "PATCH",
@@ -35885,6 +36001,22 @@
 	      data: { event: event },
 	      success: function success(resp) {
 	        cb(resp.id);
+	      },
+	      error: function error(xhr) {
+	        var errors = xhr.responseJSON;
+	
+	        _error2("edit", errors);
+	      }
+	    });
+	  },
+	  deleteEvent: function deleteEvent(id) {
+	    $.ajax({
+	      url: "/events/" + id,
+	      method: "delete",
+	      dataType: "JSON",
+	      data: { event: { id: id } },
+	      success: function success() {
+	        return;
 	      }
 	    });
 	  }
@@ -35980,14 +36112,12 @@
 	      EventActions.updateEvent(formData);
 	    }
 	  },
-	  fieldErrors: function fieldErrors(field) {
+	  fieldErrors: function fieldErrors() {
 	    var errors = ErrorStore.formErrors(this.formType());
 	
-	    if (!errors[field]) {
-	      return;
-	    }
+	    if (!errors["errors"]) return;
 	
-	    var messages = errors[field].map(function (errorMsg, i) {
+	    var messages = errors["errors"].map(function (errorMsg, i) {
 	      return React.createElement(
 	        'li',
 	        { key: i },
@@ -36002,7 +36132,7 @@
 	    );
 	  },
 	  formType: function formType() {
-	    return this.props.formType[0].toUpperCase() + this.props.formType.slice(1);
+	    return this.props.formType;
 	  },
 	  update: function update(property) {
 	    var _this = this;
@@ -36052,7 +36182,7 @@
 	            React.createElement(
 	              'h4',
 	              { className: 'modal-title' },
-	              this.formType()
+	              this.formType()[0].toUpperCase() + this.props.formType.slice(1)
 	            )
 	          ),
 	          React.createElement(
@@ -36065,7 +36195,7 @@
 	                'form',
 	                { onSubmit: this.handleSubmit, className: 'login-form-box' },
 	                React.createElement('br', null),
-	                this.fieldErrors("base"),
+	                this.fieldErrors(),
 	                React.createElement(
 	                  'div',
 	                  { className: 'login-form' },
@@ -36074,7 +36204,6 @@
 	                    'label',
 	                    null,
 	                    ' Title:',
-	                    this.fieldErrors("title"),
 	                    React.createElement('input', { type: 'text',
 	                      value: this.state.title,
 	                      onChange: this.update("title"),
@@ -36085,7 +36214,6 @@
 	                    'label',
 	                    null,
 	                    ' Location:',
-	                    this.fieldErrors("location"),
 	                    React.createElement('input', { type: 'text',
 	                      value: this.state.location,
 	                      onChange: this.update("location"),
@@ -36096,7 +36224,6 @@
 	                    'label',
 	                    null,
 	                    ' Date:',
-	                    this.fieldErrors("date"),
 	                    React.createElement(_reactInputCalendar2.default, { onChange: this.handleCalenderSelect, closeOnSelect: true, type: 'calender', format: 'DD/MM/YYYY', date: this.state.date, defaultValue: 'Click Here to Set Date' })
 	                  ),
 	                  React.createElement('br', null),
@@ -36104,7 +36231,6 @@
 	                    'label',
 	                    null,
 	                    ' Category:',
-	                    this.fieldErrors("category"),
 	                    React.createElement('input', { type: 'text',
 	                      value: this.state.category,
 	                      onChange: this.update("category"),
@@ -36135,8 +36261,8 @@
 	                  React.createElement('br', null),
 	                  React.createElement(
 	                    'button',
-	                    { onClick: this.handleSubmit, value: this.formType(), className: 'btn btn-success' },
-	                    'Create'
+	                    { onClick: this.handleSubmit, className: 'btn btn-success' },
+	                    this.formType()
 	                  )
 	                )
 	              )
@@ -53244,17 +53370,18 @@
 	      setSingleEvent(action.eventObj);
 	      break;
 	  }
-	  this.__emitChange();
 	};
 	
 	var setSingleEvent = function setSingleEvent(eventObj) {
 	  _events = eventObj;
+	  EventStore.__emitChange();
 	};
 	
 	var resetEvents = function resetEvents(events) {
 	  events.forEach(function (event) {
 	    _events[event.id] = event;
 	  });
+	  EventStore.__emitChange();
 	};
 	
 	EventStore.all = function () {
@@ -53302,10 +53429,10 @@
 	    this.setState({ user: userObj.user, user_groups: userObj.user_groups, created_groups: userObj.created_groups, created_events: userObj.created_events });
 	  },
 	  _groupTip: function _groupTip(group) {
-	    return 'Name: ' + group.name + ' <br /> Description: ' + group.description;
+	    return 'Group <br/> Name: ' + group.name + ' <br /> Description: ' + group.description;
 	  },
 	  _eventTip: function _eventTip(event) {
-	    return 'Title: ' + event.title + ' <br /> Description: ' + event.description;
+	    return 'Event <br/> Title: ' + event.title + ' <br /> Description: ' + event.description;
 	  },
 	  render_row: function render_row(row) {
 	    var _this = this;
@@ -53319,7 +53446,7 @@
 	          { to: '/groups/' + group.id, group: group },
 	          React.createElement('li', { className: 'group-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
 	        ),
-	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'user-item' }) : ""
+	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, place: 'top', 'class': 'tooltip-container', type: 'dark', effect: 'float', id: 'user-item' }) : ""
 	      );
 	    });
 	
@@ -53332,7 +53459,7 @@
 	  render_group_row: function render_group_row(row) {
 	    var _this2 = this;
 	
-	    var rowContents = row.map(function (group, idx) {
+	    var rowContents = row.map(function (group) {
 	      return React.createElement(
 	        'div',
 	        { key: group.id, group: group, 'data-tip': _this2._groupTip(group), 'data-for': 'user-item', className: 'created-index-item-container' },
@@ -53340,8 +53467,7 @@
 	          Link,
 	          { to: '/groups/' + group.id, group: group },
 	          React.createElement('li', { className: 'created-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
-	        ),
-	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, place: 'top', type: 'dark', effect: 'float', id: 'user-item' }) : ""
+	        )
 	      );
 	    });
 	    return rowContents;
@@ -53501,6 +53627,7 @@
 	var EventTicketActions = __webpack_require__(286);
 	var EventForm = __webpack_require__(290);
 	var CommentIndex = __webpack_require__(493);
+	var hashHistory = __webpack_require__(1).hashHistory;
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -53529,7 +53656,6 @@
 	  _registerForEvent: function _registerForEvent() {
 	    if (SessionStore.isUserLoggedIn()) {
 	      EventTicketActions.registerForEvent(this.state.event.id);
-	      alert('Congrats ' + SessionStore.currentUser().username + ' you registered for ' + this.state.event.title);
 	    } else {
 	      $('#login-modal').modal('show');
 	    }
@@ -53544,6 +53670,22 @@
 	    } else {
 	      return React.createElement('div', null);
 	    }
+	  },
+	  delete: function _delete() {
+	    if (this.state.creator.id === SessionStore.currentUser().id) {
+	      return React.createElement(
+	        'button',
+	        { onClick: this._deleteEvent, className: 'group-event-button' },
+	        'Delete Event'
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  },
+	  _deleteEvent: function _deleteEvent(e) {
+	    e.preventDefault();
+	    EventActions.deleteEvent(this.state.event.id);
+	    hashHistory.push('/groups/' + this.state.group.id);
 	  },
 	  _editEvent: function _editEvent(e) {
 	    e.preventDefault();
@@ -53602,13 +53744,27 @@
 	            'div',
 	            { className: 'event-info' },
 	            React.createElement('img', { id: 'event-image', src: event.pic_url }),
-	            React.createElement('div', { className: 'event-loc', value: event.location })
+	            React.createElement('br', null),
+	            React.createElement('br', null),
+	            React.createElement(
+	              'p',
+	              { className: 'event-loc', value: event.location },
+	              'Event Location: ',
+	              event.location
+	            ),
+	            React.createElement(
+	              'p',
+	              { className: 'event-loc', value: event.date },
+	              'Event Date: ',
+	              event.date
+	            ),
+	            React.createElement('br', null)
 	          ),
 	          React.createElement(
 	            'div',
 	            { className: 'event-stats' },
 	            React.createElement(
-	              'span',
+	              'p',
 	              { className: 'event-stat-members' },
 	              'Attendees: ',
 	              attendees.length
@@ -53636,7 +53792,9 @@
 	              )
 	            ),
 	            React.createElement('br', null),
-	            this.edit()
+	            this.edit(),
+	            React.createElement('br', null),
+	            this.delete()
 	          )
 	        ),
 	        React.createElement(
@@ -53720,7 +53878,7 @@
 	    var comments = this.props.comments.map(function (commentObj) {
 	      return React.createElement(
 	        'div',
-	        { className: 'comment-container' },
+	        { className: 'comment-container', key: commentObj.comment.id },
 	        React.createElement(
 	          'li',
 	          { className: 'comment-item' },
@@ -53761,9 +53919,13 @@
 	      );
 	    }
 	    return React.createElement(
-	      'h4',
-	      { className: 'comment-board-title' },
-	      'Comments',
+	      'div',
+	      null,
+	      React.createElement(
+	        'h4',
+	        { className: 'comment-board-title' },
+	        'Comments'
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'comment-board' },

@@ -5,7 +5,7 @@
 
 .tooltip {
   pointer-events: none;
-  opacity: 0;
+  opacity: 10;
   display: inline-block;
   position: absolute;
   padding: 10px 20px;
@@ -57,4 +57,8 @@
 .tooltip.out {
   opacity: 0;
   margin-top: -20px;
+}
+
+.tooltip-container {
+  max-width: 300px !important;
 }

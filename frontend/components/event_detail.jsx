@@ -7,6 +7,8 @@ const SessionStore = require('../stores/session_store');
 const EventTicketActions = require('../actions/event_ticket_actions');
 const EventForm = require('./event_form');
 const CommentIndex = require('./comment_index');
+const hashHistory = require('react-router').hashHistory;
+
 
 module.exports = React.createClass({
   getInitialState(){
@@ -39,7 +41,6 @@ module.exports = React.createClass({
   _registerForEvent() {
     if (SessionStore.isUserLoggedIn()) {
       EventTicketActions.registerForEvent(this.state.event.id);
-      alert(`Congrats ${SessionStore.currentUser().username} you registered for ${this.state.event.title}`);
     } else {
       $('#login-modal').modal('show');
     }
@@ -52,6 +53,21 @@ module.exports = React.createClass({
       return <div></div>;
     }
   },
+
+  delete() {
+    if (this.state.creator.id === SessionStore.currentUser().id) {
+      return <button onClick={this._deleteEvent} className="group-event-button">Delete Event</button>;
+    } else {
+      return <div></div>;
+    }
+  },
+
+  _deleteEvent(e) {
+    e.preventDefault();
+    EventActions.deleteEvent(this.state.event.id);
+    hashHistory.push(`/groups/${this.state.group.id}`);
+  },
+
 
   _editEvent(e) {
     e.preventDefault();
@@ -87,16 +103,18 @@ module.exports = React.createClass({
         <div className="column-container">
           <div className="detail-left">
             <div className="event-info">
-              <img id="event-image" src={event.pic_url}/>
-              <div className="event-loc" value={event.location}></div>
+              <img id="event-image" src={event.pic_url}/><br/><br/>
+              <p className="event-loc" value={event.location}>Event Location: {event.location}</p>
+              <p className="event-loc" value={event.date}>Event Date: {event.date}</p><br/>
             </div>
             <div className="event-stats">
-              <span className='event-stat-members'>Attendees: {attendees.length}</span><br/>
+              <p className='event-stat-members'>Attendees: {attendees.length}</p><br/>
             </div><br/>
             <div className="creator-box">
               <div>Created By:</div>
               <Link to={`/users/${this.state.creator.id}`} className="creator-pic-container"><li id="creator-pic" event={event} style={{backgroundImage: `url(${this.state.creator.pic_url})`}}></li><br/><span className = "member-pic-username">{this.state.creator.username}</span></Link><br/>
-            { this.edit() }
+            { this.edit() }<br/>
+            { this.delete() }
           </div>
           </div>
           <div className="detail-main">

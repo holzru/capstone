@@ -6,7 +6,7 @@ const SearchActions = require('../actions/search_actions');
 
 const Splash = React.createClass({
   getInitialState() {
-    return {query: "", searchObj: {}};
+    return {query: "", searchObj: {}, loading: false};
   },
 
   componentDidMount() {
@@ -18,14 +18,26 @@ const Splash = React.createClass({
   },
 
   handleChange() {
-    this.setState({searchObj: SearchStore.results()});
+    this.setState({searchObj: SearchStore.results(), loading: SearchStore.loading()});
   },
 
   componentToRender() {
     if (this.state.query === "") {
       return <GroupIndex/>;
-    } else {
+    } else if (!this.state.loading) {
       return <SearchIndex searchResults={this.state.searchObj} />;
+    } else {
+      return (
+        <li className="loading-container">
+          <div className="loader">
+            <div className="loader__bar"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__bar"></div>
+            <div className="loader__ball"></div>
+          </div>
+        </li>);
     }
   },
 
