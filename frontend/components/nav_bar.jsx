@@ -44,7 +44,7 @@ module.exports = React.createClass({
     if (this.state.current_user.id) {
       return (<img src={this.state.current_user.pic_url} id="user-profile-pic"/>);
     } else {
-      return (<img src="http://res.cloudinary.com/dywbzmakl/image/upload/v1467324936/default_yduuy3.jpg" id="user-profile-pic"/>)
+      return (<img src="https://res.cloudinary.com/dywbzmakl/image/upload/v1467324936/default_yduuy3.jpg" id="user-profile-pic"/>);
     }
   },
 
