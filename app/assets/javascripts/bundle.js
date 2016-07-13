@@ -26012,7 +26012,7 @@
 	    if (this.state.current_user.id) {
 	      return React.createElement('img', { src: this.state.current_user.pic_url, id: 'user-profile-pic' });
 	    } else {
-	      return React.createElement('img', { src: 'http://res.cloudinary.com/dywbzmakl/image/upload/v1467324936/default_yduuy3.jpg', id: 'user-profile-pic' });
+	      return React.createElement('img', { src: 'https://res.cloudinary.com/dywbzmakl/image/upload/v1467324936/default_yduuy3.jpg', id: 'user-profile-pic' });
 	    }
 	  },
 	  _createGroup: function _createGroup(e) {
