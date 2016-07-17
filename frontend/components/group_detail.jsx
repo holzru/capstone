@@ -15,11 +15,11 @@ module.exports = React.createClass({
   },
 
   componentDidMount() {
-    this.groupStoreListener = GroupStore.addListener(this.__groupHandleChange);
+    this.groupStoreListener = GroupStore.addListener(this._groupHandleChange);
     GroupActions.fetchGroup(this.props.params.group_id);
   },
 
-  __groupHandleChange() {
+  _groupHandleChange() {
     let groupObj = GroupStore.single();
     this.setState({group: groupObj.group, members: groupObj.members, creator: groupObj.creator, events: groupObj.events});
   },

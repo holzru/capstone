@@ -48,9 +48,6 @@ module.exports = React.createClass({
   },
 
   render() {
-    if (this.props.comments.length === 0) {
-      return (<div>No comments so far</div>);
-    }
     return(
       <div>
         <h4 className="comment-board-title">Comments</h4>

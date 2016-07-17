@@ -15,7 +15,7 @@ const LoginForm = React.createClass({
       description: ""
     } : {
       username: SessionStore.currentUser().username,
-      password: SessionStore.currentUser().password,
+      password: "",
       pic_url: SessionStore.currentUser().pic_url,
       description: SessionStore.currentUser().description
     });
@@ -39,7 +39,7 @@ const LoginForm = React.createClass({
       description: ""
     } : {
       username: SessionStore.currentUser().username,
-      password: SessionStore.currentUser().password,
+      password: "",
       pic_url: SessionStore.currentUser().pic_url,
       description: SessionStore.currentUser().description
     }));
@@ -129,7 +129,6 @@ const LoginForm = React.createClass({
         		        <br/>
         						<label> Password:
         		          <input type="password"
-        		            value={this.state.password}
         		            onChange={this.update("password")}
         								className="login-input" />
         						</label>

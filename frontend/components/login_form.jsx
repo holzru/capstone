@@ -65,10 +65,12 @@ const LoginForm = React.createClass({
     return (e) => this.setState({[property]: e.target.value});
   },
 
-  handleDemo() {
+  handleDemo(e) {
+    e.preventDefault();
+
     const formData = {
 			username: "demo",
-			password: "demo_user",
+			password: "demo_user"
 		};
 
     SessionActions.logIn(formData);
@@ -100,7 +102,6 @@ const LoginForm = React.createClass({
         		        <br/>
         						<label> Password:
         		          <input type="password"
-        		            value={this.state.password}
         		            onChange={this.update("password")}
         								className="login-input" />
         						</label>

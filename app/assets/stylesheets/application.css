@@ -102,9 +102,10 @@ a:hover #detial-banner-words {
 }
 
 .splash-page-search-bar {
+  padding: 10px;
   margin: 0 auto;
   height: 40px;
-  width: 25%;
+  width: 35%;
   z-index: 9;
   border: 1px solid #b7bbc2;
   border-radius: 5px;

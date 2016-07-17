@@ -100,7 +100,7 @@ module.exports = React.createClass({
 
           <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul className="nav navbar-nav">
-              <li><a href="#" id="group-create" onClick={this._createGroup}>Create Group <span className="sr-only">(current)</span></a></li>
+              <li><a href="#" id="group-create" group={{}} onClick={this._createGroup}>Create Group <span className="sr-only">(current)</span></a></li>
             </ul>
             {rightNavItems}
           </div>

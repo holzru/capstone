@@ -15,7 +15,7 @@ const _login = function(currentUser) {
 
 const _logout = function() {
   _currentUser = {};
-  _currentUserHasBeenFetched = true;
+  _currentUserHasBeenFetched = false;
 };
 
 

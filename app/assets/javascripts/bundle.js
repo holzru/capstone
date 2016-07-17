@@ -26138,7 +26138,7 @@
 	                null,
 	                React.createElement(
 	                  'a',
-	                  { href: '#', id: 'group-create', onClick: this._createGroup },
+	                  { href: '#', id: 'group-create', group: {}, onClick: this._createGroup },
 	                  'Create Group ',
 	                  React.createElement(
 	                    'span',
@@ -26235,7 +26235,9 @@
 	      return _this.setState(_defineProperty({}, property, e.target.value));
 	    };
 	  },
-	  handleDemo: function handleDemo() {
+	  handleDemo: function handleDemo(e) {
+	    e.preventDefault();
+	
 	    var formData = {
 	      username: "demo",
 	      password: "demo_user"
@@ -26301,7 +26303,6 @@
 	                    null,
 	                    ' Password:',
 	                    React.createElement('input', { type: 'password',
-	                      value: this.state.password,
 	                      onChange: this.update("password"),
 	                      className: 'login-input' })
 	                  ),
@@ -26792,7 +26793,7 @@
 	
 	var _logout = function _logout() {
 	  _currentUser = {};
-	  _currentUserHasBeenFetched = true;
+	  _currentUserHasBeenFetched = false;
 	};
 	
 	SessionStore.__onDispatch = function (payload) {
@@ -33348,7 +33349,7 @@
 	      description: ""
 	    } : {
 	      username: SessionStore.currentUser().username,
-	      password: SessionStore.currentUser().password,
+	      password: "",
 	      pic_url: SessionStore.currentUser().pic_url,
 	      description: SessionStore.currentUser().description
 	    };
@@ -33369,7 +33370,7 @@
 	      description: ""
 	    } : {
 	      username: SessionStore.currentUser().username,
-	      password: SessionStore.currentUser().password,
+	      password: "",
 	      pic_url: SessionStore.currentUser().pic_url,
 	      description: SessionStore.currentUser().description
 	    });
@@ -33496,7 +33497,6 @@
 	                    null,
 	                    ' Password:',
 	                    React.createElement('input', { type: 'password',
-	                      value: this.state.password,
 	                      onChange: this.update("password"),
 	                      className: 'login-input' })
 	                  ),
@@ -33630,13 +33630,13 @@
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-	    this.groupListener = GroupStore.addListener(this.closeModal);
+	    this.groupListener = GroupStore.addListener(this.closeGroupModal);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.errorListener.remove();
 	    this.groupListener.remove();
 	  },
-	  closeModal: function closeModal() {
+	  closeGroupModal: function closeGroupModal() {
 	    this.setState(this.props.formType === "new" ? {
 	      name: "",
 	      location: "",
@@ -34117,7 +34117,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'search-bar-container' },
-	          React.createElement('input', { type: 'text', className: 'splash-page-search-bar', onChange: this._handleSearch, placeholder: 'Search Site' })
+	          React.createElement('input', { type: 'text', className: 'splash-page-search-bar', onChange: this._handleSearch, placeholder: 'Search Group, Event, and Users by Name' })
 	        )
 	      ),
 	      this.componentToRender()
@@ -35474,10 +35474,10 @@
 	    return { group: {}, events: [], members: [], creator: {} };
 	  },
 	  componentDidMount: function componentDidMount() {
-	    this.groupStoreListener = GroupStore.addListener(this.__groupHandleChange);
+	    this.groupStoreListener = GroupStore.addListener(this._groupHandleChange);
 	    GroupActions.fetchGroup(this.props.params.group_id);
 	  },
-	  __groupHandleChange: function __groupHandleChange() {
+	  _groupHandleChange: function _groupHandleChange() {
 	    var groupObj = GroupStore.single();
 	    this.setState({ group: groupObj.group, members: groupObj.members, creator: groupObj.creator, events: groupObj.events });
 	  },
@@ -53411,6 +53411,8 @@
 	var UserStore = __webpack_require__(491);
 	var UserActions = __webpack_require__(259);
 	var ReactTooltip = __webpack_require__(268);
+	var SessionStore = __webpack_require__(239);
+	var GroupStore = __webpack_require__(264);
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
@@ -53419,10 +53421,17 @@
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.userStoreListener = UserStore.addListener(this._handleChange);
+	    this.seesionStoreListener = SessionStore.addListener(this._handleUp);
+	    this.groupStoreListener = GroupStore.addListener(this._handleUp);
 	    UserActions.fetchUser(this.props.params.user_id);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.userStoreListener.remove();
+	    this.seesionStoreListener.remove();
+	    this.groupStoreListener.remove();
+	  },
+	  _handleUp: function _handleUp() {
+	    UserActions.fetchUser(this.props.params.user_id);
 	  },
 	  _handleChange: function _handleChange() {
 	    var userObj = UserStore.current();
@@ -53803,11 +53812,13 @@
 	          React.createElement(
 	            'h3',
 	            { className: 'event-title' },
+	            'Title: ',
 	            event.title
 	          ),
 	          React.createElement(
 	            'p',
 	            { className: 'event-description' },
+	            'Descrption: ',
 	            event.description
 	          ),
 	          this.register(),
@@ -53911,13 +53922,6 @@
 	    }
 	  },
 	  render: function render() {
-	    if (this.props.comments.length === 0) {
-	      return React.createElement(
-	        'div',
-	        null,
-	        'No comments so far'
-	      );
-	    }
 	    return React.createElement(
 	      'div',
 	      null,

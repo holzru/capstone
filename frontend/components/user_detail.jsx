@@ -3,6 +3,8 @@ const Link = require('react-router').Link;
 const UserStore = require('../stores/user_store');
 const UserActions = require('../actions/user_actions');
 const ReactTooltip = require("react-tooltip");
+const SessionStore = require("../stores/session_store");
+const GroupStore = require("../stores/group_store");
 
 
 module.exports = React.createClass({
@@ -12,11 +14,19 @@ module.exports = React.createClass({
 
   componentDidMount() {
     this.userStoreListener = UserStore.addListener(this._handleChange);
+    this.seesionStoreListener = SessionStore.addListener(this._handleUp);
+    this.groupStoreListener = GroupStore.addListener(this._handleUp);
     UserActions.fetchUser(this.props.params.user_id);
   },
 
   componentWillUnmount() {
     this.userStoreListener.remove();
+    this.seesionStoreListener.remove();
+    this.groupStoreListener.remove();
+  },
+
+  _handleUp () {
+    UserActions.fetchUser(this.props.params.user_id);
   },
 
   _handleChange() {

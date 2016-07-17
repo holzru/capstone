@@ -5,10 +5,9 @@ class SessionsController < ApplicationController
       params[:user][:username],
       params[:user][:password]
     )
-
     if @user
 			login(@user)
-			render json: @user
+			render "users/show"
 		else
 			render json: { errors: ["Invalid username/password combination"] }, status: 401
 		end

@@ -20,9 +20,10 @@ const GroupForm = React.createClass({
     });
   },
 
+
   componentDidMount() {
     this.errorListener = ErrorStore.addListener(this.forceUpdate.bind(this));
-    this.groupListener = GroupStore.addListener(this.closeModal);
+    this.groupListener = GroupStore.addListener(this.closeGroupModal);
   },
 
   componentWillUnmount() {
@@ -30,7 +31,7 @@ const GroupForm = React.createClass({
     this.groupListener.remove();
   },
 
-  closeModal() {
+  closeGroupModal() {
     this.setState((this.props.formType === "new" ? {
       name: "",
       location: "",
