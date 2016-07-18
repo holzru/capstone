@@ -6,8 +6,8 @@
 
 LetsMeet is a full-stack web application inspired by Meetup.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
 
-
-##Splash & Global Search
+##Features & Implementation
+###Splash & Global Search
 
 LetsMeet allows the user access to a community of interest based groups who host social events.
 
