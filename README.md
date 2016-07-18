@@ -6,7 +6,6 @@
 
 LetsMeet is a full-stack web application inspired by Meetup.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
 
-## Features & Implementation:
 
 ##Splash & Global Search
 
@@ -44,6 +43,7 @@ Results are dynamically loaded on page and sorted by category.
 
 On the database side, the groups and events are stored in multiple tables in the database, which contains columns for `id`, `location`, `description`, and `updated_at`.  Upon login, an API call is made to the database group index database and renders all groups. These groups are held in the `GroupStore`.
 
+
 ### Group Rendering and Editing
 
 Group Show pages are rendered with an event index, of the groups events as well as, members and group info.
@@ -79,7 +79,11 @@ getInitialState() {
 },
 ```
 
+
 ### Events
+
+Event show page:
+![image of event detail](http://res.cloudinary.com/dywbzmakl/image/upload/v1468814095/event_detail_rkgpg0.jpg)
 
 Similar to the groups the events were eager loaded to avoid async issues and loading time, using custom built objects in manual Ruby instead of jBuilder to avoid unnecessary database querying.
 
