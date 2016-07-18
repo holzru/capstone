@@ -28,7 +28,6 @@ module.exports = React.createClass({
 
   _handleChange() {
     let userObj = UserStore.current();
-    debugger;
     this.setState({user: userObj.user, user_groups: userObj.user_groups, created_groups: userObj.created_groups, created_events: userObj.created_events});
   },
 
