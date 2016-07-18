@@ -1,103 +1,112 @@
-# FresherNote
+# LetsMeet
 
-[Heroku link][heroku] **Note:** This should be a link to your production site
+[LetsMeet live][LetsMeet]
 
-[heroku]: https://thawing-brook-34178.herokuapp.com/#/?_k=l3e69s
+[LetsMeet]: https://thawing-brook-34178.herokuapp.com/#/?_k=xtohni
 
-## Minimum Viable Product
+LetsMeet is a full-stack web application inspired by Meetup.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
 
-MeatUp is a web application inspired by Meetup that will be build using Ruby on Rails and React.js.  By the end of Week 9, this app will, at a minimum, satisfy the following criteria:
+## Features & Implementation:
 
-- [X] Hosting on Heroku
-- [X] New account creation, login, and guest/demo login
-- [X] A production README, replacing this README (**NB**: check out the [sample production README](docs/production_readme.md) -- you'll write this later)
-- [X] Members
-  - [X] Smooth, bug-free navigation
-  - [X] Adequate seed data to demonstrate the site's features
-  - [X] Adequate CSS styling
-- [X] Groups with members
-  - [X] Smooth, bug-free navigation
-  - [X] Adequate seed data to demonstrate the site's features
-  - [X] Adequate CSS styling
-- [X] Events for groups
-  - [X] Smooth, bug-free navigation
-  - [X] Adequate seed data to demonstrate the site's features
-  - [X] Adequate CSS styling
-- [X] Members register for events
-  - [X] Smooth, bug-free navigation
-  - [X] Adequate seed data to demonstrate the site's features
-  - [X] Adequate CSS styling
+##Splash & Global Search
 
-## Design Docs
-* [View Wireframes][views]
-* [React Components][components]
-* [Flux Cycles][flux-cycles]
-* [API endpoints][api-endpoints]
-* [DB schema][schema]
+LetsMeet allows the user access to a community of interest based groups who host social events.
 
-[views]: docs/views.md
-[components]: docs/components.md
-[flux-cycles]: docs/flux-cycles.md
-[api-endpoints]: docs/api-endpoints.md
-[schema]: docs/schema.md
+LetsMeet is truly a single-page; all content is delivered on one static page.  The root page listens to a `SessionStore` and renders content based on a call to `SessionStore.currentUser()`.  Sensitive information is kept out of the frontend of the app by making an API call to `SessionsController#get_user`.
 
-## Implementation Timeline
+Users arrive to a splash page with the global search bar and pictures each representing individual groups.
+Group descriptions are done with tooltips, interactive text boxes with the description and title of the group or event.
 
-### Phase 1: Backend setup and Front End User Authentication, Models (2 days, W1 Thur 6pm)
+![image of group index](http://res.cloudinary.com/dywbzmakl/image/upload/v1468023045/splash-snap_pmhxwf.png)
 
-**Objective:** Functioning rails project with Authentication
+The global search filters users, groups, and events by name/title and delivers matching results
+using a custom SQL call built in ActiveRecord.
 
-- [X] create new project
-- [X] create Models
-- [X] authentication
-- [X] user signup/signin pages
-- [X] splash page after signin
-- [X] setup Webpack & Flux scaffold
-- [X] learn bootstrap-sass
+```ruby
+def show
+  query = params[:query]
 
+  @groups= Group.where("name ILIKE ?", "%#{query}%")
 
-# Phase 2: Flux Architecture and Group Continued (2 days Monday W1 6pm)
+  @users = User.where("username ILIKE ?", "%#{query}%")
 
-- [X] Finish out Actions/Stores for events/groups
-- [X] create a basic style guide
-- [X] position elements on the page
-- [X] add basic colors & styles
-- [X] seed the database with a small amount of test data
-- [X] API for groups/events
-- [X] test out interaction in the console.
-- [X] setup the flux loop with skeleton files
-- [X] setup React Router
-- [X] implement each component, building out the flux loop as needed.
+  @events = Event.where("title ILIKE ?", "%#{query}%")
 
+  render json: {groups: @groups, users: @users, events: @events}
+end
+```
 
-### Phase 3: Search (2 days, W2 Tues 6pm)
-- [X] Setup global search
-- [X] allow for search through users/groups/events
+While the search results return a loading graphic displays.
 
-### Phase 4: Finish Styling (1 day, W2 Wed 6pm)
+![image of group index](http://res.cloudinary.com/dywbzmakl/image/upload/v1468812436/search_animation_ojakkg.jpg)
 
-**Objective:** Existing pages (including signup/signin) will look good.
+Results are dynamically loaded on page and sorted by category.
 
-- [X] Finish Up/additional styling as needed
-- [X] Peer review on style and functionality
-- [X] bug fix, code refactoring
+On the database side, the groups and events are stored in multiple tables in the database, which contains columns for `id`, `location`, `description`, and `updated_at`.  Upon login, an API call is made to the database group index database and renders all groups. These groups are held in the `GroupStore`.
 
+### Group Rendering and Editing
 
-### Phase 5: Garbage Collection, Fix Up (1 day, W2 Thur 6pm)
-- [X] Implementation of peer suggestions
-- [X] additional styling as needed
-- [X] bug fix, code refactoring
+Group Show pages are rendered with an event index, of the groups events as well as, members and group info.
 
-### Phase 6: Extra Time for whatever is needed or bonus work (1 day, W2 Fri 6pm)
+![image of group detail](http://res.cloudinary.com/dywbzmakl/image/upload/v1468023307/user_detail_bfcrku.png)
 
-### Bonus Features (TBD)
-- [ ] Google Map Directions for events
-- [ ] Automatic email notification of events
-- [ ] slack client in page
-- [ ] Multiple sessions
+The groups were eager loaded to avoid async issues and loading time, using custom built objects
+in manual Ruby instead of jBuilder to avoid unnecessary database querying.
 
-[phase-one]: docs/phases/phase1.md
-[phase-two]: docs/phases/phase2.md
-[phase-three]: docs/phases/phase3.md
-[phase-four]: docs/phases/phase4.md
-[phase-five]: docs/phases/phase5.md
+```ruby
+def show
+  @group = Group.find(params[:id])
+  render json: {group: @group, members: @group.members, creator: @group.creator, events: @group.events}
+end
+```
+
+Group editing and creation are implemented using a single modal partial, whose content is determined by formType props passed by the respective action's button. Only the creators can
+edit or destroy the group.
+
+```javascript
+getInitialState() {
+  return (this.props.formType === "new" ? {
+    name: "",
+    location: "",
+    pic_url: "",
+    description: ""
+  } : {
+    name: this.props.group.name,
+    location: this.props.group.location,
+    pic_url: this.props.group.pic_url,
+    description: this.props.group.description
+  });
+},
+```
+
+### Events
+
+Similar to the groups the events were eager loaded to avoid async issues and loading time, using custom built objects in manual Ruby instead of jBuilder to avoid unnecessary database querying.
+
+```Ruby
+def show
+  @event = Event.find(params[:id])
+  @event_comments = []
+  @event.comments.each do |comment|
+    @event_comments << {comment: comment, author: comment.author}
+  end
+  render json: {event: @event, group: @event.group, attendees: @event.attendees, creator: @event.creator, comments: @event_comments}
+end
+```
+
+Events feature comment boards for event attendees, displayed using a comment index component.
+
+```javascript
+<div>
+  <h4 className="comment-board-title">Comments</h4>
+  <div className="comment-board">
+    {this.comment_render()}
+    <form className="new-comment-form">
+      <input type="text" placeholder="Comment" className="comment-input" onChange={this.handleInput} value={this.state.body}/>
+      <button onClick={this._submitComment} className="btn-success">Create Comment</button>
+    </form>
+</div>
+</div>);
+```
+
+Again, similar to the Groups Events can only be edited and destroyed by their creators.
