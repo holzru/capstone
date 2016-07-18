@@ -71,25 +71,22 @@ MeatUp is a web application inspired by Meetup that will be build using Ruby on 
 
 
 ### Phase 3: Search (2 days, W2 Tues 6pm)
-- [ ] Setup global search
-- [ ] allow for search through users/groups/events
-- [ ] pane filtering for toggling between calendar vs Bootstrap view
-
+- [X] Setup global search
+- [X] allow for search through users/groups/events
 
 ### Phase 4: Finish Styling (1 day, W2 Wed 6pm)
 
 **Objective:** Existing pages (including signup/signin) will look good.
 
-- [ ] Finish Up/additional styling as needed
-- [ ] Peer review on style and functionality
-- [ ] bug fix, code refactoring
+- [X] Finish Up/additional styling as needed
+- [X] Peer review on style and functionality
+- [X] bug fix, code refactoring
 
 
-### Phase 5: Reminders and Garbage Collection, Fix Up (1days, W2 Thur 6pm)
-- [ ] Implementation of peer suggestions
-- [ ] reminder model and Implementation
-- [ ] additional styling as needed
-- [ ] bug fix, code refactoring
+### Phase 5: Garbage Collection, Fix Up (1 day, W2 Thur 6pm)
+- [X] Implementation of peer suggestions
+- [X] additional styling as needed
+- [X] bug fix, code refactoring
 
 ### Phase 6: Extra Time for whatever is needed or bonus work (1 day, W2 Fri 6pm)
 
