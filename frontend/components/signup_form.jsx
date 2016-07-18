@@ -39,7 +39,7 @@ const LoginForm = React.createClass({
       description: ""
     } : {
       username: SessionStore.currentUser().username,
-      password: "",
+      password: SessionStore.currentUser().password,
       pic_url: SessionStore.currentUser().pic_url,
       description: SessionStore.currentUser().description
     }));

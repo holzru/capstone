@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
 		if @user.save
 			login(@user)
-			render json: @user
+			render json: {user: @user, user_groups: @user.groups, created_groups: @user.created_groups, created_events: @user.created_events}
 		else
 			render json: {errors: @user.errors.full_messages}, status: 422
 		end
@@ -12,9 +12,9 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
-
 		if @user.update(user_params)
-			render json: @user
+      login(@user)
+			render json: {user: @user, user_groups: @user.groups, created_groups: @user.created_groups, created_events: @user.created_events}
 		else
 			render json: {errors: @user.errors.full_messages}, status: 422
 		end

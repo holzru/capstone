@@ -11,11 +11,11 @@ UserStore.__onDispatch = function(action) {
       resetUser(action.user);
       break;
   }
-  this.__emitChange();
 };
 
 const resetUser = function(user) {
   _user = user;
+  UserStore.__emitChange();
 };
 
 UserStore.current = function() {

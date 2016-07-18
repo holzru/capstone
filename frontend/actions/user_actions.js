@@ -16,8 +16,9 @@ module.exports = {
 
   updateUser(user) {
     UserUtil.updateUser(user, function (newUser) {
+      debugger;
       this.recieveUser(newUser);
-      SessionActions.receiveCurrentUser(newUser);
+      SessionActions.receiveCurrentUser(newUser.user);
     }.bind(this));
   }
 };

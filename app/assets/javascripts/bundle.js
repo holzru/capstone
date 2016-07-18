@@ -60,6 +60,8 @@
 	var EventActions = __webpack_require__(288);
 	var SessionActions = __webpack_require__(232);
 	var ReactTooltip = __webpack_require__(268);
+	var SessionStore = __webpack_require__(239);
+	window.SessionStore = SessionStore;
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -33370,7 +33372,7 @@
 	      description: ""
 	    } : {
 	      username: SessionStore.currentUser().username,
-	      password: "",
+	      password: SessionStore.currentUser().password,
 	      pic_url: SessionStore.currentUser().pic_url,
 	      description: SessionStore.currentUser().description
 	    });
@@ -33562,8 +33564,9 @@
 	  },
 	  updateUser: function updateUser(user) {
 	    UserUtil.updateUser(user, function (newUser) {
+	      debugger;
 	      this.recieveUser(newUser);
-	      SessionActions.receiveCurrentUser(newUser);
+	      SessionActions.receiveCurrentUser(newUser.user);
 	    }.bind(this));
 	  }
 	};
@@ -53411,7 +53414,6 @@
 	var UserStore = __webpack_require__(491);
 	var UserActions = __webpack_require__(259);
 	var ReactTooltip = __webpack_require__(268);
-	var SessionStore = __webpack_require__(239);
 	var GroupStore = __webpack_require__(264);
 	
 	module.exports = React.createClass({
@@ -53421,13 +53423,11 @@
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.userStoreListener = UserStore.addListener(this._handleChange);
-	    this.seesionStoreListener = SessionStore.addListener(this._handleUp);
 	    this.groupStoreListener = GroupStore.addListener(this._handleUp);
 	    UserActions.fetchUser(this.props.params.user_id);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.userStoreListener.remove();
-	    this.seesionStoreListener.remove();
 	    this.groupStoreListener.remove();
 	  },
 	  _handleUp: function _handleUp() {
@@ -53435,6 +53435,7 @@
 	  },
 	  _handleChange: function _handleChange() {
 	    var userObj = UserStore.current();
+	    debugger;
 	    this.setState({ user: userObj.user, user_groups: userObj.user_groups, created_groups: userObj.created_groups, created_events: userObj.created_events });
 	  },
 	  _groupTip: function _groupTip(group) {
@@ -53608,11 +53609,11 @@
 	      resetUser(action.user);
 	      break;
 	  }
-	  this.__emitChange();
 	};
 	
 	var resetUser = function resetUser(user) {
 	  _user = user;
+	  UserStore.__emitChange();
 	};
 	
 	UserStore.current = function () {
