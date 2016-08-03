@@ -10,6 +10,12 @@ module.exports = {
   resolve: {
     extensions: ["", ".js", ".jsx"]
   },
+  DefinePlugin: {
+  "process.env": {
+     NODE_ENV: JSON.stringify("production")
+    }
+  },
+
   devtool: 'source-maps',
   module: {
     loaders: [
