@@ -33564,7 +33564,6 @@
 	  },
 	  updateUser: function updateUser(user) {
 	    UserUtil.updateUser(user, function (newUser) {
-	      debugger;
 	      this.recieveUser(newUser);
 	      SessionActions.receiveCurrentUser(newUser.user);
 	    }.bind(this));
@@ -34067,17 +34066,27 @@
 	var SearchStore = __webpack_require__(278);
 	var SearchIndex = __webpack_require__(279);
 	var SearchActions = __webpack_require__(280);
+	var SessionStore = __webpack_require__(239);
 	
 	var Splash = React.createClass({
 	  displayName: 'Splash',
 	  getInitialState: function getInitialState() {
-	    return { query: "", searchObj: {}, loading: false };
+	    return { query: "", searchObj: {}, loading: false, loggedIn: false };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.storeListener = SearchStore.addListener(this.handleChange);
+	    this.sessionStoreListener = SessionStore.addListener(this._handleLogin);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.storeListener.remove();
+	    this.sessionStoreListener.remove();
+	  },
+	  _handleLogin: function _handleLogin() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      this.setState({ loggedIn: true });
+	    } else {
+	      this.setState({ loggedIn: false });
+	    }
 	  },
 	  handleChange: function handleChange() {
 	    this.setState({ searchObj: SearchStore.results(), loading: SearchStore.loading() });
@@ -34086,7 +34095,7 @@
 	    if (this.state.query === "") {
 	      return React.createElement(GroupIndex, null);
 	    } else if (!this.state.loading) {
-	      return React.createElement(SearchIndex, { searchResults: this.state.searchObj });
+	      return React.createElement(SearchIndex, { searchResults: this.state.searchObj, query: this.state.query });
 	    } else {
 	      return React.createElement(
 	        'li',
@@ -35315,9 +35324,14 @@
 	  _userTip: function _userTip(user) {
 	    return 'User <br/> Name: ' + user.username + ' <br /> Description: ' + user.description;
 	  },
+	  _tooltipAttach: function _tooltipAttach(condition) {
+	    this.tooltipDeployed = true;
+	    return React.createElement(ReactTooltip, { multiline: true, 'class': 'tooltip-container', place: 'top', type: 'dark', effect: 'float', id: 'search-item' });
+	  },
 	  group_render: function group_render() {
 	    var _this = this;
 	
+	    this.tooltipDeployed = false;
 	    var groups = this.props.searchResults.groups.map(function (group, idx) {
 	      return React.createElement(
 	        'div',
@@ -35327,7 +35341,7 @@
 	          { to: '/groups/' + group.id, group: group },
 	          React.createElement('li', { className: 'group-index-item', group: group, style: { backgroundImage: 'url(' + group.pic_url + ')' } })
 	        ),
-	        idx === 0 ? React.createElement(ReactTooltip, { multiline: true, 'class': 'tooltip-container', place: 'top', type: 'dark', effect: 'float', id: 'search-item' }) : ""
+	        idx === 0 && !_this.tooltipDeployed ? _this._tooltipAttach(_this.tooltipDeployed) : ""
 	      );
 	    });
 	    return React.createElement(
@@ -35339,7 +35353,7 @@
 	  event_render: function event_render() {
 	    var _this2 = this;
 	
-	    var events = this.props.searchResults.events.map(function (e) {
+	    var events = this.props.searchResults.events.map(function (e, idx) {
 	      return React.createElement(
 	        'div',
 	        { key: e.id, event: e, 'data-tip': _this2._eventTip(e), 'data-for': 'search-item', className: 'group-index-item-container' },
@@ -35347,7 +35361,8 @@
 	          Link,
 	          { to: '/events/' + e.id, event: e },
 	          React.createElement('li', { className: 'group-index-item', event: e, style: { backgroundImage: 'url(' + e.pic_url + ')' } })
-	        )
+	        ),
+	        idx === 0 && !_this2.tooltipDeployed ? _this2._tooltipAttach(_this2.tooltipDeployed) : ""
 	      );
 	    });
 	    return React.createElement(
@@ -35359,7 +35374,7 @@
 	  user_render: function user_render() {
 	    var _this3 = this;
 	
-	    var users = this.props.searchResults.users.map(function (user) {
+	    var users = this.props.searchResults.users.map(function (user, idx) {
 	      return React.createElement(
 	        'div',
 	        { key: user.id, user: user, 'data-tip': _this3._userTip(user), 'data-for': 'search-item', className: 'group-index-item-container' },
@@ -35367,7 +35382,8 @@
 	          Link,
 	          { to: '/users/' + user.id, user: user },
 	          React.createElement('li', { className: 'group-index-item', user: user, style: { backgroundImage: 'url(' + user.pic_url + ')' } })
-	        )
+	        ),
+	        idx === 0 && !_this3.tooltipDeployed ? _this3._tooltipAttach(_this3.tooltipDeployed) : ""
 	      );
 	    });
 	    return React.createElement(
@@ -35386,19 +35402,19 @@
 	      React.createElement(
 	        'h4',
 	        { className: 'search-index-title' },
-	        'Groups'
+	        'Groups including "' + this.props.query + '"'
 	      ),
 	      this.group_render(),
 	      React.createElement(
 	        'h4',
 	        { className: 'search-index-title' },
-	        'Events'
+	        'Events including "' + this.props.query + '"'
 	      ),
 	      this.event_render(),
 	      React.createElement(
 	        'h4',
 	        { className: 'search-index-title' },
-	        'User'
+	        'Users including "' + this.props.query + '"'
 	      ),
 	      this.user_render()
 	    );
@@ -35474,11 +35490,19 @@
 	module.exports = React.createClass({
 	  displayName: 'exports',
 	  getInitialState: function getInitialState() {
-	    return { group: {}, events: [], members: [], creator: {} };
+	    return { group: {}, events: [], members: [], creator: {}, loggedIn: false };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.groupStoreListener = GroupStore.addListener(this._groupHandleChange);
 	    GroupActions.fetchGroup(this.props.params.group_id);
+	    this.sessionStoreListener = SessionStore.addListener(this._handleLogin);
+	  },
+	  _handleLogin: function _handleLogin() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      this.setState({ loggedIn: true });
+	    } else {
+	      this.setState({ loggedIn: false });
+	    }
 	  },
 	  _groupHandleChange: function _groupHandleChange() {
 	    var groupObj = GroupStore.single();
@@ -35486,6 +35510,7 @@
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.groupStoreListener.remove();
+	    this.sessionStoreListener.remove();
 	  },
 	  editButton: function editButton() {
 	    if (SessionStore.currentUser().id === this.state.creator.id) {
@@ -53415,27 +53440,36 @@
 	var UserActions = __webpack_require__(259);
 	var ReactTooltip = __webpack_require__(268);
 	var GroupStore = __webpack_require__(264);
+	var SessionStore = __webpack_require__(239);
 	
 	module.exports = React.createClass({
 	  displayName: 'exports',
 	  getInitialState: function getInitialState() {
-	    return { user: {}, user_groups: [], created_groups: [], created_events: [] };
+	    return { user: {}, user_groups: [], created_groups: [], created_events: [], loggedIn: false };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.userStoreListener = UserStore.addListener(this._handleChange);
 	    this.groupStoreListener = GroupStore.addListener(this._handleUp);
 	    UserActions.fetchUser(this.props.params.user_id);
+	    this.sessionStoreListener = SessionStore.addListener(this._handleLogin);
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.userStoreListener.remove();
 	    this.groupStoreListener.remove();
+	    this.sessionStoreListener.remove();
+	  },
+	  _handleLogin: function _handleLogin() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      this.setState({ loggedIn: true });
+	    } else {
+	      this.setState({ loggedIn: false });
+	    }
 	  },
 	  _handleUp: function _handleUp() {
 	    UserActions.fetchUser(this.props.params.user_id);
 	  },
 	  _handleChange: function _handleChange() {
 	    var userObj = UserStore.current();
-	    debugger;
 	    this.setState({ user: userObj.user, user_groups: userObj.user_groups, created_groups: userObj.created_groups, created_events: userObj.created_events });
 	  },
 	  _groupTip: function _groupTip(group) {
@@ -53642,11 +53676,24 @@
 	module.exports = React.createClass({
 	  displayName: 'exports',
 	  getInitialState: function getInitialState() {
-	    return { event: {}, attendees: [], group: {}, creator: {}, comments: [] };
+	    return { event: {},
+	      attendees: [],
+	      group: {},
+	      creator: {},
+	      comments: [],
+	      loggedIn: false };
 	  },
 	  componentDidMount: function componentDidMount() {
 	    this.eventStoreListener = EventStore.addListener(this._handleEvent);
 	    EventActions.getEvent(this.props.params.event_id);
+	    this.sessionStoreListener = SessionStore.addListener(this._handleLogin);
+	  },
+	  _handleLogin: function _handleLogin() {
+	    if (SessionStore.isUserLoggedIn()) {
+	      this.setState({ loggedIn: true });
+	    } else {
+	      this.setState({ loggedIn: false });
+	    }
 	  },
 	  _handleEvent: function _handleEvent() {
 	    var eventObj = EventStore.current();
@@ -53654,6 +53701,7 @@
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.eventStoreListener.remove();
+	    this.sessionStoreListener.remove();
 	  },
 	  _unregisterForEvent: function _unregisterForEvent(e) {
 	    e.preventDefault();

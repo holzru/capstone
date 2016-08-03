@@ -4,22 +4,33 @@ const UserStore = require('../stores/user_store');
 const UserActions = require('../actions/user_actions');
 const ReactTooltip = require("react-tooltip");
 const GroupStore = require("../stores/group_store");
+const SessionStore = require('../stores/session_store');
 
 
 module.exports = React.createClass({
   getInitialState() {
-    return ({user: {}, user_groups: [], created_groups: [], created_events: []});
+    return ({user: {}, user_groups: [], created_groups: [], created_events: [], loggedIn: false});
   },
 
   componentDidMount() {
     this.userStoreListener = UserStore.addListener(this._handleChange);
     this.groupStoreListener = GroupStore.addListener(this._handleUp);
     UserActions.fetchUser(this.props.params.user_id);
+    this.sessionStoreListener = SessionStore.addListener(this._handleLogin);
   },
 
   componentWillUnmount() {
     this.userStoreListener.remove();
     this.groupStoreListener.remove();
+    this.sessionStoreListener.remove();
+  },
+
+  _handleLogin() {
+    if (SessionStore.isUserLoggedIn()) {
+      this.setState({loggedIn: true});
+    } else {
+      this.setState({loggedIn: false});
+    }
   },
 
   _handleUp () {

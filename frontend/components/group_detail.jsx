@@ -11,13 +11,23 @@ const hashHistory = require('react-router').hashHistory;
 
 module.exports = React.createClass({
   getInitialState(){
-    return({group: {}, events: [], members: [], creator: {}});
+    return({group: {}, events: [], members: [], creator: {}, loggedIn: false});
   },
 
   componentDidMount() {
     this.groupStoreListener = GroupStore.addListener(this._groupHandleChange);
     GroupActions.fetchGroup(this.props.params.group_id);
+    this.sessionStoreListener = SessionStore.addListener(this._handleLogin);
   },
+
+  _handleLogin() {
+    if (SessionStore.isUserLoggedIn()) {
+      this.setState({loggedIn: true});
+    } else {
+      this.setState({loggedIn: false});
+    }
+  },
+
 
   _groupHandleChange() {
     let groupObj = GroupStore.single();
@@ -26,6 +36,7 @@ module.exports = React.createClass({
 
   componentWillUnmount() {
     this.groupStoreListener.remove();
+    this.sessionStoreListener.remove();
   },
 
   editButton(){

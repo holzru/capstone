@@ -12,12 +12,27 @@ const hashHistory = require('react-router').hashHistory;
 
 module.exports = React.createClass({
   getInitialState(){
-    return({event: {}, attendees: [], group: {}, creator:{}, comments: []});
+    return({event: {},
+            attendees: [],
+            group: {},
+            creator:{},
+            comments: [],
+            loggedIn: false});
   },
 
   componentDidMount() {
     this.eventStoreListener = EventStore.addListener(this._handleEvent);
     EventActions.getEvent(this.props.params.event_id);
+    this.sessionStoreListener = SessionStore.addListener(this._handleLogin);
+  },
+
+
+  _handleLogin() {
+    if (SessionStore.isUserLoggedIn()) {
+      this.setState({loggedIn: true});
+    } else {
+      this.setState({loggedIn: false});
+    }
   },
 
   _handleEvent() {
@@ -27,6 +42,7 @@ module.exports = React.createClass({
 
   componentWillUnmount(){
     this.eventStoreListener.remove();
+    this.sessionStoreListener.remove();
   },
 
   _unregisterForEvent(e) {

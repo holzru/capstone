@@ -571,23 +571,23 @@ user_pics.length.times do
 end
 u += 2
 
-groups = 150
+groups = 200
 groups.times do
   group = Group.create(creator_id: (1..u).to_a.sample, name: Faker::Hipster.words.join(' ').capitalize, description: Faker::Hipster.paragraph, location:"#{Faker::Address.street_address}, #{Faker::Address.city}", pic_url: pics.sample )
   GroupMembership.create!(user_id: group.creator_id, group_id: group.id)
 end
 
-events = 1500
+events = 2000
 events.times do
   Event.create(creator_id: (1..u).to_a.sample, title: Faker::Hipster.words.join(' ').capitalize, group_id: (1..groups).to_a.sample, description: Faker::Hipster.paragraph, location: "#{Faker::Address.street_address}, #{Faker::Address.city}", category: Faker::StarWars.planet, pic_url: pics.sample, date: Faker::Time.between(10.days.ago, Date.today, :all))
 end
 
-7000.times do
+8000.times do
   Comment.create(author_id: (1..u).to_a.sample, body: Faker::Hipster.sentence, event_id: (1..events).to_a.sample)
 end
 
 i = 0
-while i <= 8000
+while i <= 12000
   if EventTicket.create(user_id: (1..u).to_a.sample, event_id: (1..events).to_a.sample)
     i += 1
   end
@@ -632,7 +632,7 @@ while m <= 30
 end
 
 j = 0
-while j <= 5000
+while j <= 8000
   if GroupMembership.create(user_id: (1..u).to_a.sample, group_id: (1..groups).to_a.sample)
     j += 1
   end
