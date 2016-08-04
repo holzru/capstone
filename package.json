@@ -24,6 +24,7 @@
     "react-search-bar": "^1.1.4",
     "react-tooltip": "^3.0.8",
     "spinkit": "^1.2.5",
+    "uglify-js": "^2.7.0",
     "webpack": "^1.13.1"
   },
   "devDependencies": {},

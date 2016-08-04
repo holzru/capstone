@@ -13,7 +13,6 @@ const EventActions = require('./actions/event_actions');
 const SessionActions = require('./actions/session_actions');
 const ReactTooltip = require("react-tooltip");
 const SessionStore = require('./stores/session_store');
-window.SessionStore = SessionStore;
 
 
 const App = React.createClass({
